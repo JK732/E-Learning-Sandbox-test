@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Smartphone-Sandbox</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 20px; background: #f4f4f2; color: #222; }
+  #app { max-width: 640px; margin: 0 auto; }
+  .card { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 24px; }
+  h1 { font-size: 20px; margin-top: 0; }
+  label { display: block; margin: 16px 0 6px; font-weight: bold; font-size: 15px; }
+  select, input[type="text"] { width: 100%; padding: 10px; font-size: 15px; border-radius: 8px; border: 1px solid #bbb; }
+  .radio-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .radio-row label { display: flex; align-items: center; gap: 6px; font-weight: normal; border: 1px solid #bbb; padding: 10px 14px; border-radius: 8px; cursor: pointer; margin: 0; flex: 1 1 auto; }
+  .radio-row input { margin: 0; }
+  .toggle-row { display: flex; gap: 10px; margin-top: 16px; }
+  .toggle-row button { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #bbb; background: #fff; cursor: pointer; font-size: 14px; }
+  .toggle-row button.active { background: #0c447c; color: #fff; border-color: #0c447c; }
+  #startBtn { margin-top: 22px; width: 100%; padding: 14px; font-size: 16px; font-weight: bold; background: #0c447c; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+  #newTabBtn { margin-top: 10px; width: 100%; padding: 10px; font-size: 13px; background: #fff; color: #0c447c; border: 1px solid #0c447c; border-radius: 8px; cursor: pointer; }
+  .devnote { font-size: 12px; color: #888; margin-top: 6px; }
+
+  #sandbox { display: none; position: fixed; inset: 0; background: #e9e9e6; z-index: 999; }
+  #sandbox.active { display: flex; flex-direction: column; }
+  #taskbar { background: #0c447c; color: #fff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  #taskbar .taskText { font-size: 14px; }
+  #taskbar button { background: #fff; color: #0c447c; border: none; border-radius: 6px; padding: 8px 12px; font-size: 13px; cursor: pointer; font-weight: bold; }
+  #hintbar { background: #fff3d6; color: #6b4c00; font-size: 13px; padding: 8px 16px; text-align: center; min-height: 34px; }
+  #stage { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+  .phone { width: 260px; height: 540px; background: #111; border-radius: 32px; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+  .screen { position: absolute; inset: 6px; background: #dfe7ee; border-radius: 26px; overflow: hidden; }
+  .statusbar { height: 30px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; font-size: 11px; background: #dfe7ee; position: relative; z-index: 2; }
+  .statusbar .icons { display: flex; gap: 6px; align-items: center; }
+  .notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 90px; height: 18px; background: #111; border-radius: 0 0 12px 12px; z-index: 30; }
+  .homebar { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); width: 90px; height: 4px; background: #999; border-radius: 4px; z-index: 30; }
+  .homebtn { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); width: 36px; height: 36px; border: 2px solid #999; border-radius: 50%; z-index: 30; cursor: pointer; }
+  .homebtn.pressed { background: rgba(255,255,255,0.3); }
+
+  .dimmer { position: absolute; top: 30px; left: 0; right: 0; bottom: 0; background: #000; opacity: 0.45; pointer-events: none; z-index: 12; }
+
+  .apps { padding: 16px 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; position: relative; z-index: 1; }
+  .app { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+  .app .icon { width: 42px; height: 42px; border-radius: 12px; background: #7f77dd; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; }
+  .app:nth-child(2n) .icon { background: #1d9e75; }
+  .app:nth-child(3n) .icon { background: #d85a30; }
+  .app:nth-child(4n) .icon { background: #d4537e; }
+  .app .lbl { font-size: 9px; color: #333; text-align: center; }
+
+  .hotspot { position: absolute; background: rgba(255,255,255,0.001); z-index: 20; cursor: pointer; top: 0; }
+  .hotspot-left { left: 0; width: 40%; height: 34px; }
+  .hotspot-right { right: 0; width: 60%; height: 34px; }
+  .hotspot-bottom { bottom: 0; left: 0; width: 100%; height: 24px; top: auto; }
+  .hotspot-swipeup { bottom: 24px; left: 20%; width: 60%; height: 20px; top: auto; }
+  .hotspot.pulse { background: rgba(12,68,124,0.15); animation: pulse 1.4s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  .panel { position: absolute; left: 8px; right: 8px; background: rgba(30,30,30,0.94); border-radius: 18px; padding: 16px; z-index: 25; transition: transform 0.3s ease, top 0.3s ease, bottom 0.3s ease; }
+  .panel.top { top: -360px; }
+  .panel.top.open { top: 40px; }
+  .panel.bottom { bottom: -360px; }
+  .panel.bottom.open { bottom: 40px; }
+  .panel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .toggleicon { background: #333; color: #ccc; border-radius: 12px; padding: 10px 6px; text-align: center; font-size: 18px; cursor: pointer; }
+  .toggleicon.on { background: #0c447c; color: #fff; }
+  .toggleicon .lbl { display: block; font-size: 9px; margin-top: 4px; }
+  .panel-title { color: #999; font-size: 11px; margin-bottom: 8px; }
+  .notif-item { background: #444; color: #eee; border-radius: 10px; padding: 10px; margin-bottom: 8px; font-size: 11px; }
+  .notif-item .app-name { font-weight: bold; display: block; margin-bottom: 2px; }
+  .panel-slider-row { margin-top: 12px; color: #ccc; font-size: 11px; }
+  .panel-slider-row input { width: 100%; }
+
+  .overlay { position: absolute; inset: 0; background: #f2f2f0; z-index: 15; display: none; flex-direction: column; }
+  .overlay.open { display: flex; }
+  .overlay-header { background: #0c447c; color: #fff; padding: 10px 12px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: bold; }
+  .overlay-header button { background: none; border: none; color: #fff; font-size: 16px; cursor: pointer; padding: 2px 6px; }
+  .overlay-body { flex: 1; padding: 10px; overflow: hidden; }
+  .settings-row { display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 12px; cursor: pointer; }
+  .mini-toggle { width: 38px; height: 20px; border-radius: 12px; background: #ccc; position: relative; cursor: pointer; }
+  .mini-toggle.on { background: #0c447c; }
+  .mini-toggle .dot { width: 16px; height: 16px; border-radius: 50%; background: #fff; position: absolute; top: 2px; left: 2px; transition: left 0.2s; }
+  .mini-toggle.on .dot { left: 20px; }
+  .chat-item { background: #fff; border-radius: 8px; padding: 10px; margin-bottom: 8px; font-size: 11px; }
+  .chat-item .name { font-weight: bold; display: block; }
+  .camera-view { flex: 1; background: #222; display: flex; align-items: center; justify-content: center; color: #666; font-size: 11px; }
+  .shutter { width: 56px; height: 56px; border-radius: 50%; background: #fff; border: 4px solid #ccc; margin: 14px auto; cursor: pointer; }
+  .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 40; }
+  .flash.fire { opacity: 1; transition: opacity 0.4s; }
+  .list-item { background: #fff; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .list-item .sub { display: block; font-size: 10px; color: #888; }
+  .check { color: #1d9e75; font-weight: bold; }
+  .lock { color: #999; font-size: 11px; }
+  .slider-block { background: #fff; border-radius: 8px; padding: 14px 12px; margin-bottom: 12px; }
+  .slider-block label { font-size: 12px; font-weight: bold; margin-bottom: 8px; }
+  .slider-block input { width: 100%; }
+  .preview-text { background: #fff; border-radius: 8px; padding: 12px; text-align: center; }
+
+  .toast { position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); background: #1d9e75; color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 12px; opacity: 0; transition: opacity 0.3s; z-index: 50; max-width: 220px; text-align: center; }
+  .toast.show { opacity: 1; }
+  .toast.neutral { background: #555; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div id="setup" class="card">
+    <h1>Smartphone-Sandbox – Einrichtung</h1>
+
+    <label>Gerätetyp</label>
+    <div class="radio-row">
+      <label><input type="radio" name="platform" value="android" checked> Android</label>
+      <label><input type="radio" name="platform" value="ios-neu"> iPhone (neu, ohne Home-Button)</label>
+      <label><input type="radio" name="platform" value="ios-alt"> iPhone (älter, mit Home-Button)</label>
+    </div>
+
+    <label for="model">Modellname (optional)</label>
+    <input type="text" id="model" placeholder="z. B. Samsung Galaxy A54">
+
+    <label>Anleitung während der Aufgabe</label>
+    <div class="toggle-row">
+      <button id="guidedOn" class="active">Mit Schritt-für-Schritt-Hilfe</button>
+      <button id="guidedOff">Ohne Hilfe (frei ausprobieren)</button>
+    </div>
+
+    <label for="taskSelectDev">Aufgabe (nur für Vorschau/Test – im Rise-Export über URL-Parameter "task" fest eingestellt)</label>
+    <select id="taskSelectDev">
+      <option value="flugmodus">Flugmodus aktivieren</option>
+      <option value="wlan">Mit WLAN verbinden</option>
+      <option value="bluetooth">Bluetooth-Kopfhörer koppeln</option>
+      <option value="anzeige">Anzeige anpassen</option>
+    </select>
+
+    <button id="startBtn">Aufgabe starten</button>
+    <button id="newTabBtn">In neuem Tab öffnen (echtes Vollbild)</button>
+    <div class="devnote">Rise-Einbettung: dieselbe Datei hosten und pro Lektion per URL unterschiedliche Aufgabe übergeben, z. B. ?auto=1&#38;task=wlan&#38;guided=1</div>
+  </div>
+
+  <div id="sandbox">
+    <div id="taskbar">
+      <div class="taskText" id="taskbarText">Aufgabe</div>
+      <div>
+        <button id="resetBtn">Zurücksetzen</button>
+        <button id="exitBtn">Zurück</button>
+      </div>
+    </div>
+    <div id="hintbar"></div>
+    <div id="stage">
+      <div class="phone" id="phone">
+        <div class="notch" id="notch"></div>
+        <div class="flash" id="flash"></div>
+        <div class="screen" id="screen">
+          <div class="statusbar">
+            <span id="modelLabel">14:32</span>
+            <span class="icons"><span id="flightIcon" style="display:none;">✈</span><span id="wifiIcon">📶</span> 🔋</span>
+          </div>
+
+          <div class="apps" id="homeApps"></div>
+          <div class="dimmer" id="dimmer"></div>
+
+          <div class="hotspot hotspot-left" id="hotspotLeft"></div>
+          <div class="hotspot hotspot-right" id="hotspotRight"></div>
+          <div class="hotspot hotspot-bottom" id="hotspotBottom"></div>
+          <div class="hotspot hotspot-swipeup" id="hotspotSwipeUp"></div>
+
+          <div class="panel top" id="panelNotif">
+            <div class="panel-title">Mitteilungen</div>
+            <div class="notif-item"><span class="app-name">Wetter</span>Heute sonnig, 21°C</div>
+            <div class="notif-item"><span class="app-name">Kalender</span>Erinnerung: Arzttermin 15:00 Uhr</div>
+          </div>
+
+          <div class="panel top" id="panelControlTop">
+            <div class="panel-title">Schnelleinstellungen</div>
+            <div class="panel-grid">
+              <div class="toggleicon" id="flightToggleTop">✈<span class="lbl">Flugmodus</span></div>
+              <div class="toggleicon" id="wifiToggleTop">📶<span class="lbl">WLAN</span></div>
+              <div class="toggleicon" id="btToggleTop">🔵<span class="lbl">Bluetooth</span></div>
+            </div>
+            <div class="panel-slider-row">Helligkeit
+              <input type="range" id="brightnessTop" min="0" max="100" value="30">
+            </div>
+          </div>
+
+          <div class="panel bottom" id="panelControlBottom">
+            <div class="panel-title">Kontrollzentrum</div>
+            <div class="panel-grid">
+              <div class="toggleicon" id="flightToggleBottom">✈<span class="lbl">Flugmodus</span></div>
+              <div class="toggleicon" id="wifiToggleBottom">📶<span class="lbl">WLAN</span></div>
+              <div class="toggleicon" id="btToggleBottom">🔵<span class="lbl">Bluetooth</span></div>
+            </div>
+            <div class="panel-slider-row">Helligkeit
+              <input type="range" id="brightnessBottom" min="0" max="100" value="30">
+            </div>
+          </div>
+
+          <div class="overlay" id="overlaySettings">
+            <div class="overlay-header"><button id="backSettings">←</button> Einstellungen</div>
+            <div class="overlay-body">
+              <div class="settings-row" id="rowWifi"><span>WLAN <span id="wifiRowStatus" style="color:#888;"></span></span><span>›</span></div>
+              <div class="settings-row" id="rowBt"><span>Bluetooth <span id="btRowStatus" style="color:#888;"></span></span><span>›</span></div>
+              <div class="settings-row"><span>Flugmodus</span><div class="mini-toggle" id="flightToggleSettings"><div class="dot"></div></div></div>
+              <div class="settings-row" id="rowDisplay"><span>Anzeige &amp; Helligkeit</span><span>›</span></div>
+              <div class="settings-row"><span>Töne &amp; Lautstärke</span><span>›</span></div>
+              <div class="settings-row"><span>Datenschutz</span><span>›</span></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayWifiList">
+            <div class="overlay-header"><button id="backWifiList">←</button> WLAN</div>
+            <div class="overlay-body">
+              <div class="settings-row"><span>WLAN</span><div class="mini-toggle" id="wifiToggleList"><div class="dot"></div></div></div>
+              <div class="list-item" data-net="Zuhause"><span>Zuhause<span class="sub">Kein Passwort nötig</span></span><span class="netcheck"></span></div>
+              <div class="list-item lockednet" data-net="Café Sonne"><span>Café Sonne<span class="sub">Gesichert</span></span><span class="lock">🔒</span></div>
+              <div class="list-item lockednet" data-net="Nachbar_5G"><span>Nachbar_5G<span class="sub">Gesichert</span></span><span class="lock">🔒</span></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayBtList">
+            <div class="overlay-header"><button id="backBtList">←</button> Bluetooth</div>
+            <div class="overlay-body">
+              <div class="settings-row"><span>Bluetooth</span><div class="mini-toggle" id="btToggleList"><div class="dot"></div></div></div>
+              <div class="panel-title" style="color:#888;">Eigene Geräte</div>
+              <div class="list-item" data-dev="Kopfhörer XY"><span>Kopfhörer XY<span class="sub">Bereit zum Koppeln</span></span><span class="devcheck"></span></div>
+              <div class="list-item lockeddev" data-dev="Lautsprecher Wohnzimmer"><span>Lautsprecher Wohnzimmer<span class="sub">Außer Reichweite</span></span></div>
+              <div class="list-item lockeddev" data-dev="Unbekanntes Gerät"><span>Unbekanntes Gerät<span class="sub">Nicht zugeordnet</span></span></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayDisplay">
+            <div class="overlay-header"><button id="backDisplay">←</button> Anzeige &amp; Helligkeit</div>
+            <div class="overlay-body">
+              <div class="slider-block">
+                <label>Helligkeit</label>
+                <input type="range" id="brightnessDisplay" min="0" max="100" value="30">
+              </div>
+              <div class="slider-block">
+                <label>Schriftgröße</label>
+                <input type="range" id="fontsizeDisplay" min="0" max="100" value="20">
+              </div>
+              <div class="preview-text" id="previewText">So sieht Text auf Ihrem Bildschirm aus.</div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayMessages">
+            <div class="overlay-header"><button id="backMessages">←</button> Nachrichten</div>
+            <div class="overlay-body">
+              <div class="chat-item"><span class="name">Anna</span>Bis später dann!</div>
+              <div class="chat-item"><span class="name">Praxis Dr. Meier</span>Ihr Termin wurde bestätigt.</div>
+              <div class="chat-item"><span class="name">Thomas</span>Kannst du mich anrufen?</div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayCamera">
+            <div class="overlay-header"><button id="backCamera">←</button> Kamera</div>
+            <div class="overlay-body" style="display:flex; flex-direction:column;">
+              <div class="camera-view">Kamera-Vorschau</div>
+              <div class="shutter" id="shutterBtn"></div>
+            </div>
+          </div>
+
+        </div>
+        <div class="homebar" id="homebar"></div>
+        <div class="homebtn" id="homebtn" style="display:none;"></div>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+  </div>
+
+</div>
+
+<script>
+  var TASKS = {
+    flugmodus: { label: 'Flugmodus aktivieren', taskbar: 'Aktivieren Sie den Flugmodus.' },
+    wlan: { label: 'Mit WLAN verbinden', taskbar: 'Verbinden Sie sich mit dem WLAN "Zuhause".' },
+    bluetooth: { label: 'Bluetooth-Kopfhörer koppeln', taskbar: 'Koppeln Sie Ihre Bluetooth-Kopfhörer.' },
+    anzeige: { label: 'Bildschirm heller und Schrift größer machen', taskbar: 'Machen Sie den Bildschirm heller und die Schrift größer.' }
+  };
+
+  var state = {
+    platform: 'android', model: '', guided: true, task: 'flugmodus', step: 1, screen: 'home',
+    flight: false, wifi: true, bt: false, wifiConnectedNetwork: null, btConnectedDevice: null,
+    brightness: 30, fontsize: 20
+  };
+
+  var appDefs = [
+    { key: 'phone', label: 'Telefon', icon: '📞', interactive: false },
+    { key: 'messages', label: 'Nachrichten', icon: '💬', interactive: true },
+    { key: 'camera', label: 'Kamera', icon: '📷', interactive: true },
+    { key: 'photos', label: 'Fotos', icon: '🖼', interactive: false },
+    { key: 'browser', label: 'Browser', icon: '🌐', interactive: false },
+    { key: 'mail', label: 'E-Mail', icon: '✉', interactive: false },
+    { key: 'calendar', label: 'Kalender', icon: '📅', interactive: false },
+    { key: 'settings', label: 'Einstellungen', icon: '⚙', interactive: true }
+  ];
+
+  function renderApps() {
+    var wrap = document.getElementById('homeApps');
+    wrap.innerHTML = '';
+    appDefs.forEach(function (a) {
+      var div = document.createElement('div');
+      div.className = 'app';
+      div.innerHTML = '<div class="icon">' + a.icon + '</div><div class="lbl">' + a.label + '</div>';
+      div.onclick = function () { openApp(a.key, a.interactive, a.label); };
+      wrap.appendChild(div);
+    });
+  }
+  renderApps();
+
+  document.getElementById('guidedOn').onclick = function () { setGuided(true); };
+  document.getElementById('guidedOff').onclick = function () { setGuided(false); };
+  function setGuided(v) {
+    state.guided = v;
+    document.getElementById('guidedOn').classList.toggle('active', v);
+    document.getElementById('guidedOff').classList.toggle('active', !v);
+  }
+
+  document.getElementById('startBtn').onclick = function () {
+    var radios = document.getElementsByName('platform');
+    for (var i = 0; i < radios.length; i++) { if (radios[i].checked) state.platform = radios[i].value; }
+    state.model = document.getElementById('model').value || (state.platform === 'android' ? 'Android-Gerät' : 'iPhone');
+    state.task = document.getElementById('taskSelectDev').value;
+    resetSandbox();
+    document.getElementById('sandbox').classList.add('active');
+  };
+
+  document.getElementById('newTabBtn').onclick = function () {
+    var radios = document.getElementsByName('platform');
+    var plat = 'android';
+    for (var i = 0; i < radios.length; i++) { if (radios[i].checked) plat = radios[i].value; }
+    var model = document.getElementById('model').value || '';
+    var task = document.getElementById('taskSelectDev').value;
+    var url = location.href.split('?')[0] + '?auto=1&platform=' + encodeURIComponent(plat) + '&model=' + encodeURIComponent(model) + '&guided=' + (state.guided ? '1' : '0') + '&task=' + encodeURIComponent(task);
+    window.open(url, '_blank');
+  };
+
+  document.getElementById('exitBtn').onclick = function () {
+    document.getElementById('sandbox').classList.remove('active');
+  };
+  document.getElementById('resetBtn').onclick = resetSandbox;
+
+  document.getElementById('hotspotLeft').onclick = function () { closeOverlays(); openPanel('panelNotif'); };
+  document.getElementById('hotspotRight').onclick = function () { closeOverlays(); openPanel('panelControlTop'); };
+  document.getElementById('hotspotBottom').onclick = function () { closeOverlays(); openPanel('panelControlBottom'); };
+  document.getElementById('hotspotSwipeUp').onclick = function () {
+    showToast('Das bringt Sie nur zum Startbildschirm zurück.', true);
+  };
+
+  document.getElementById('flightToggleTop').onclick = toggleFlight;
+  document.getElementById('flightToggleBottom').onclick = toggleFlight;
+  document.getElementById('wifiToggleTop').onclick = function () { toggleWifiRadio(); };
+  document.getElementById('wifiToggleBottom').onclick = function () { toggleWifiRadio(); };
+  document.getElementById('btToggleTop').onclick = function () { toggleBtRadio(); };
+  document.getElementById('btToggleBottom').onclick = function () { toggleBtRadio(); };
+  document.getElementById('brightnessTop').oninput = function (e) { setBrightness(e.target.value); };
+  document.getElementById('brightnessBottom').oninput = function (e) { setBrightness(e.target.value); };
+
+  document.getElementById('backSettings').onclick = function () { closeOverlays(); };
+  document.getElementById('backMessages').onclick = function () { closeOverlays(); };
+  document.getElementById('backCamera').onclick = function () { closeOverlays(); };
+  document.getElementById('backWifiList').onclick = function () { openApp('settings', true, 'Einstellungen'); };
+  document.getElementById('backBtList').onclick = function () { openApp('settings', true, 'Einstellungen'); };
+  document.getElementById('backDisplay').onclick = function () { openApp('settings', true, 'Einstellungen'); };
+  document.getElementById('flightToggleSettings').onclick = toggleFlight;
+  document.getElementById('wifiToggleList').onclick = function () { toggleWifiRadio(); };
+  document.getElementById('btToggleList').onclick = function () { toggleBtRadio(); };
+
+  document.getElementById('rowWifi').onclick = function () { openOverlay('overlayWifiList'); if (state.task === 'wlan' && state.step === 2) { state.step = 3; updateHint(); } };
+  document.getElementById('rowBt').onclick = function () { openOverlay('overlayBtList'); if (state.task === 'bluetooth' && state.step === 2) { state.step = 3; updateHint(); } };
+  document.getElementById('rowDisplay').onclick = function () { openOverlay('overlayDisplay'); if (state.task === 'anzeige' && state.step === 2) { state.step = 3; updateHint(); } };
+
+  document.querySelectorAll('#overlayWifiList .list-item').forEach(function (el) {
+    el.onclick = function () {
+      var net = el.getAttribute('data-net');
+      if (el.classList.contains('lockednet')) { showToast('"' + net + '" ist gesichert. Sie kennen das Passwort nicht.', true); return; }
+      state.wifiConnectedNetwork = net;
+      state.wifi = true;
+      renderWifiBtStatus();
+      showToast('Verbunden mit "' + net + '".');
+      finishIfDone();
+    };
+  });
+
+  document.querySelectorAll('#overlayBtList .list-item').forEach(function (el) {
+    el.onclick = function () {
+      var dev = el.getAttribute('data-dev');
+      if (el.classList.contains('lockeddev')) { showToast('"' + dev + '" kann nicht verbunden werden.', true); return; }
+      state.btConnectedDevice = dev;
+      state.bt = true;
+      renderWifiBtStatus();
+      showToast('Verbunden mit "' + dev + '".');
+      finishIfDone();
+    };
+  });
+
+  document.getElementById('brightnessDisplay').oninput = function (e) { setBrightness(e.target.value); };
+  document.getElementById('fontsizeDisplay').oninput = function (e) { setFontsize(e.target.value); };
+
+  document.getElementById('shutterBtn').onclick = function () {
+    var f = document.getElementById('flash');
+    f.classList.add('fire');
+    setTimeout(function () { f.classList.remove('fire'); }, 400);
+  };
+  document.getElementById('homebtn').onclick = function () {
+    var h = document.getElementById('homebtn');
+    h.classList.add('pressed');
+    setTimeout(function () { h.classList.remove('pressed'); }, 200);
+    closeOverlays();
+  };
+
+  function openApp(key, interactive, label) {
+    if (document.getElementById('panelNotif').classList.contains('open') ||
+        document.getElementById('panelControlTop').classList.contains('open') ||
+        document.getElementById('panelControlBottom').classList.contains('open')) { return; }
+    if (!interactive) { showToast('"' + label + '" ist in dieser Demo nicht verfügbar.', true); return; }
+    closeOverlays();
+    if (key === 'settings') {
+      document.getElementById('overlaySettings').classList.add('open');
+      if (['wlan', 'bluetooth', 'anzeige'].indexOf(state.task) > -1 && state.step === 1) { state.step = 2; updateHint(); }
+    }
+    if (key === 'messages') document.getElementById('overlayMessages').classList.add('open');
+    if (key === 'camera') document.getElementById('overlayCamera').classList.add('open');
+    state.screen = key;
+  }
+
+  function openOverlay(id) {
+    closeOverlays();
+    document.getElementById(id).classList.add('open');
+    state.screen = id;
+  }
+
+  function closeOverlays() {
+    ['overlaySettings', 'overlayMessages', 'overlayCamera', 'overlayWifiList', 'overlayBtList', 'overlayDisplay'].forEach(function (id) {
+      document.getElementById(id).classList.remove('open');
+    });
+    state.screen = 'home';
+  }
+
+  function openPanel(id) {
+    ['panelNotif', 'panelControlTop', 'panelControlBottom'].forEach(function (pid) {
+      if (pid !== id) document.getElementById(pid).classList.remove('open');
+    });
+    document.getElementById(id).classList.add('open');
+    document.getElementById('hotspotLeft').classList.remove('pulse');
+    document.getElementById('hotspotRight').classList.remove('pulse');
+    document.getElementById('hotspotBottom').classList.remove('pulse');
+    if (id === 'panelNotif') {
+      showToast('Das sind Ihre Mitteilungen. Hier finden Sie diese Einstellung nicht.', true);
+    } else if (state.task === 'flugmodus' && state.step === 1) {
+      state.step = 2;
+      updateHint();
+    } else if (['wlan', 'bluetooth'].indexOf(state.task) > -1) {
+      showToast('Hier können Sie ' + (state.task === 'wlan' ? 'WLAN' : 'Bluetooth') + ' nur an- oder ausschalten. Das genaue Verbinden geschieht in den Einstellungen.', true);
+    }
+    setTimeout(function () {
+      document.addEventListener('click', outsideCloseOnce, { once: true, capture: true });
+    }, 0);
+  }
+  function outsideCloseOnce(e) {
+    var panels = ['panelNotif', 'panelControlTop', 'panelControlBottom'];
+    var insidePanel = panels.some(function (id) { return document.getElementById(id).contains(e.target); });
+    var onHotspot = e.target.classList.contains('hotspot');
+    if (!insidePanel && !onHotspot) {
+      panels.forEach(function (id) { document.getElementById(id).classList.remove('open'); });
+    }
+  }
+
+  function toggleFlight() {
+    state.flight = !state.flight;
+    document.getElementById('flightIcon').style.display = state.flight ? 'inline' : 'none';
+    ['flightToggleTop', 'flightToggleBottom'].forEach(function (id) { document.getElementById(id).classList.toggle('on', state.flight); });
+    document.getElementById('flightToggleSettings').classList.toggle('on', state.flight);
+    if (state.flight) {
+      if (state.wifi) setRadioWifi(false, true);
+      if (state.bt) setRadioBt(false, true);
+      showToast('Flugmodus aktiviert. WLAN und Bluetooth wurden mit ausgeschaltet.');
+    } else {
+      showToast('Flugmodus deaktiviert');
+    }
+    finishIfDone();
+  }
+
+  function toggleWifiRadio() { setRadioWifi(!state.wifi); }
+  function toggleBtRadio() { setRadioBt(!state.bt); }
+
+  function setRadioWifi(on, silent) {
+    state.wifi = on;
+    if (!on) state.wifiConnectedNetwork = null;
+    document.getElementById('wifiIcon').style.opacity = on ? '1' : '0.25';
+    ['wifiToggleTop', 'wifiToggleBottom', 'wifiToggleList'].forEach(function (id) { document.getElementById(id).classList.toggle('on', on); });
+    renderWifiBtStatus();
+    if (!silent) showToast(on ? 'WLAN eingeschaltet' : 'WLAN ausgeschaltet', true);
+    finishIfDone();
+  }
+  function setRadioBt(on, silent) {
+    state.bt = on;
+    if (!on) state.btConnectedDevice = null;
+    ['btToggleTop', 'btToggleBottom', 'btToggleList'].forEach(function (id) { document.getElementById(id).classList.toggle('on', on); });
+    renderWifiBtStatus();
+    if (!silent) showToast(on ? 'Bluetooth eingeschaltet' : 'Bluetooth ausgeschaltet', true);
+    finishIfDone();
+  }
+
+  function renderWifiBtStatus() {
+    document.getElementById('wifiRowStatus').textContent = state.wifiConnectedNetwork ? ('· ' + state.wifiConnectedNetwork) : (state.wifi ? '· An' : '· Aus');
+    document.getElementById('btRowStatus').textContent = state.btConnectedDevice ? ('· ' + state.btConnectedDevice) : (state.bt ? '· An' : '· Aus');
+    document.querySelectorAll('#overlayWifiList .list-item').forEach(function (el) {
+      el.querySelector('.netcheck').textContent = (state.wifiConnectedNetwork === el.getAttribute('data-net')) ? '✓' : '';
+    });
+    document.querySelectorAll('#overlayBtList .list-item .devcheck').forEach(function (el) {
+      el.textContent = (state.btConnectedDevice === 'Kopfhörer XY') ? '✓' : '';
+    });
+  }
+
+  function setBrightness(v) {
+    state.brightness = Number(v);
+    document.getElementById('brightnessTop').value = v;
+    document.getElementById('brightnessBottom').value = v;
+    document.getElementById('brightnessDisplay').value = v;
+    document.getElementById('dimmer').style.opacity = (1 - state.brightness / 100) * 0.75;
+    if (state.task === 'anzeige' && state.step === 3) { state.step = 4; }
+    finishIfDone();
+  }
+  function setFontsize(v) {
+    state.fontsize = Number(v);
+    document.getElementById('fontsizeDisplay').value = v;
+    document.getElementById('previewText').style.fontSize = (11 + (state.fontsize / 100) * 12) + 'px';
+    finishIfDone();
+  }
+
+  function showToast(msg, neutral) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.toggle('neutral', !!neutral);
+    t.classList.add('show');
+    setTimeout(function () { t.classList.remove('show'); }, 2400);
+  }
+
+  function isTaskDone() {
+    if (state.task === 'flugmodus') return state.flight;
+    if (state.task === 'wlan') return state.wifiConnectedNetwork === 'Zuhause';
+    if (state.task === 'bluetooth') return state.btConnectedDevice === 'Kopfhörer XY';
+    if (state.task === 'anzeige') return state.brightness >= 70 && state.fontsize >= 70;
+    return false;
+  }
+
+  function finishIfDone() {
+    if (isTaskDone()) {
+      var steps = getStepsForTask();
+      state.step = steps.length;
+      updateHint();
+    } else {
+      updateHint();
+    }
+  }
+
+  function resetSandbox() {
+    state.flight = false; state.step = 1; state.screen = 'home';
+    setRadioWifi(true, true); setRadioBt(false, true);
+    state.wifiConnectedNetwork = null; state.btConnectedDevice = null;
+    state.brightness = 30; state.fontsize = 20;
+    document.getElementById('panelNotif').classList.remove('open');
+    document.getElementById('panelControlTop').classList.remove('open');
+    document.getElementById('panelControlBottom').classList.remove('open');
+    closeOverlays();
+    document.getElementById('flightIcon').style.display = 'none';
+    document.getElementById('flightToggleTop').classList.remove('on');
+    document.getElementById('flightToggleBottom').classList.remove('on');
+    document.getElementById('flightToggleSettings').classList.remove('on');
+    setBrightness(30);
+    setFontsize(20);
+    renderWifiBtStatus();
+    document.getElementById('modelLabel').textContent = state.model;
+    document.getElementById('taskbarText').textContent = TASKS[state.task] ? TASKS[state.task].taskbar : '';
+    applyPlatformLayout();
+    state.step = 1;
+    updateHint();
+  }
+
+  function applyPlatformLayout() {
+    var isAndroidOrNew = state.platform !== 'ios-alt';
+    document.getElementById('hotspotLeft').style.display = isAndroidOrNew ? 'block' : 'none';
+    document.getElementById('hotspotRight').style.display = isAndroidOrNew ? 'block' : 'none';
+    document.getElementById('hotspotBottom').style.display = isAndroidOrNew ? 'none' : 'block';
+    document.getElementById('hotspotSwipeUp').style.display = isAndroidOrNew ? 'block' : 'none';
+    document.getElementById('notch').style.display = state.platform === 'ios-neu' ? 'block' : 'none';
+    document.getElementById('homebtn').style.display = state.platform === 'ios-alt' ? 'block' : 'none';
+    document.getElementById('homebar').style.display = state.platform === 'ios-alt' ? 'none' : 'block';
+    document.getElementById('hotspotLeft').classList.remove('pulse');
+    document.getElementById('hotspotRight').classList.remove('pulse');
+    document.getElementById('hotspotBottom').classList.remove('pulse');
+    if (state.guided && state.task === 'flugmodus') {
+      if (isAndroidOrNew) document.getElementById('hotspotRight').classList.add('pulse');
+      else document.getElementById('hotspotBottom').classList.add('pulse');
+    }
+  }
+
+  function getStepsForTask() {
+    var gesture = state.platform === 'ios-alt'
+      ? 'Wischen Sie vom unteren Bildschirmrand nach oben.'
+      : 'Wischen Sie oben rechts nach unten, nicht oben links.';
+    if (state.task === 'flugmodus') {
+      return ['Schritt 1: ' + gesture, 'Schritt 2: Tippen Sie auf das Flugzeug-Symbol.', 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.'];
+    }
+    if (state.task === 'wlan') {
+      return ['Schritt 1: Öffnen Sie die App "Einstellungen".', 'Schritt 2: Tippen Sie auf "WLAN".', 'Schritt 3: Wählen Sie das Netzwerk "Zuhause" aus.', 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.'];
+    }
+    if (state.task === 'bluetooth') {
+      return ['Schritt 1: Öffnen Sie die App "Einstellungen".', 'Schritt 2: Tippen Sie auf "Bluetooth".', 'Schritt 3: Wählen Sie "Kopfhörer XY" aus.', 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.'];
+    }
+    if (state.task === 'anzeige') {
+      return ['Schritt 1: Öffnen Sie die App "Einstellungen".', 'Schritt 2: Tippen Sie auf "Anzeige & Helligkeit".', 'Schritt 3: Schieben Sie beide Regler deutlich nach rechts.', 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.'];
+    }
+    return [];
+  }
+
+  function updateHint() {
+    var hb = document.getElementById('hintbar');
+    if (!state.guided) { hb.textContent = ''; return; }
+    var steps = getStepsForTask();
+    hb.textContent = steps[state.step - 1] || steps[steps.length - 1] || '';
+  }
+
+  (function checkAutoStart() {
+    var params = new URLSearchParams(location.search);
+    if (params.get('auto') === '1') {
+      state.platform = params.get('platform') || 'android';
+      state.model = params.get('model') || '';
+      state.guided = params.get('guided') !== '0';
+      state.task = params.get('task') || 'flugmodus';
+      document.getElementById('setup').style.display = 'none';
+      resetSandbox();
+      document.getElementById('sandbox').classList.add('active');
+      document.documentElement.requestFullscreen && document.documentElement.requestFullscreen().catch(function(){});
+    } else {
+      var t = new URLSearchParams(location.search).get('task');
+      if (t) document.getElementById('taskSelectDev').value = t;
+    }
+  })();
+</script>
+</body>
+</html>
