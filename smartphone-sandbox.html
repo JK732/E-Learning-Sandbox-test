@@ -504,7 +504,8 @@
     document.getElementById('wifiRowStatus').textContent = state.wifiConnectedNetwork ? ('· ' + state.wifiConnectedNetwork) : (state.wifi ? '· An' : '· Aus');
     document.getElementById('btRowStatus').textContent = state.btConnectedDevice ? ('· ' + state.btConnectedDevice) : (state.bt ? '· An' : '· Aus');
     document.querySelectorAll('#overlayWifiList .list-item').forEach(function (el) {
-      el.querySelector('.netcheck').textContent = (state.wifiConnectedNetwork === el.getAttribute('data-net')) ? '✓' : '';
+      var nc = el.querySelector('.netcheck');
+      if (nc) nc.textContent = (state.wifiConnectedNetwork === el.getAttribute('data-net')) ? '✓' : '';
     });
     document.querySelectorAll('#overlayBtList .list-item .devcheck').forEach(function (el) {
       el.textContent = (state.btConnectedDevice === 'Kopfhörer XY') ? '✓' : '';
