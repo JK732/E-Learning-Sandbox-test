@@ -2,125 +2,370 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Smartphone-Sandbox</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>iPhone-Sandbox</title>
 <style>
-  * { box-sizing: border-box; }
-  body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 20px; background: #f4f4f2; color: #222; }
+  :root {
+    --brand: #0e6a80;
+    --brand-dark: #0a4f60;
+    --brand-darkest: #0a3a45;
+    --accent: #e8a233;
+    --accent-light: #f5be5a;
+    --text: #4a4a68;
+    --text-soft: #6b6b80;
+    --bg: #f5f6fa;
+    --border: #eaeaf2;
+    --danger: #c0392b;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, Arial, Helvetica, sans-serif; margin: 0; padding: 20px; background: var(--bg); color: var(--text); touch-action: none; }
   #app { max-width: 640px; margin: 0 auto; }
-  .card { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 24px; }
-  h1 { font-size: 20px; margin-top: 0; }
-  label { display: block; margin: 16px 0 6px; font-weight: bold; font-size: 15px; }
-  select, input[type="text"] { width: 100%; padding: 10px; font-size: 15px; border-radius: 8px; border: 1px solid #bbb; }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 26px; box-shadow: 0 2px 10px rgba(10,58,69,0.06); }
+  h1 { font-size: 20px; margin-top: 0; color: var(--brand-darkest); }
+  label { display: block; margin: 16px 0 6px; font-weight: 600; font-size: 14px; color: var(--text); }
+  select, input[type="text"] { width: 100%; padding: 10px; font-size: 15px; border-radius: 8px; border: 1px solid var(--border); color: var(--text); background: #fff; }
+  select:focus, input[type="text"]:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
   .radio-row { display: flex; gap: 10px; flex-wrap: wrap; }
-  .radio-row label { display: flex; align-items: center; gap: 6px; font-weight: normal; border: 1px solid #bbb; padding: 10px 14px; border-radius: 8px; cursor: pointer; margin: 0; flex: 1 1 auto; }
-  .radio-row input { margin: 0; }
+  .radio-row label { display: flex; align-items: center; gap: 6px; font-weight: normal; border: 1px solid var(--border); padding: 10px 14px; border-radius: 10px; cursor: pointer; margin: 0; flex: 1 1 auto; color: var(--text); }
+  .radio-row input { margin: 0; accent-color: var(--brand); }
   .toggle-row { display: flex; gap: 10px; margin-top: 16px; }
-  .toggle-row button { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #bbb; background: #fff; cursor: pointer; font-size: 14px; }
-  .toggle-row button.active { background: #0c447c; color: #fff; border-color: #0c447c; }
-  #startBtn { margin-top: 22px; width: 100%; padding: 14px; font-size: 16px; font-weight: bold; background: #0c447c; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
-  #newTabBtn { margin-top: 10px; width: 100%; padding: 10px; font-size: 13px; background: #fff; color: #0c447c; border: 1px solid #0c447c; border-radius: 8px; cursor: pointer; }
-  .devnote { font-size: 12px; color: #888; margin-top: 6px; }
+  .toggle-row button { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 14px; color: var(--text); transition: background 0.15s, color 0.15s; }
+  .toggle-row button.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .toggle-row button:hover:not(.active) { border-color: var(--brand); }
+  #startBtn { margin-top: 22px; width: 100%; padding: 14px; font-size: 16px; font-weight: 700; background: var(--brand); color: #fff; border: none; border-radius: 10px; cursor: pointer; transition: background 0.15s; }
+  #startBtn:hover { background: var(--brand-dark); }
+  #newTabBtn { margin-top: 10px; width: 100%; padding: 10px; font-size: 13px; background: #fff; color: var(--brand); border: 1px solid var(--brand); border-radius: 10px; cursor: pointer; }
+  #newTabBtn:hover { background: var(--bg); }
+  .devnote { font-size: 12px; color: var(--text-soft); margin-top: 6px; }
 
   #sandbox { display: none; position: fixed; inset: 0; background: #e9e9e6; z-index: 999; }
   #sandbox.active { display: flex; flex-direction: column; }
-  #taskbar { background: #0c447c; color: #fff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-  #taskbar .taskText { font-size: 14px; }
-  #taskbar button { background: #fff; color: #0c447c; border: none; border-radius: 6px; padding: 8px 12px; font-size: 13px; cursor: pointer; font-weight: bold; }
-  #hintbar { background: #fff3d6; color: #6b4c00; font-size: 13px; padding: 8px 16px; text-align: center; min-height: 34px; }
-  #stage { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  #taskbar { background: linear-gradient(120deg, var(--brand-darkest), var(--brand)); color: #fff; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); flex-wrap: wrap; }
+  #taskbar .taskLabel { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.75; margin-bottom: 2px; }
+  #taskbar .taskText { font-size: 14.5px; font-weight: 500; max-width: 62vw; }
+  #taskbar .btnRow { display: flex; gap: 8px; }
+  #taskbar button { background: rgba(255,255,255,0.14); color: #fff; border: 1px solid rgba(255,255,255,0.35); border-radius: 8px; padding: 8px 14px; font-size: 13px; cursor: pointer; font-weight: 600; transition: background 0.15s; }
+  #taskbar button:hover { background: rgba(255,255,255,0.28); }
+  #taskbar #resetBtn { background: var(--accent); border-color: var(--accent); color: #3a2600; }
+  #taskbar #resetBtn:hover { background: var(--accent-light); }
+  #hintbar { background: #fff3d6; color: #6b4c00; font-size: 13.5px; padding: 9px 16px; text-align: center; min-height: 36px; border-bottom: 1px solid #f0e0b0; }
+  #hintbar:empty { padding: 0; min-height: 0; border: none; }
+  #stage { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+  #zoomBar { position: absolute; right: 14px; bottom: 14px; background: #fff; border: 1px solid var(--border); border-radius: 30px; padding: 6px 10px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); z-index: 60; }
+  #zoomBar button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--brand-darkest); font-size: 16px; font-weight: 700; cursor: pointer; line-height: 1; }
+  #zoomBar button:hover { background: #eef4f6; }
+  #zoomLabel { font-size: 12px; color: var(--text-soft); min-width: 34px; text-align: center; }
 
-  .phone { width: 260px; height: 540px; background: #111; border-radius: 32px; position: relative; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
-  .screen { position: absolute; inset: 6px; background: #dfe7ee; border-radius: 26px; overflow: hidden; }
-  .statusbar { height: 30px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; font-size: 11px; background: #dfe7ee; position: relative; z-index: 2; }
-  .statusbar .icons { display: flex; gap: 6px; align-items: center; }
-  .notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 90px; height: 18px; background: #111; border-radius: 0 0 12px 12px; z-index: 30; }
-  .homebar { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); width: 90px; height: 4px; background: #999; border-radius: 4px; z-index: 30; }
-  .homebtn { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); width: 36px; height: 36px; border: 2px solid #999; border-radius: 50%; z-index: 30; cursor: pointer; }
-  .homebtn.pressed { background: rgba(255,255,255,0.3); }
+  #phoneZoomWrap { transform: scale(1); transition: transform 0.15s ease; }
+  .phone { width: 320px; height: 664px; background: #111; border-radius: 50px; position: relative; box-shadow: 0 14px 34px rgba(10,58,69,0.35); border: 2px solid #000; }
+  .screen { position: absolute; inset: 5px; background: #e8ecef; border-radius: 40px; overflow: hidden; }
+  .statusbar { height: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; font-size: 12px; font-weight: 600; background: transparent; position: relative; z-index: 2; }
+  .statusbar .icons { display: flex; gap: 5px; align-items: center; }
+  .statusbar svg { width: 15px; height: 15px; display: block; }
+  .notch { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 84px; height: 24px; background: #000; border-radius: 14px; z-index: 30; }
+  .homebar { position: absolute; bottom: 7px; left: 50%; transform: translateX(-50%); width: 110px; height: 4px; background: #333; border-radius: 4px; z-index: 30; }
+  .homebtn { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 40px; height: 40px; border: 2.5px solid #999; border-radius: 50%; z-index: 30; cursor: pointer; }
+  .homebtn.pressed { background: rgba(255,255,255,0.35); }
 
-  .dimmer { position: absolute; top: 30px; left: 0; right: 0; bottom: 0; background: #000; opacity: 0.45; pointer-events: none; z-index: 12; }
+  .dimmer { position: absolute; top: 34px; left: 0; right: 0; bottom: 0; background: #000; opacity: 0.45; pointer-events: none; z-index: 35; }
 
-  .apps { padding: 16px 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; position: relative; z-index: 1; }
-  .app { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
-  .app .icon { width: 42px; height: 42px; border-radius: 12px; background: #7f77dd; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; }
+  .apps { padding: 18px 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; position: relative; z-index: 1; }
+  .app { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+  .app .icon { width: 46px; height: 46px; border-radius: 13px; background: #7f77dd; display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: inset 0 -2px 4px rgba(0,0,0,0.15); }
+  .app .icon svg { width: 24px; height: 24px; }
   .app:nth-child(2n) .icon { background: #1d9e75; }
   .app:nth-child(3n) .icon { background: #d85a30; }
-  .app:nth-child(4n) .icon { background: #d4537e; }
-  .app .lbl { font-size: 9px; color: #333; text-align: center; }
+  .app:nth-child(4n) .icon { background: #4a90d9; }
+  .app .lbl { font-size: 9.5px; color: #333; text-align: center; }
 
-  .hotspot { position: absolute; background: rgba(255,255,255,0.001); z-index: 20; cursor: pointer; top: 0; }
-  .hotspot-left { left: 0; width: 40%; height: 34px; }
-  .hotspot-right { right: 0; width: 60%; height: 34px; }
-  .hotspot-bottom { bottom: 0; left: 0; width: 100%; height: 24px; top: auto; }
-  .hotspot-swipeup { bottom: 24px; left: 20%; width: 60%; height: 20px; top: auto; }
+  .hotspot { position: absolute; background: rgba(255,255,255,0.001); z-index: 20; cursor: grab; top: 0; touch-action: none; }
+  .hotspot-left { left: 0; width: 40%; height: 30px; }
+  .hotspot-right { right: 0; width: 60%; height: 30px; }
+  .hotspot-topfull { left: 0; width: 100%; height: 30px; }
+  .hotspot-bottom { bottom: 0; left: 0; width: 100%; height: 30px; top: auto; }
+  .hotspot-swipeup { bottom: 0; left: 0; width: 100%; height: 30px; top: auto; }
   .hotspot.pulse { background: rgba(12,68,124,0.15); animation: pulse 1.4s infinite; }
   @keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-  .panel { position: absolute; left: 8px; right: 8px; background: rgba(30,30,30,0.94); border-radius: 18px; padding: 16px; z-index: 25; transition: transform 0.3s ease, top 0.3s ease, bottom 0.3s ease; }
-  .panel.top { top: -360px; }
-  .panel.top.open { top: 40px; }
-  .panel.bottom { bottom: -360px; }
-  .panel.bottom.open { bottom: 40px; }
-  .panel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .toggleicon { background: #333; color: #ccc; border-radius: 12px; padding: 10px 6px; text-align: center; font-size: 18px; cursor: pointer; }
-  .toggleicon.on { background: #0c447c; color: #fff; }
+  .panel { position: absolute; left: 8px; right: 8px; background: rgba(40,40,45,0.9); backdrop-filter: blur(6px); border-radius: 20px; padding: 16px; z-index: 25; top: -420px; }
+  .panel.bottompanel { bottom: -420px; top: auto; }
+  .panel.open { top: 44px; }
+  .panel.bottompanel.open { bottom: 44px; top: auto; }
+  .panel.snap { transition: top 0.25s ease, bottom 0.25s ease; }
+  .panel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .toggleicon { background: #3a3a3f; color: #ddd; border-radius: 14px; padding: 10px 6px; text-align: center; cursor: pointer; }
+  .toggleicon svg { width: 20px; height: 20px; margin: 0 auto; display: block; }
+  .toggleicon.on { background: var(--brand); color: #fff; }
   .toggleicon .lbl { display: block; font-size: 9px; margin-top: 4px; }
   .panel-title { color: #999; font-size: 11px; margin-bottom: 8px; }
-  .notif-item { background: #444; color: #eee; border-radius: 10px; padding: 10px; margin-bottom: 8px; font-size: 11px; }
+  .notif-item { background: #4a4a4f; color: #eee; border-radius: 12px; padding: 10px; margin-bottom: 8px; font-size: 11px; }
   .notif-item .app-name { font-weight: bold; display: block; margin-bottom: 2px; }
-  .panel-slider-row { margin-top: 12px; color: #ccc; font-size: 11px; }
+  .panel-slider-row { margin-top: 12px; color: #ccc; font-size: 11px; display: flex; align-items: center; gap: 8px; }
+  .panel-slider-row svg { width: 16px; height: 16px; flex-shrink: 0; }
   .panel-slider-row input { width: 100%; }
 
-  .overlay { position: absolute; inset: 0; background: #f2f2f0; z-index: 15; display: none; flex-direction: column; }
+  .overlay { position: absolute; inset: 0; top: 34px; background: #f2f2f0; z-index: 15; display: none; flex-direction: column; }
   .overlay.open { display: flex; }
-  .overlay-header { background: #0c447c; color: #fff; padding: 10px 12px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: bold; }
-  .overlay-header button { background: none; border: none; color: #fff; font-size: 16px; cursor: pointer; padding: 2px 6px; }
-  .overlay-body { flex: 1; padding: 10px; overflow: hidden; }
-  .settings-row { display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 12px; cursor: pointer; }
-  .mini-toggle { width: 38px; height: 20px; border-radius: 12px; background: #ccc; position: relative; cursor: pointer; }
-  .mini-toggle.on { background: #0c447c; }
-  .mini-toggle .dot { width: 16px; height: 16px; border-radius: 50%; background: #fff; position: absolute; top: 2px; left: 2px; transition: left 0.2s; }
+  .overlay-header { background: linear-gradient(120deg, var(--brand-darkest), var(--brand)); color: #fff; padding: 12px 12px 12px 16px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: bold; }
+  .overlay-header { position: relative; z-index: 1; }
+  .overlay-header button { background: none; border: none; color: #fff; font-size: 22px; line-height: 1; cursor: pointer; min-width: 40px; min-height: 36px; margin: -8px 0 -8px -8px; padding: 0 8px; border-radius: 8px; }
+  .overlay-header button:active { background: rgba(255,255,255,0.2); }
+  .overlay-body { flex: 1; padding: 10px; overflow-y: auto; }
+  .settings-row { display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 10px; padding: 11px 14px; margin-bottom: 8px; font-size: 13px; cursor: pointer; }
+  .mini-toggle { width: 40px; height: 22px; border-radius: 12px; background: #ccc; position: relative; cursor: pointer; flex-shrink: 0; }
+  .mini-toggle.on { background: var(--brand); }
+  .mini-toggle .dot { width: 18px; height: 18px; border-radius: 50%; background: #fff; position: absolute; top: 2px; left: 2px; transition: left 0.2s; }
   .mini-toggle.on .dot { left: 20px; }
-  .chat-item { background: #fff; border-radius: 8px; padding: 10px; margin-bottom: 8px; font-size: 11px; }
+  .chat-item { background: #fff; border-radius: 10px; padding: 10px; margin-bottom: 8px; font-size: 11px; }
   .chat-item .name { font-weight: bold; display: block; }
-  .camera-view { flex: 1; background: #222; display: flex; align-items: center; justify-content: center; color: #666; font-size: 11px; }
-  .shutter { width: 56px; height: 56px; border-radius: 50%; background: #fff; border: 4px solid #ccc; margin: 14px auto; cursor: pointer; }
+  .camera-view { flex: 1; background: #222; display: flex; align-items: center; justify-content: center; color: #666; font-size: 11px; border-radius: 10px; }
+  .shutter { width: 58px; height: 58px; border-radius: 50%; background: #fff; border: 4px solid #ccc; margin: 14px auto; cursor: pointer; }
   .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 40; }
   .flash.fire { opacity: 1; transition: opacity 0.4s; }
-  .list-item { background: #fff; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .list-item { background: #fff; border-radius: 10px; padding: 11px 14px; margin-bottom: 8px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
   .list-item .sub { display: block; font-size: 10px; color: #888; }
-  .check { color: #1d9e75; font-weight: bold; }
-  .lock { color: #999; font-size: 11px; }
-  .slider-block { background: #fff; border-radius: 8px; padding: 14px 12px; margin-bottom: 12px; }
+  .check { color: var(--brand); font-weight: bold; }
+  .lock svg { width: 13px; height: 13px; color: #999; }
+  .slider-block { background: #fff; border-radius: 10px; padding: 14px 14px; margin-bottom: 12px; }
   .slider-block label { font-size: 12px; font-weight: bold; margin-bottom: 8px; }
   .slider-block input { width: 100%; }
-  .preview-text { background: #fff; border-radius: 8px; padding: 12px; text-align: center; }
+  .preview-text { background: #fff; border-radius: 10px; padding: 14px; text-align: center; }
 
-  .toast { position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); background: #1d9e75; color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 12px; opacity: 0; transition: opacity 0.3s; z-index: 50; max-width: 220px; text-align: center; }
+  .panel { touch-action: none; }
+  .grabber { width: 44px; height: 5px; border-radius: 3px; background: #777; margin: 12px auto 0; cursor: grab; }
+  .panel.bottompanel .grabber { margin: 0 auto 12px; }
+  body.hl .hotspot-left, body.hl .hotspot-right, body.hl .hotspot-topfull { background: rgba(232,162,51,0.24); border-bottom: 2px dashed var(--accent); }
+  body.hl .hotspot-left { border-right: 1px solid rgba(232,162,51,0.6); }
+  body.hl .hotspot-bottom { background: rgba(232,162,51,0.24); border-top: 2px dashed var(--accent); }
+  body.hl .hotspot-swipeup { background: rgba(232,162,51,0.24); border-top: 2px dashed var(--accent); }
+  body.hl .sw-preview { box-shadow: 0 0 0 2px rgba(232,162,51,0.8); }
+  body.hl .grabber { background: var(--accent); box-shadow: 0 0 0 3px rgba(232,162,51,0.35); }
+  body.hl #sandbox input[type=range] { accent-color: var(--accent); }
+  body.hl .panel-slider-row, body.hl .slider-block { box-shadow: 0 0 0 2px rgba(232,162,51,0.6); border-radius: 10px; }
+  body.hl .panel-slider-row { padding: 6px 8px; }
+  .legend { display: none; font-size: 12px; color: #7a4c00; background: #fdf1dc; padding: 4px 16px; text-align: center; border-top: 1px solid #f3ddb0; }
+  body.hl .legend { display: block; }
+  .legend .sw { display: inline-block; width: 14px; height: 10px; background: rgba(232,162,51,0.4); border: 1px dashed var(--accent); vertical-align: middle; margin-right: 4px; }
+  .overlay.leaving { transition: transform 0.2s ease, opacity 0.2s ease; transform: scale(0.35) translateY(120px) !important; opacity: 0; }
+  #switcher { position: absolute; inset: 0; background: rgba(25,25,30,0.9); z-index: 18; display: none; flex-direction: column; justify-content: center; }
+  #switcher.open { display: flex; }
+  .sw-track { display: flex; gap: 14px; overflow-x: auto; padding: 0 50px; scrollbar-width: none; align-items: center; }
+  .sw-track::-webkit-scrollbar { display: none; }
+  .sw-card { flex: 0 0 150px; touch-action: none; cursor: grab; user-select: none; }
+  .sw-label { color: #fff; font-size: 11px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .sw-ic { width: 20px; height: 20px; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: #fff; }
+  .sw-ic svg { width: 13px; height: 13px; }
+  .sw-preview { background: #f2f2f0; border-radius: 18px; height: 270px; overflow: hidden; }
+  .sw-preview.dark { background: #222; }
+  .sw-bar { background: #0c447c; color: #fff; font-size: 10px; font-weight: bold; padding: 8px 10px; }
+  .sw-lines i { display: block; height: 22px; background: #fff; border-radius: 6px; margin: 8px; }
+  .sw-preview.dark .sw-lines i { background: #333; }
+  .sw-empty { color: #bbb; text-align: center; font-size: 13px; display: none; }
+  .sw-hint { color: #aaa; font-size: 10px; text-align: center; margin-top: 14px; padding: 0 20px; }
+  #gestureBubble { position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); color: #fff; font-size: 11px; padding: 6px 12px; border-radius: 12px; z-index: 45; display: none; white-space: nowrap; }
+  .note { font-size: 11px; color: #777; padding: 4px 6px 10px; line-height: 1.4; }
+  .kp-body { display: flex; flex-direction: column; align-items: center; position: relative; }
+  .kp-title { font-size: 15px; font-weight: 600; margin-top: 6px; }
+  .kp-msg { font-size: 11px; color: #c0392b; min-height: 16px; text-align: center; margin-top: 4px; padding: 0 10px; }
+  .kp-dots { display: flex; gap: 12px; justify-content: center; margin: 8px 0 14px; }
+  .kp-dots span { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid #333; }
+  .kp-dots span.f { background: #333; }
+  .kp-dots.dark span { border-color: #fff; }
+  .kp-dots.dark span.f { background: #fff; }
+  .kp { display: grid; grid-template-columns: repeat(3, 58px); gap: 10px 16px; justify-content: center; }
+  .kp-key { width: 58px; height: 58px; border-radius: 50%; border: none; background: #dedee3; font-size: 22px; color: #111; cursor: pointer; font-family: inherit; }
+  .kp-key:active { background: #bbb; }
+  .kp-key.dark { background: rgba(255,255,255,0.2); color: #fff; }
+  .kp-key.blank { visibility: hidden; }
+  .kp-key.del { background: transparent; font-size: 12px; }
+  .kp-link { margin-top: 12px; font-size: 12px; color: var(--brand); cursor: pointer; padding: 6px 10px; }
+  .shake { animation: shake 0.4s; }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-8px); } 40%,80% { transform: translateX(8px); } }
+  .kp-sheet, .kp-dialog { position: absolute; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: flex-end; justify-content: center; padding: 10px; z-index: 5; }
+  .kp-dialog { align-items: center; }
+  .kp-sheet-inner, .kp-dialog-inner { background: #fff; border-radius: 14px; width: 100%; overflow: hidden; }
+  .kp-sheet-inner div, .kp-dialog-inner button { display: block; width: 100%; padding: 12px; text-align: center; font-size: 13px; color: var(--brand); border: none; border-top: 1px solid #eee; background: #fff; cursor: pointer; font-family: inherit; }
+  .kp-dialog-inner p { margin: 0; padding: 14px 14px 10px; font-size: 12px; text-align: center; color: #333; }
+  .kp-dialog-inner p b { display: block; font-size: 13px; margin-bottom: 4px; color: var(--danger); }
+  #lockscreen { position: absolute; inset: 0; z-index: 28; display: none; flex-direction: column; background: linear-gradient(160deg, #2b4c7e, #1a2a44 60%, #3a2350); color: #fff; }
+  .ls-info { flex: 1; display: flex; flex-direction: column; align-items: center; padding-top: 44px; }
+  .ls-lockicon svg { width: 18px; height: 18px; }
+  .ls-time { font-size: 54px; font-weight: 300; line-height: 1.1; }
+  .ls-date { font-size: 13px; opacity: 0.85; }
+  .ls-notif { margin: 26px 14px 0; background: rgba(255,255,255,0.18); border-radius: 14px; padding: 10px 12px; font-size: 11px; align-self: stretch; }
+  .ls-bottom { margin-top: auto; margin-bottom: 30px; font-size: 11px; opacity: 0.85; }
+  .ls-keypad { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.35); }
+  #lsSwipe { position: absolute; left: 0; right: 0; bottom: 0; height: 60px; cursor: grab; touch-action: none; }
+  body.hl #lsSwipe { background: rgba(255,170,0,0.22); border-top: 2px dashed #e69500; }
+  #screenOff { position: absolute; inset: 0; background: #000; z-index: 29; display: none; cursor: pointer; }
+  .sidebtn { position: absolute; right: -7px; top: 130px; width: 7px; height: 64px; background: #2a2a2a; border-radius: 0 4px 4px 0; cursor: pointer; }
+  .volbtn { position: absolute; left: -7px; width: 7px; height: 40px; background: #2a2a2a; border-radius: 4px 0 0 4px; cursor: pointer; }
+  .sidebtn::after, .volbtn::after { content: ''; position: absolute; inset: -6px -10px; }
+  .sidebtn:active, .volbtn:active { background: #666; }
+  .pulse-btn { animation: pulsebtn 1.2s infinite; }
+  @keyframes pulsebtn { 0%,100% { box-shadow: 0 0 0 0 rgba(255,170,0,0); background: #2a2a2a; } 50% { box-shadow: 0 0 0 6px rgba(255,170,0,0.55); background: #e69500; } }
+  .bio-modal { position: absolute; inset: 0; background: rgba(255,255,255,0.97); z-index: 8; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+  .bio-modal.open { display: flex; }
+  .bio-ring { width: 90px; height: 90px; border-radius: 50%; border: 4px solid #ddd; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; position: relative; }
+  .bio-ring svg { width: 46px; height: 46px; color: #999; }
+  .bio-ring.scanning { border-color: #0c447c; animation: bioSpin 1.1s linear infinite; }
+  .bio-ring.ok { border-color: #1d9e75; }
+  .bio-ring.ok svg { color: #1d9e75; }
+  @keyframes bioSpin { 0% { border-top-color: #0c447c; } 50% { border-top-color: #cfe0ee; } 100% { border-top-color: #0c447c; } }
+  .bio-title { font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+  .bio-sub { font-size: 11px; color: #777; }
+  .cam-modes { display: flex; gap: 18px; justify-content: center; padding: 10px 0 4px; overflow-x: auto; }
+  .cam-mode { color: rgba(255,255,255,0.55); font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap; padding: 4px 2px; }
+  .cam-mode.active { color: #f2c200; }
+  .cam-explain { color: #ddd; font-size: 10px; text-align: center; padding: 0 16px 6px; min-height: 14px; }
+  .rec-indicator { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background: #e53935; color: #fff; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 6px; display: none; align-items: center; gap: 4px; }
+  .rec-indicator.show { display: flex; }
+  .rec-dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: recBlink 1s infinite; }
+  @keyframes recBlink { 50% { opacity: 0.2; } }
+  .shutter.video { border-color: #e53935; }
+  .shutter.video .sq { display: none; width: 22px; height: 22px; background: #e53935; border-radius: 4px; margin: 17px auto; }
+  .shutter.recording .sq { display: block; }
+  .browser-bar { background: #e2e4e8; padding: 8px 12px; font-size: 11px; color: #555; text-align: center; border-radius: 8px; margin: 8px; }
+  .form-block { background: #fff; border-radius: 10px; padding: 14px; margin: 0 8px 8px; }
+  .form-block label { display: block; font-size: 11px; color: #888; margin-bottom: 4px; }
+  .form-block input[type=text], .form-block input[type=password] { width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 9px 10px; font-size: 13px; margin-bottom: 12px; font-family: inherit; }
+  .pw-field-wrap { position: relative; }
+  .pw-field-wrap input { padding-right: 34px !important; }
+  .pw-eye { position: absolute; right: 8px; top: 7px; background: none; border: none; cursor: pointer; font-size: 14px; color: #888; }
+  .pw-weak-note { color: var(--danger); font-size: 10.5px; margin: -8px 0 10px; }
+  .pw-suggest { background: #eaf2fb; border: 1px solid #cfe0f5; border-radius: 8px; padding: 9px 10px; font-size: 11.5px; color: var(--brand-darkest); margin: -6px 0 12px; cursor: pointer; display: none; }
+  .pw-suggest.show { display: block; }
+  .pw-suggest b { display: block; font-size: 12px; margin-bottom: 2px; }
+  .form-submit { width: 100%; padding: 11px; background: var(--brand); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  #sosOverlay { position: absolute; inset: 0; background: rgba(20,0,0,0.85); z-index: 32; display: none; flex-direction: column; align-items: center; justify-content: center; color: #fff; padding: 20px; text-align: center; }
+  #sosOverlay.open { display: flex; }
+  .sos-ring { width: 92px; height: 92px; border-radius: 50%; border: 3px solid #e53935; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 18px; }
+  .sos-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .sos-sub { font-size: 11px; color: #ddd; margin-bottom: 24px; }
+  .sos-slider-track { width: 220px; height: 46px; background: rgba(255,255,255,0.15); border-radius: 23px; position: relative; touch-action: none; }
+  .sos-slider-knob { width: 42px; height: 42px; border-radius: 50%; background: #e53935; position: absolute; top: 2px; left: 2px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: grab; }
+  .sos-slider-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #ccc; pointer-events: none; }
+  .sos-cancel { margin-top: 22px; font-size: 12px; color: #bbb; cursor: pointer; padding: 8px 14px; }
+  @keyframes jiggle { 0%,100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+  .apps.jiggling .app:not(.app-removing) { animation: jiggle 0.22s infinite; }
+  .apps.jiggling .app { position: relative; }
+  .app-badge { display: none; position: absolute; top: -6px; left: -6px; width: 20px; height: 20px; background: #4a4a55; border-radius: 50%; color: #fff; font-size: 15px; line-height: 18px; text-align: center; z-index: 3; }
+  .apps.jiggling .app-badge { display: block; }
+  .app-removing { animation: none !important; transition: transform 0.2s ease, opacity 0.2s ease; transform: scale(0); opacity: 0; }
+  #jiggleDone { display: none; text-align: center; margin-top: 4px; }
+  .apps.jiggling ~ #jiggleDone, .jiggle-done-visible { display: block !important; }
+  #jiggleDoneBtn { background: var(--brand); color: #fff; border: none; border-radius: 14px; padding: 6px 18px; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .app-confirm { position: absolute; inset: 0; background: rgba(0,0,0,0.4); z-index: 22; display: none; align-items: center; justify-content: center; }
+  .app-confirm.open { display: flex; }
+  .app-confirm-box { background: #eee; border-radius: 14px; width: 78%; overflow: hidden; text-align: center; }
+  .app-confirm-box p { margin: 0; padding: 16px 14px 12px; font-size: 12.5px; color: #333; }
+  .app-confirm-box p b { display: block; font-size: 13.5px; margin-bottom: 4px; }
+  .app-confirm-box button { display: block; width: 100%; padding: 11px; border: none; border-top: 1px solid #ccc; background: #eee; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .app-confirm-box button.danger { color: var(--danger); font-weight: 600; }
+  .st-summary { font-size: 12.5px; padding: 6px 6px 10px; color: var(--text); line-height: 1.5; }
+  .st-bar { height: 14px; border-radius: 7px; background: #e3e6ea; display: flex; overflow: hidden; margin: 0 0 12px; }
+  .st-seg { height: 100%; }
+  .st-btn { display: block; width: 100%; padding: 11px; border-radius: 10px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 10px; font-family: inherit; }
+  .st-btn.danger { background: #fff; color: var(--danger); border: 1px solid var(--danger); }
+  .batt-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 2px; font-size: 12.5px; border-bottom: 1px solid var(--border); }
+  .batt-row .pct { color: #888; }
+  .batt-row.hog { font-weight: 700; color: var(--danger); }
+  .app.dragging { opacity: 0.85; z-index: 6; }
+  .app.drop-hover .icon { outline: 3px solid var(--accent); outline-offset: 2px; transform: scale(1.08); }
+  .folder-tile .icon { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; padding: 6px; gap: 2px; background: #7f77dd; }
+  .folder-tile .icon span { display: flex; align-items: center; justify-content: center; }
+  .folder-tile .icon svg { width: 13px; height: 13px; }
+  .page-dots { display: flex; justify-content: center; gap: 7px; margin-top: 2px; padding: 4px; }
+  .page-dots .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(0,0,0,0.25); cursor: pointer; }
+  .page-dots .dot.active { background: #555; }
+  .folder-overlay { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.4); z-index: 45; align-items: flex-start; justify-content: center; padding-top: 90px; }
+  .folder-overlay.open { display: flex; }
+  .folder-box { background: rgba(246,246,248,0.96); border-radius: 20px; padding: 14px; width: 210px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .folder-header { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: #333; }
+  .folder-header button { border: none; background: var(--brand); color: #fff; border-radius: 12px; padding: 4px 10px; font-size: 11.5px; cursor: pointer; font-family: inherit; }
+  .folder-box .apps { padding: 0; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .hs-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 4px; font-size: 13px; border-bottom: 1px solid var(--border); cursor: pointer; color: var(--text); }
+  .hs-row:last-of-type { border-bottom: none; }
+  .hs-check { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #bbb; flex-shrink: 0; }
+  .hs-check.on { background: var(--brand); border-color: var(--brand); position: relative; }
+  .hs-check.on::after { content: ''; position: absolute; left: 5px; top: 1px; width: 4px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .toast { position: absolute; bottom: 64px; left: 50%; transform: translateX(-50%); background: var(--brand-darkest); color: #fff; padding: 9px 15px; border-radius: 10px; font-size: 12.5px; opacity: 0; transition: opacity 0.3s; z-index: 50; max-width: 240px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
   .toast.show { opacity: 1; }
-  .toast.neutral { background: #555; }
+  .toast.neutral { background: #4a4a55; }
+
+  /* ===== Einbettung / Touch (v2) ===== */
+  /* Eingebettet (iPad/Computer): Wischen ausserhalb der ziehbaren Elemente scrollt die Lektionsseite. */
+  html.embedded body { touch-action: pan-y pinch-zoom; }
+  /* Eigenes Fenster (Vollbild): kein Gummiband-Scrollen, keine Pull-to-Refresh-Geste. */
+  html.standalone, html.standalone body { overscroll-behavior: none; }
+  /* Langes Druecken (Wackelmodus) darf keine Textauswahl/Lupe/Kontextmenue des Geraets ausloesen. */
+  #sandbox, #launch { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  #sandbox input, #sandbox textarea { -webkit-user-select: text; user-select: text; }
+  /* Ziehbare Kacheln im Wackelmodus gehoeren der Simulation, nicht dem Browser. */
+  .apps.jiggling .app, .app.dragging { touch-action: none; }
+  /* Die Wackel-Animation ueberschreibt sonst die Verschiebung: gezogene App muss dem Finger folgen. */
+  .apps.jiggling .app.dragging { animation: none !important; }
+  #sandbox { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  /* Hinweiszeile hat feste Mindesthoehe, damit die Skalierung zwischen Schritten nicht springt. */
+  #hintbar { min-height: 52px; display: flex; align-items: center; justify-content: center; }
+  #hintbar:empty { display: block; min-height: 0; }
+  html.embedded #exitBtn { display: none; }
+
+  /* Start-Karte auf kleinen Bildschirmen (Smartphone, eingebettet) */
+  #launch { display: none; }
+  #launch.show { display: flex; position: fixed; inset: 0; align-items: center; justify-content: center; padding: 20px; background: var(--bg); z-index: 1000; }
+  .launch-card { max-width: 420px; width: 100%; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 24px 20px; text-align: center; box-shadow: 0 2px 10px rgba(10,58,69,0.08); }
+  .launch-card h2 { margin: 0 0 8px; font-size: 20px; color: var(--brand-darkest); }
+  .launch-task { font-size: 15px; line-height: 1.45; color: var(--text); margin: 0 0 18px; }
+  #launchBtn { width: 100%; min-height: 56px; padding: 14px; font-size: 18px; font-weight: 700; background: var(--brand); color: #fff; border: none; border-radius: 12px; cursor: pointer; }
+  #launchBtn:active { background: var(--brand-dark); }
+  .launch-note { font-size: 14px; line-height: 1.45; color: var(--text-soft); margin: 14px 0 0; }
+  #closedNote { display: none; position: fixed; inset: 0; z-index: 1100; align-items: center; justify-content: center; padding: 20px; background: rgba(10,58,69,0.92); }
+  #closedNote.show { display: flex; }
+  #closedNote .launch-card p { font-size: 16px; line-height: 1.5; margin: 0 0 16px; color: var(--text); }
+  #closedNote button { width: 100%; min-height: 52px; font-size: 16px; font-weight: 700; background: var(--brand); color: #fff; border: none; border-radius: 12px; cursor: pointer; }
+
+  /* Kompakte Kopfzeile auf schmalen Bildschirmen */
+  @media (max-width: 520px) {
+    #taskbar { position: relative; flex-wrap: nowrap; align-items: flex-start; padding: 8px 10px; gap: 8px; }
+    #taskbar > div:first-child { flex: 1 1 auto; min-width: 0; }
+    #taskbar .taskLabel { margin-bottom: 0; }
+    #taskbar .taskText { font-size: 12.5px; line-height: 1.3; max-width: none; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
+    #taskbar .taskText.open { position: absolute; left: 0; right: 0; top: 100%; z-index: 1001; display: block; overflow: visible; padding: 10px 12px 12px; background: var(--brand-darkest); box-shadow: 0 6px 14px rgba(0,0,0,0.3); }
+    #taskbar .btnRow { flex: 0 0 auto; gap: 6px; }
+    #taskbar button { padding: 7px 9px; font-size: 12px; min-height: 36px; }
+    #hintbar { font-size: 12.5px; line-height: 1.3; padding: 6px 10px; min-height: 78px; }
+    #hintbar:empty { min-height: 0; }
+    .legend { font-size: 11px; padding: 3px 10px; }
+    #zoomBar { display: none; }
+  }
 </style>
 </head>
 <body>
 <div id="app">
 
   <div id="setup" class="card">
-    <h1>Smartphone-Sandbox – Einrichtung</h1>
+    <h1>iPhone-Sandbox – Einrichtung</h1>
 
-    <label>Gerätetyp</label>
+    <label>iPhone-Typ</label>
     <div class="radio-row">
-      <label><input type="radio" name="platform" value="android" checked> Android</label>
-      <label><input type="radio" name="platform" value="ios-neu"> iPhone (neu, ohne Home-Button)</label>
+      <label><input type="radio" name="platform" value="ios-neu" checked> iPhone (neu, Wischgesten, ohne Home-Button)</label>
       <label><input type="radio" name="platform" value="ios-alt"> iPhone (älter, mit Home-Button)</label>
     </div>
 
     <label for="model">Modellname (optional)</label>
-    <input type="text" id="model" placeholder="z. B. Samsung Galaxy A54">
+    <input type="text" id="model" placeholder="z. B. iPhone 13">
 
     <label>Anleitung während der Aufgabe</label>
     <div class="toggle-row">
       <button id="guidedOn" class="active">Mit Schritt-für-Schritt-Hilfe</button>
       <button id="guidedOff">Ohne Hilfe (frei ausprobieren)</button>
+    </div>
+
+    <label>Zieh- und Schiebebereiche</label>
+    <div class="toggle-row">
+      <button id="hlOn" class="active">Farblich hervorheben</button>
+      <button id="hlOff">Nicht hervorheben (schwieriger)</button>
     </div>
 
     <label for="taskSelectDev">Aufgabe (nur für Vorschau/Test – im Rise-Export über URL-Parameter "task" fest eingestellt)</label>
@@ -129,94 +374,204 @@
       <option value="wlan">Mit WLAN verbinden</option>
       <option value="bluetooth">Bluetooth-Kopfhörer koppeln</option>
       <option value="anzeige">Anzeige anpassen</option>
+      <option value="code">Sicherheit: Code, Face ID oder Touch ID</option>
+      <option value="nichtstoeren">Kontrollzentrum: Nicht stören aktivieren</option>
+      <option value="kamera">Kamera: Modi kennenlernen</option>
+      <option value="passwort">Browser: Passwort-Manager</option>
+      <option value="notruf">Sicherheit: Notruf SOS</option>
+      <option value="app_loeschen">Startbildschirm: Eine App löschen</option>
+      <option value="autosperre">Sicherheit: Automatische Sperre einstellen</option>
+      <option value="sperren">Sicherheit: iPhone sperren und entsperren</option>
+      <option value="tracking">Datenschutz: Tracking verbieten</option>
+      <option value="ortung">Datenschutz: Standortzugriff entziehen</option>
+      <option value="speicher">Fehlerbehebung: Speicher ist voll</option>
+      <option value="sim">Fehlerbehebung: SIM-Karte gesperrt</option>
+      <option value="akku">Fehlerbehebung: Akku wird schnell leer</option>
+      <option value="internet">Fehlerbehebung: Kein Internet</option>
+      <option value="apps_organisieren">Startbildschirm: Apps verschieben &amp; Ordner</option>
     </select>
 
     <button id="startBtn">Aufgabe starten</button>
     <button id="newTabBtn">In neuem Tab öffnen (echtes Vollbild)</button>
-    <div class="devnote">Rise-Einbettung: dieselbe Datei hosten und pro Lektion per URL unterschiedliche Aufgabe übergeben, z. B. ?auto=1&#38;task=wlan&#38;guided=1</div>
+    <div class="devnote">Rise-Einbettung: dieselbe Datei hosten und pro Lektion per URL unterschiedliche Aufgabe übergeben, z. B. ?auto=1&#38;task=wlan&#38;guided=1&#38;platform=ios-alt&#38;hl=1</div>
+  </div>
+
+  <div id="launch">
+    <div class="launch-card">
+      <h2>Übung öffnen</h2>
+      <p class="launch-task" id="launchTask"></p>
+      <button id="launchBtn">Übung im Vollbild starten</button>
+      <p class="launch-note">Die Übung öffnet sich in einem neuen Fenster. Wenn Sie fertig sind, tippen Sie dort auf &bdquo;Schließen&ldquo; und kehren zu dieser Lektion zurück.</p>
+      <p class="launch-note">Tipp: Auf einem iPad oder Computer lässt sich die Übung bequemer bedienen.</p>
+    </div>
+  </div>
+
+  <div id="closedNote">
+    <div class="launch-card">
+      <p>Sie können dieses Fenster jetzt schließen und zu Ihrer Lektion zurückkehren.</p>
+      <button id="closedRestart">Übung noch einmal von vorn</button>
+    </div>
   </div>
 
   <div id="sandbox">
     <div id="taskbar">
-      <div class="taskText" id="taskbarText">Aufgabe</div>
-      <div>
-        <button id="resetBtn">Zurücksetzen</button>
-        <button id="exitBtn">Zurück</button>
+      <div><div class="taskLabel">Aufgabe</div><div class="taskText" id="taskbarText">Aufgabe</div></div>
+      <div class="btnRow">
+        <button id="resetBtn">↺ Zurücksetzen</button>
+        <button id="exitBtn">‹ Zurück</button>
       </div>
     </div>
     <div id="hintbar"></div>
+    <div class="legend"><span class="sw"></span>Orange markierte Stellen lassen sich ziehen oder schieben.</div>
     <div id="stage">
-      <div class="phone" id="phone">
+      <div id="zoomBar">
+        <button id="zoomOut" title="Kleiner">–</button>
+        <span id="zoomLabel">100%</span>
+        <button id="zoomIn" title="Größer">+</button>
+      </div>
+      <div id="phoneZoomWrap"><div class="phone" id="phone">
         <div class="notch" id="notch"></div>
         <div class="flash" id="flash"></div>
         <div class="screen" id="screen">
           <div class="statusbar">
             <span id="modelLabel">14:32</span>
-            <span class="icons"><span id="flightIcon" style="display:none;">✈</span><span id="wifiIcon">📶</span> 🔋</span>
+            <span class="icons">
+              <span id="simIcon" style="display:none;font-size:9.5px;font-weight:700;color:#c0392b;">Kein Netz (SIM gesperrt)</span>
+              <span id="flightIcon" style="display:none;"></span>
+              <span id="wifiIcon"></span>
+              <span id="battIcon"></span>
+            </span>
           </div>
 
           <div class="apps" id="homeApps"></div>
+          <div class="page-dots" id="pageDots"><span class="dot" data-page="0"></span><span class="dot" data-page="1"></span></div>
+          <div class="folder-overlay" id="folderOverlay">
+            <div class="folder-box">
+              <div class="folder-header"><span id="folderTitle">Ordner</span><button id="folderCloseBtn">Fertig</button></div>
+              <div class="apps" id="folderApps"></div>
+            </div>
+          </div>
+          <div class="folder-overlay" id="hsPicker">
+            <div class="folder-box" style="width:190px;">
+              <div class="folder-header"><span>Startbildschirm</span><button id="hsPickerDone">Fertig</button></div>
+              <div class="hs-row" data-page="0">Seite 1 <span class="hs-check" id="hsCheck0"></span></div>
+              <div class="hs-row" data-page="1">Seite 2 <span class="hs-check" id="hsCheck1"></span></div>
+            </div>
+          </div>
+          <div id="jiggleDone"><button id="jiggleDoneBtn">Fertig</button></div>
+          <div class="app-confirm" id="appConfirm"><div class="app-confirm-box">
+            <p><b id="appConfirmName">App</b>löschen? Damit werden auch alle Daten dieser App gelöscht.</p>
+            <button class="danger" id="appConfirmDelete">App löschen</button>
+            <button id="appConfirmCancel">Abbrechen</button>
+          </div></div>
           <div class="dimmer" id="dimmer"></div>
 
           <div class="hotspot hotspot-left" id="hotspotLeft"></div>
           <div class="hotspot hotspot-right" id="hotspotRight"></div>
+          <div class="hotspot hotspot-topfull" id="hotspotTopFull" style="display:none;"></div>
           <div class="hotspot hotspot-bottom" id="hotspotBottom"></div>
           <div class="hotspot hotspot-swipeup" id="hotspotSwipeUp"></div>
 
-          <div class="panel top" id="panelNotif">
+          <div id="switcher">
+            <div class="sw-empty" id="swEmpty">Keine geöffneten Apps</div>
+            <div class="sw-track" id="swTrack"></div>
+            <div class="sw-hint" id="swHint">Tippen öffnet eine App · Nach oben wischen schließt sie · Daneben tippen führt zum Startbildschirm</div>
+          </div>
+          <div id="gestureBubble"></div>
+
+          <div id="lockscreen">
+            <div class="ls-info" id="lsInfo">
+              <div class="ls-lockicon" data-icon-inline="lock"></div>
+              <div class="ls-time" id="lsTime">14:32</div>
+              <div class="ls-date" id="lsDate">Donnerstag, 24. September</div>
+              <div class="ls-notif"><b>Nachrichten</b><br>Anna: Bis später dann!</div>
+              <div class="ls-bottom" id="lsBottomText">Zum Öffnen nach oben wischen</div>
+            </div>
+            <div class="ls-keypad" id="lsKeypad">
+              <div class="kp-title">Code eingeben</div>
+              <div class="kp-msg" id="lsMsg" style="color:#ffb4a8;"></div>
+              <div class="kp-dots dark" id="lsDots"></div>
+              <div class="kp" id="lsPad"></div>
+              <div class="kp-link" id="lsCancel" style="color:#fff;">Abbrechen</div>
+            </div>
+            <div id="lsSwipe"></div>
+          </div>
+          <div id="screenOff"></div>
+          <div id="sosOverlay">
+            <div class="sos-ring">🚨</div>
+            <div class="sos-title">Notruf SOS</div>
+            <div class="sos-sub">Schieben Sie den Regler, um den Notruf zu wählen.</div>
+            <div class="sos-slider-track" id="sosTrack">
+              <div class="sos-slider-label">Zum Wählen schieben</div>
+              <div class="sos-slider-knob" id="sosKnob">📞</div>
+            </div>
+            <div class="sos-cancel" id="sosCancel">Abbrechen</div>
+          </div>
+
+          <div class="panel" id="panelNotif">
             <div class="panel-title">Mitteilungen</div>
             <div class="notif-item"><span class="app-name">Wetter</span>Heute sonnig, 21°C</div>
             <div class="notif-item"><span class="app-name">Kalender</span>Erinnerung: Arzttermin 15:00 Uhr</div>
+            <div class="notif-item" id="notifSim" style="display:none;"><span class="app-name">Telefon</span>SIM-Karte gesperrt. Öffnen Sie Einstellungen, dann Mobilfunk, dann SIM-PIN.</div>
+            <div class="grabber"></div>
           </div>
 
-          <div class="panel top" id="panelControlTop">
-            <div class="panel-title">Schnelleinstellungen</div>
-            <div class="panel-grid">
-              <div class="toggleicon" id="flightToggleTop">✈<span class="lbl">Flugmodus</span></div>
-              <div class="toggleicon" id="wifiToggleTop">📶<span class="lbl">WLAN</span></div>
-              <div class="toggleicon" id="btToggleTop">🔵<span class="lbl">Bluetooth</span></div>
-            </div>
-            <div class="panel-slider-row">Helligkeit
-              <input type="range" id="brightnessTop" min="0" max="100" value="30">
-            </div>
-          </div>
-
-          <div class="panel bottom" id="panelControlBottom">
+          <div class="panel" id="panelControlTop">
             <div class="panel-title">Kontrollzentrum</div>
             <div class="panel-grid">
-              <div class="toggleicon" id="flightToggleBottom">✈<span class="lbl">Flugmodus</span></div>
-              <div class="toggleicon" id="wifiToggleBottom">📶<span class="lbl">WLAN</span></div>
-              <div class="toggleicon" id="btToggleBottom">🔵<span class="lbl">Bluetooth</span></div>
+              <div class="toggleicon" id="flightToggleTop" data-icon="plane"><span class="lbl">Flugmodus</span></div>
+              <div class="toggleicon" id="wifiToggleTop" data-icon="wifi"><span class="lbl">WLAN</span></div>
+              <div class="toggleicon" id="btToggleTop" data-icon="bt"><span class="lbl">Bluetooth</span></div>
+              <div class="toggleicon" id="dndToggleTop" data-icon="moon"><span class="lbl">Nicht stören</span></div>
             </div>
-            <div class="panel-slider-row">Helligkeit
+            <div class="panel-slider-row"><span data-icon-inline="sun"></span>
+              <input type="range" id="brightnessTop" min="0" max="100" value="30">
+            </div>
+            <div class="grabber"></div>
+          </div>
+
+          <div class="panel bottompanel" id="panelControlBottom">
+            <div class="grabber"></div>
+            <div class="panel-title">Kontrollzentrum</div>
+            <div class="panel-grid">
+              <div class="toggleicon" id="flightToggleBottom" data-icon="plane"><span class="lbl">Flugmodus</span></div>
+              <div class="toggleicon" id="wifiToggleBottom" data-icon="wifi"><span class="lbl">WLAN</span></div>
+              <div class="toggleicon" id="btToggleBottom" data-icon="bt"><span class="lbl">Bluetooth</span></div>
+              <div class="toggleicon" id="dndToggleBottom" data-icon="moon"><span class="lbl">Nicht stören</span></div>
+            </div>
+            <div class="panel-slider-row"><span data-icon-inline="sun"></span>
               <input type="range" id="brightnessBottom" min="0" max="100" value="30">
             </div>
           </div>
 
           <div class="overlay" id="overlaySettings">
-            <div class="overlay-header"><button id="backSettings">←</button> Einstellungen</div>
+            <div class="overlay-header"><button id="backSettings" style="display:none;">‹</button> Einstellungen</div>
             <div class="overlay-body">
               <div class="settings-row" id="rowWifi"><span>WLAN <span id="wifiRowStatus" style="color:#888;"></span></span><span>›</span></div>
               <div class="settings-row" id="rowBt"><span>Bluetooth <span id="btRowStatus" style="color:#888;"></span></span><span>›</span></div>
               <div class="settings-row"><span>Flugmodus</span><div class="mini-toggle" id="flightToggleSettings"><div class="dot"></div></div></div>
               <div class="settings-row" id="rowDisplay"><span>Anzeige &amp; Helligkeit</span><span>›</span></div>
-              <div class="settings-row"><span>Töne &amp; Lautstärke</span><span>›</span></div>
-              <div class="settings-row"><span>Datenschutz</span><span>›</span></div>
+              <div class="settings-row" id="rowCellular"><span>Mobilfunk <span id="cellularRowStatus" style="color:#888;"></span></span><span>›</span></div>
+              <div class="settings-row" id="rowBattery"><span>Batterie</span><span>›</span></div>
+              <div class="settings-row" id="rowGeneral"><span>Allgemein</span><span>›</span></div>
+              <div class="settings-row" id="rowCode"><span id="codeRowLabel">Face ID &amp; Code</span><span>›</span></div>
+              <div class="settings-row" id="rowPrivacy"><span>Datenschutz &amp; Sicherheit</span><span>›</span></div>
+              <div class="settings-row dead-row"><span>Töne &amp; Haptik</span><span>›</span></div>
             </div>
           </div>
 
           <div class="overlay" id="overlayWifiList">
-            <div class="overlay-header"><button id="backWifiList">←</button> WLAN</div>
+            <div class="overlay-header"><button id="backWifiList">‹</button> WLAN</div>
             <div class="overlay-body">
               <div class="settings-row"><span>WLAN</span><div class="mini-toggle" id="wifiToggleList"><div class="dot"></div></div></div>
-              <div class="list-item" data-net="Zuhause"><span>Zuhause<span class="sub">Kein Passwort nötig</span></span><span class="netcheck"></span></div>
-              <div class="list-item lockednet" data-net="Café Sonne"><span>Café Sonne<span class="sub">Gesichert</span></span><span class="lock">🔒</span></div>
-              <div class="list-item lockednet" data-net="Nachbar_5G"><span>Nachbar_5G<span class="sub">Gesichert</span></span><span class="lock">🔒</span></div>
+              <div class="list-item" data-net="Zuhause" data-pin="1234"><span>Zuhause<span class="sub">Gesichert</span></span><span class="netcheck"></span></div>
+              <div class="list-item lockednet" data-net="Café Sonne"><span>Café Sonne<span class="sub">Gesichert</span></span><span class="lock" data-icon-inline="lock"></span></div>
+              <div class="list-item lockednet" data-net="Nachbar_5G"><span>Nachbar_5G<span class="sub">Gesichert</span></span><span class="lock" data-icon-inline="lock"></span></div>
             </div>
           </div>
 
           <div class="overlay" id="overlayBtList">
-            <div class="overlay-header"><button id="backBtList">←</button> Bluetooth</div>
+            <div class="overlay-header"><button id="backBtList">‹</button> Bluetooth</div>
             <div class="overlay-body">
               <div class="settings-row"><span>Bluetooth</span><div class="mini-toggle" id="btToggleList"><div class="dot"></div></div></div>
               <div class="panel-title" style="color:#888;">Eigene Geräte</div>
@@ -227,7 +582,7 @@
           </div>
 
           <div class="overlay" id="overlayDisplay">
-            <div class="overlay-header"><button id="backDisplay">←</button> Anzeige &amp; Helligkeit</div>
+            <div class="overlay-header"><button id="backDisplay">‹</button> Anzeige &amp; Helligkeit</div>
             <div class="overlay-body">
               <div class="slider-block">
                 <label>Helligkeit</label>
@@ -238,11 +593,187 @@
                 <input type="range" id="fontsizeDisplay" min="0" max="100" value="20">
               </div>
               <div class="preview-text" id="previewText">So sieht Text auf Ihrem Bildschirm aus.</div>
+              <div class="settings-row" id="rowAutolock" style="margin-top:12px;"><span>Automatische Sperre</span><span><span id="autolockValue" style="color:#888;">30 Sekunden</span> ›</span></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayCode">
+            <div class="overlay-header"><button id="backCode">‹</button> <span id="codeHeader">Face ID &amp; Code</span></div>
+            <div class="overlay-body">
+              <div class="settings-row" id="rowBiometric"><span id="bioLabel">Face ID einrichten</span><span id="bioStatus" style="color:#888;"></span></div>
+              <div class="settings-row" id="rowCodeToggle"><span id="codeToggleLabel" style="color:#0a64c2;">Code aktivieren</span></div>
+              <div class="settings-row" id="rowCodeChange" style="display:none;"><span style="color:#0a64c2;">Code ändern</span></div>
+              <div class="note" id="codeNote"></div>
+            </div>
+            <div class="bio-modal" id="bioModal">
+              <div class="bio-ring" id="bioRing"></div>
+              <div class="bio-title" id="bioTitle">Bitte schauen Sie auf den Bildschirm</div>
+              <div class="bio-sub" id="bioSub">Halten Sie das iPhone in normalem Abstand vor Ihr Gesicht.</div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayKeypad">
+            <div class="overlay-header"><button id="backKeypad" style="font-size:13px;">Abbrechen</button> <span id="kpHeader">Code festlegen</span></div>
+            <div class="overlay-body kp-body">
+              <div class="kp-title" id="kpTitle">Code eingeben</div>
+              <div class="kp-msg" id="kpMsg"></div>
+              <div class="kp-dots" id="kpDots"></div>
+              <div class="kp" id="kpPad"></div>
+              <div class="kp-link" id="kpOptions">Codeoptionen</div>
+              <div class="kp-sheet" id="kpSheet"><div class="kp-sheet-inner">
+                <div data-len="alpha">Eigener alphanumerischer Code</div>
+                <div data-len="6">6-stelliger Zahlencode</div>
+                <div data-len="4">4-stelliger Zahlencode</div>
+                <div data-len="cancel" style="font-weight:600;">Abbrechen</div>
+              </div></div>
+              <div class="kp-dialog" id="kpWeak"><div class="kp-dialog-inner">
+                <p><b>Dieser Code ist leicht zu erraten</b>Codes wie 123456 oder 111111 probieren Fremde als Erstes aus.</p>
+                <button id="kpWeakChange" style="font-weight:600;">Anderen Code wählen</button>
+                <button id="kpWeakUse">Trotzdem verwenden</button>
+              </div></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayWifiPin">
+            <div class="overlay-header"><button id="backWifiPin" style="font-size:13px;">Abbrechen</button> <span id="wifiPinHeader">Netzwerkschlüssel</span></div>
+            <div class="overlay-body kp-body">
+              <div class="kp-title">Netzwerkschlüssel eingeben</div>
+              <div class="kp-msg" id="wifiPinMsg"></div>
+              <div class="kp-dots" id="wifiPinDots"></div>
+              <div class="kp" id="wifiPinPad"></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayAutolock">
+            <div class="overlay-header"><button id="backAutolock">‹</button> Automatische Sperre</div>
+            <div class="overlay-body">
+              <div class="note">Nach dieser Zeit ohne Benutzung sperrt sich Ihr iPhone von selbst.</div>
+              <div id="autolockList"></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayPrivacy">
+            <div class="overlay-header"><button id="backPrivacy">‹</button> Datenschutz &amp; Sicherheit</div>
+            <div class="overlay-body">
+              <div class="settings-row" id="rowLocation"><span>Ortungsdienste</span><span><span id="locStatus" style="color:#888;">An</span> ›</span></div>
+              <div class="settings-row" id="rowTracking"><span>Tracking</span><span>›</span></div>
+              <div class="settings-row dead-row"><span>Kontakte</span><span>›</span></div>
+              <div class="settings-row dead-row"><span>Fotos</span><span>›</span></div>
+              <div class="settings-row dead-row"><span>Mikrofon</span><span>›</span></div>
+              <div class="settings-row dead-row"><span>Kamera</span><span>›</span></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayTracking">
+            <div class="overlay-header"><button id="backTracking">‹</button> Tracking</div>
+            <div class="overlay-body">
+              <div class="settings-row"><span>Apps erlauben, Tracking anzufordern</span><div class="mini-toggle" id="trackToggle"><div class="dot"></div></div></div>
+              <div class="note">Ist diese Option aus, dürfen Apps Sie nicht fragen, ob sie Ihre Aktivitäten in anderen Apps und auf Websites verfolgen dürfen.</div>
+              <div id="trackAppList"></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayLocation">
+            <div class="overlay-header"><button id="backLocation">‹</button> Ortungsdienste</div>
+            <div class="overlay-body">
+              <div class="settings-row"><span>Ortungsdienste</span><div class="mini-toggle" id="locMasterToggle"><div class="dot"></div></div></div>
+              <div id="locList"></div>
+              <div class="note">Tipp: Überlegen Sie bei jeder App, ob sie Ihren Standort wirklich braucht.</div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayLocApp">
+            <div class="overlay-header"><button id="backLocApp">‹</button> <span id="locAppTitle">App</span></div>
+            <div class="overlay-body">
+              <div class="note">Zugriff auf den Standort erlauben</div>
+              <div id="locOptList"></div>
+              <div class="settings-row"><span>Genauer Standort</span><div class="mini-toggle on" id="preciseToggle"><div class="dot"></div></div></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayBrowser">
+            <div class="overlay-header" style="display:flex;"><span>Safari</span></div>
+            <div class="overlay-body" style="padding:0;">
+              <div class="browser-bar">🔒 meinshop.de</div>
+              <div class="note" style="margin:0 8px 4px;">Ein Passwort-Manager – auf dem iPhone heißt er Schlüsselbund – merkt sich für Sie starke, einzigartige Passwörter. Sie müssen sich dann nur noch den Code für Ihr iPhone merken.</div>
+              <div class="form-block">
+                <label>Konto erstellen</label>
+                <label style="margin-top:6px;">E-Mail-Adresse</label>
+                <input type="text" id="pwUsername" value="ihre.email@beispiel.de">
+                <label>Passwort</label>
+                <div class="pw-field-wrap">
+                  <input type="password" id="pwPassword" placeholder="Passwort eingeben">
+                  <button class="pw-eye" id="pwEye" type="button">👁</button>
+                </div>
+                <div class="pw-weak-note" id="pwWeakNote" style="display:none;">Dieses Passwort ist kurz und leicht zu erraten.</div>
+                <div class="pw-suggest" id="pwSuggest"><b>Starkes Passwort verwenden</b>Der Schlüsselbund merkt sich dieses Passwort für Sie.</div>
+                <button class="form-submit" id="pwSubmit">Konto erstellen</button>
+              </div>
+            </div>
+            <div class="kp-dialog" id="pwSaveDialog"><div class="kp-dialog-inner">
+              <p><b>Passwort sichern?</b>Der Schlüsselbund merkt sich dieses Passwort für "meinshop.de" und füllt es beim nächsten Mal automatisch aus.</p>
+              <button id="pwSaveYes" style="font-weight:600;">Speichern</button>
+              <button id="pwSaveNo">Nicht jetzt</button>
+            </div></div>
+          </div>
+
+          <div class="overlay" id="overlayCellular">
+            <div class="overlay-header"><button id="backCellular">‹</button> Mobilfunk</div>
+            <div class="overlay-body">
+              <div class="settings-row dead-row"><span>Mobile Daten</span><span>›</span></div>
+              <div class="settings-row dead-row"><span>Datenroaming</span><span>›</span></div>
+              <div class="settings-row" id="rowSimPin"><span>SIM-PIN</span><span><span id="simPinStatus" style="color:#888;"></span> ›</span></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlaySimPin">
+            <div class="overlay-header"><button id="backSimPin" style="font-size:13px;">Abbrechen</button> <span>SIM-PIN</span></div>
+            <div class="overlay-body kp-body">
+              <div class="kp-title">SIM-PIN eingeben</div>
+              <div class="kp-msg" id="simPinMsg"></div>
+              <div class="kp-dots" id="simPinDots"></div>
+              <div class="kp" id="simPinPad"></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayGeneral">
+            <div class="overlay-header"><button id="backGeneral">‹</button> Allgemein</div>
+            <div class="overlay-body">
+              <div class="settings-row dead-row"><span>Info</span><span>›</span></div>
+              <div class="settings-row dead-row"><span>Softwareupdate</span><span>›</span></div>
+              <div class="settings-row" id="rowStorage"><span>iPhone-Speicher</span><span>›</span></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayStorage">
+            <div class="overlay-header"><button id="backStorage">‹</button> iPhone-Speicher</div>
+            <div class="overlay-body">
+              <div class="st-summary" id="storageSummary"></div>
+              <div class="st-bar" id="storageBar"></div>
+              <div id="storageList"></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayStorageApp">
+            <div class="overlay-header"><button id="backStorageApp">‹</button> <span id="storageAppTitle">App</span></div>
+            <div class="overlay-body">
+              <div class="note" id="storageAppNote"></div>
+              <button class="st-btn danger" id="storageAppDelete">App löschen</button>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayBattery">
+            <div class="overlay-header"><button id="backBattery">‹</button> Batterie</div>
+            <div class="overlay-body">
+              <div class="settings-row"><span>Stromsparmodus</span><div class="mini-toggle" id="lowPowerToggle"><div class="dot"></div></div></div>
+              <div class="note" id="lowPowerNote">Reduziert Hintergrundaktivität und schont den Akku.</div>
+              <div class="panel-title" style="color:#888; margin-top:10px;">Batterienutzung (letzte 24 Stunden)</div>
+              <div id="battList"></div>
             </div>
           </div>
 
           <div class="overlay" id="overlayMessages">
-            <div class="overlay-header"><button id="backMessages">←</button> Nachrichten</div>
+            <div class="overlay-header"><button id="backMessages" style="display:none;">‹</button> Nachrichten</div>
             <div class="overlay-body">
               <div class="chat-item"><span class="name">Anna</span>Bis später dann!</div>
               <div class="chat-item"><span class="name">Praxis Dr. Meier</span>Ihr Termin wurde bestätigt.</div>
@@ -251,17 +782,25 @@
           </div>
 
           <div class="overlay" id="overlayCamera">
-            <div class="overlay-header"><button id="backCamera">←</button> Kamera</div>
-            <div class="overlay-body" style="display:flex; flex-direction:column;">
-              <div class="camera-view">Kamera-Vorschau</div>
-              <div class="shutter" id="shutterBtn"></div>
+            <div class="overlay-header"><button id="backCamera" style="display:none;">‹</button> Kamera</div>
+            <div class="overlay-body" style="display:flex; flex-direction:column; padding:0;">
+              <div class="camera-view" style="margin:10px 10px 0; position:relative; border-radius:14px;">
+                <div class="rec-indicator" id="recIndicator"><span class="rec-dot"></span><span id="recTime">0:00</span></div>
+                <span id="camViewLabel">Kamera-Vorschau</span>
+              </div>
+              <div class="cam-explain" id="camExplain"></div>
+              <div class="cam-modes" id="camModes"></div>
+              <div class="shutter" id="shutterBtn"><div class="sq"></div></div>
             </div>
           </div>
 
         </div>
         <div class="homebar" id="homebar"></div>
         <div class="homebtn" id="homebtn" style="display:none;"></div>
-      </div>
+        <div class="sidebtn" id="sideBtn" title="Seitentaste"></div>
+        <div class="volbtn" id="volUp" style="top:110px;" title="Lauter"></div>
+        <div class="volbtn" id="volDown" style="top:160px;" title="Leiser"></div>
+      </div></div>
     </div>
     <div class="toast" id="toast"></div>
   </div>
@@ -269,42 +808,394 @@
 </div>
 
 <script>
+  var PARAMS = new URLSearchParams(location.search);
+  var IS_EMBEDDED = (function () { try { return window.self !== window.top; } catch (e) { return true; } })();
+  var FULL = PARAMS.get('full') === '1';
+  document.documentElement.classList.add(IS_EMBEDDED && !FULL ? 'embedded' : 'standalone');
+  var viewScale = 1;   // aktuelle Gesamtskalierung des iPhone-Modells (Anpassung x Zoom)
+  var ICONS = {
+    plane: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16l20-8-8 20-3-8-8-3z"/></svg>',
+    wifi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5a16 16 0 0120 0M5.5 12a11 11 0 0113 0M9 15.5a6 6 0 016 0"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></svg>',
+    bt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10-5 5V2l5 5L7 17"/></svg>',
+    sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>',
+    lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>',
+    battery: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="18" height="10" rx="2"/><rect x="21" y="10" width="1.5" height="4" fill="currentColor" stroke="none"/><rect x="4" y="9" width="13" height="6" rx="1" fill="currentColor" stroke="none"/></svg>',
+    phone: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.3 1L6.6 10.8z"/></svg>',
+    message: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a1 1 0 011 1v11a1 1 0 01-1 1H9l-5 4V6a2 2 0 012-2z"/></svg>',
+    camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13.5" r="3.2"/></svg>',
+    photo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6" fill="currentColor" stroke="none"/><path d="M21 16l-5.5-5.5-4 4L8 11l-5 5"/></svg>',
+    globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 6 4 9s-1.5 6.5-4 9c-2.5-2.5-4-6-4-9s1.5-6.5 4-9z"/></svg>',
+    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+    calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+    gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.6V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.6 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.6 1z"/></svg>',
+    faceid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h-.5A1.5 1.5 0 004 5.5V7M18 4h.5A1.5 1.5 0 0120 5.5V7M6 20h-.5A1.5 1.5 0 014 18.5V17M18 20h.5a1.5 1.5 0 001.5-1.5V17M9 10v1.5M15 10v1.5M8.5 15.5c1 1 2 1.3 3.5 1.3s2.5-.3 3.5-1.3"/></svg>',
+    fingerprint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3a7 7 0 00-7 7c0 2.5.5 4 1.5 6M12 3a7 7 0 017 7c0 1-.1 2-.3 3M8.5 20a11 11 0 002-4.5M12 6.5A3.5 3.5 0 008.5 10c0 2.5-.5 4.5-1.8 6.8M12 6.5A3.5 3.5 0 0115.5 10c0 1 0 2-.2 3M11 20c1.6-1.8 2.5-3.6 2.8-5.5M15 17.5c.6-1 1-2.2 1.2-3.5"/></svg>',
+    moon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/></svg>'
+  };
+
+  function icon(name) { return ICONS[name] || ''; }
+  document.addEventListener('contextmenu', function (e) {
+    if (e.target.closest && e.target.closest('#sandbox') && !e.target.closest('input, textarea')) e.preventDefault();
+  });
+
   var TASKS = {
     flugmodus: { label: 'Flugmodus aktivieren', taskbar: 'Aktivieren Sie den Flugmodus.' },
-    wlan: { label: 'Mit WLAN verbinden', taskbar: 'Verbinden Sie sich mit dem WLAN "Zuhause".' },
+    wlan: { label: 'Mit WLAN verbinden', taskbar: 'Verbinden Sie sich mit dem WLAN "Zuhause". Der Netzwerkschlüssel lautet: 1 2 3 4' },
     bluetooth: { label: 'Bluetooth-Kopfhörer koppeln', taskbar: 'Koppeln Sie Ihre Bluetooth-Kopfhörer.' },
-    anzeige: { label: 'Bildschirm heller und Schrift größer machen', taskbar: 'Machen Sie den Bildschirm heller und die Schrift größer.' }
+    anzeige: { label: 'Bildschirm heller und Schrift größer machen', taskbar: 'Machen Sie den Bildschirm heller und die Schrift größer.' },
+    code: { label: 'Code, Face ID oder Touch ID einrichten', taskbar: 'Schützen Sie Ihr iPhone: mit einem Zahlencode oder mit Face ID / Touch ID.' },
+    nichtstoeren: { label: 'Nicht stören aktivieren', taskbar: 'Aktivieren Sie "Nicht stören", damit Sie eine Zeit lang nicht gestört werden.' },
+    kamera: { label: 'Kamera und Kameramodi', taskbar: 'Öffnen Sie die Kamera und wechseln Sie in den Video-Modus.' },
+    passwort: { label: 'Passwort-Manager (Schlüsselbund)', taskbar: 'Erstellen Sie im Browser ein Konto mit einem sicheren Passwort und speichern Sie es im Schlüsselbund.' },
+    notruf: { label: 'Notruf SOS kennenlernen', taskbar: 'Lernen Sie, wie Sie im Notfall schnell einen Notruf absetzen können.' },
+    app_loeschen: { label: 'Eine App löschen', taskbar: 'Löschen Sie die App "Kalender" vom Startbildschirm.' },
+    autosperre: { label: 'Automatische Sperre', taskbar: 'Stellen Sie ein, dass sich Ihr iPhone nach 2 Minuten automatisch sperrt.' },
+    sperren: { label: 'Sperren und entsperren', taskbar: 'Sperren Sie Ihr iPhone und entsperren Sie es wieder. Ihr Code lautet: 1 2 3 4 5 6' },
+    tracking: { label: 'Tracking verbieten', taskbar: 'Verbieten Sie Apps, Sie über andere Apps und Websites hinweg zu verfolgen.' },
+    ortung: { label: 'Standortzugriff entziehen', taskbar: 'Die App "Taschenlampe Pro" soll Ihren Standort nicht mehr sehen dürfen.' },
+    speicher: { label: 'Problem: Speicher ist voll', taskbar: 'Problem: Ihr iPhone meldet "Kein Speicherplatz mehr verfügbar". Finden Sie in den Einstellungen heraus, welche App am meisten Speicher belegt, und löschen Sie sie.' },
+    sim: { label: 'Problem: SIM-Karte gesperrt', taskbar: 'Problem: Nach einem Neustart ist Ihre SIM-Karte gesperrt, Sie haben kein Netz. Entsperren Sie sie in den Einstellungen. Ihre SIM-PIN lautet: 4 8 2 1' },
+    akku: { label: 'Problem: Akku wird schnell leer', taskbar: 'Problem: Der Akku ist ständig schnell leer. Finden Sie in den Einstellungen heraus, welche App am meisten Akku verbraucht, und schalten Sie den Stromsparmodus ein.' },
+    internet: { label: 'Problem: Kein Internet', taskbar: 'Problem: Sie haben kein Internet. Schalten Sie den Flugmodus aus und verbinden Sie sich mit dem WLAN "Zuhause" (Schlüssel: 1 2 3 4).' },
+    apps_organisieren: { label: 'Apps verschieben, Ordner und Startbildschirm', taskbar: 'Halten Sie eine App gedrückt, bis alle Symbole wackeln. Ziehen Sie dann Apps mit dem Finger an ihren neuen Platz – genau wie auf einem echten iPhone.' }
   };
 
   var state = {
-    platform: 'android', model: '', guided: true, task: 'flugmodus', step: 1, screen: 'home',
+    platform: 'ios-neu', model: '', guided: true, task: 'flugmodus', step: 1, screen: 'home',
     flight: false, wifi: true, bt: false, wifiConnectedNetwork: null, btConnectedDevice: null,
-    brightness: 30, fontsize: 20
+    brightness: 30, fontsize: 20, highlight: true,
+    recents: [], appScreens: {}, currentApp: null,
+    passcode: null, codeVerified: false, biometric: false, biometricExplained: false, dnd: false, autolock: '30 Sekunden', trackingAllowed: true, trackApps: {},
+    locMaster: true, loc: {}, locApp: null, locked: false, screenOff: false, unlockedWithCode: false, volume: 5,
+    camMode: 'foto', camRecording: false, camExplained: {}, camShots: 0,
+    pwSuggested: false, pwSaved: false,
+    sosCalled: false, jiggling: false, removedApps: [],
+    simLocked: false, lowPower: false, storageDeleted: false,
+    homeOrder: null, homeOrder2: [], folders: {}, folderSeq: 1, currentPage: 0, mainPage: 0
   };
 
   var appDefs = [
-    { key: 'phone', label: 'Telefon', icon: '📞', interactive: false },
-    { key: 'messages', label: 'Nachrichten', icon: '💬', interactive: true },
-    { key: 'camera', label: 'Kamera', icon: '📷', interactive: true },
-    { key: 'photos', label: 'Fotos', icon: '🖼', interactive: false },
-    { key: 'browser', label: 'Browser', icon: '🌐', interactive: false },
-    { key: 'mail', label: 'E-Mail', icon: '✉', interactive: false },
-    { key: 'calendar', label: 'Kalender', icon: '📅', interactive: false },
-    { key: 'settings', label: 'Einstellungen', icon: '⚙', interactive: true }
+    { key: 'phone', label: 'Telefon', icon: 'phone', interactive: false },
+    { key: 'messages', label: 'Nachrichten', icon: 'message', interactive: true },
+    { key: 'camera', label: 'Kamera', icon: 'camera', interactive: true },
+    { key: 'photos', label: 'Fotos', icon: 'photo', interactive: false },
+    { key: 'browser', label: 'Safari', icon: 'globe', interactive: true },
+    { key: 'mail', label: 'Mail', icon: 'mail', interactive: false },
+    { key: 'calendar', label: 'Kalender', icon: 'calendar', interactive: false },
+    { key: 'settings', label: 'Einstellungen', icon: 'gear', interactive: true }
   ];
+
+  var LONGPRESS_MS = 550;
+
+  function appLabel(key) {
+    if (key.indexOf('folder:') === 0) {
+      var f = state.folders[key.slice(7)];
+      return f ? f.name : 'Ordner';
+    }
+    var a = appDefs.filter(function (x) { return x.key === key; })[0];
+    return a ? a.label : key;
+  }
+  function ensureHomeOrder() {
+    if (!state.homeOrder) { state.homeOrder = appDefs.map(function (a) { return a.key; }); }
+  }
+  function currentPageOrder() { ensureHomeOrder(); return state.currentPage === 0 ? state.homeOrder : state.homeOrder2; }
+  function removeFromAllPages(id) {
+    var i0 = state.homeOrder.indexOf(id); if (i0 > -1) state.homeOrder.splice(i0, 1);
+    var i1 = state.homeOrder2.indexOf(id); if (i1 > -1) state.homeOrder2.splice(i1, 1);
+  }
+
+  var drag = null; // { id, el, startX, startY, moved, hoverEl, hoverSince, edge, edgeSince }
+  var homeSwipeSuppressClick = false;
 
   function renderApps() {
     var wrap = document.getElementById('homeApps');
     wrap.innerHTML = '';
-    appDefs.forEach(function (a) {
+    var order = currentPageOrder().filter(function (id) {
+      return id.indexOf('folder:') === 0 || state.removedApps.indexOf(id) === -1;
+    });
+    order.forEach(function (id) {
+      var isFolder = id.indexOf('folder:') === 0;
       var div = document.createElement('div');
-      div.className = 'app';
-      div.innerHTML = '<div class="icon">' + a.icon + '</div><div class="lbl">' + a.label + '</div>';
-      div.onclick = function () { openApp(a.key, a.interactive, a.label); };
+      div.className = 'app' + (isFolder ? ' folder-tile' : '');
+      div.setAttribute('data-key', id);
+      if (isFolder) {
+        var folder = state.folders[id.slice(7)];
+        var mini = (folder ? folder.items : []).slice(0, 4).map(function (k) {
+          var a2 = appDefs.filter(function (x) { return x.key === k; })[0];
+          return '<span>' + (a2 ? icon(a2.icon) : '') + '</span>';
+        }).join('');
+        div.innerHTML = '<div class="app-badge">–</div><div class="icon">' + mini + '</div><div class="lbl">' + (folder ? folder.name : 'Ordner') + '</div>';
+      } else {
+        var a = appDefs.filter(function (x) { return x.key === id; })[0];
+        if (!a) return;
+        div.innerHTML = '<div class="app-badge">–</div><div class="icon">' + icon(a.icon) + '</div><div class="lbl">' + a.label + '</div>';
+      }
+      var pressTimer = null;
+      div.addEventListener('pointerdown', function (e) {
+        if (e.target.closest && e.target.closest('.app-badge')) return;
+        if (state.jiggling) { startDrag(div, id, e); return; }
+        pressTimer = setTimeout(function () { enterJiggle(); }, LONGPRESS_MS);
+      });
+      div.addEventListener('pointermove', function (e) { clearTimeout(pressTimer); onDragMove(e); });
+      div.addEventListener('pointerup', function (e) { clearTimeout(pressTimer); onDragEnd(e); });
+      div.addEventListener('pointercancel', function (e) { clearTimeout(pressTimer); onDragEnd(e); });
+      div.querySelector('.app-badge').addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (state.jiggling) openAppConfirm(id, appLabel(id));
+      });
+      div.addEventListener('click', function () {
+        if (state.jiggling) return;
+        if (homeSwipeSuppressClick) { homeSwipeSuppressClick = false; return; }
+        if (isFolder) { openFolder(id.slice(7)); return; }
+        openApp(id, appDefs.filter(function (x) { return x.key === id; })[0].interactive, appLabel(id));
+      });
       wrap.appendChild(div);
     });
+    renderPageDots();
   }
   renderApps();
+
+  function tileRectsExcept(excludeEl) {
+    return Array.prototype.filter.call(document.querySelectorAll('#homeApps .app'), function (el) { return el !== excludeEl; });
+  }
+  function pointInRect(x, y, r) { return r && r.width > 0 && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom; }
+  function screenEdgeZone(x) {
+    var screenEl = document.getElementById('screen');
+    var r = screenEl.getBoundingClientRect();
+    if (!r || !r.width) return null;
+    var margin = 34;
+    if (x <= r.left + margin) return 'left';
+    if (x >= r.right - margin) return 'right';
+    return null;
+  }
+  function startDrag(el, id, e) {
+    drag = { id: id, el: el, startX: e.clientX / viewScale, startY: e.clientY / viewScale, moved: false, hoverEl: null, hoverSince: 0, edge: null, edgeSince: 0 };
+    el.classList.add('dragging');
+    try { el.setPointerCapture(e.pointerId); } catch (err) {}
+  }
+  function onDragMove(e) {
+    if (!drag) return;
+    var dx = e.clientX / viewScale - drag.startX, dy = e.clientY / viewScale - drag.startY;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) drag.moved = true;
+    drag.el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+    var found = null;
+    var targets = tileRectsExcept(drag.el);
+    for (var i = 0; i < targets.length; i++) {
+      if (pointInRect(e.clientX, e.clientY, targets[i].getBoundingClientRect())) { found = targets[i]; break; }
+    }
+    if (found !== drag.hoverEl) {
+      if (drag.hoverEl) drag.hoverEl.classList.remove('drop-hover');
+      drag.hoverEl = found;
+      drag.hoverSince = Date.now();
+      if (found) found.classList.add('drop-hover');
+    }
+    var edge = screenEdgeZone(e.clientX);
+    if (edge !== drag.edge) { drag.edge = edge; drag.edgeSince = Date.now(); }
+  }
+  function onDragEnd(e) {
+    if (!drag) return;
+    var d = drag; drag = null;
+    d.el.classList.remove('dragging');
+    d.el.style.transform = '';
+    if (d.hoverEl) d.hoverEl.classList.remove('drop-hover');
+    var targetId = d.hoverEl ? d.hoverEl.getAttribute('data-key') : null;
+    var draggingFolder = d.id.indexOf('folder:') === 0;
+    if (targetId && targetId !== d.id) {
+      var targetFolder = targetId.indexOf('folder:') === 0;
+      if (targetFolder && !draggingFolder) {
+        mergeIntoFolder(d.id, targetId.slice(7));
+      } else if (!targetFolder) {
+        var dwell = Date.now() - d.hoverSince;
+        if (!draggingFolder && dwell >= 500) createFolder(d.id, targetId);
+        else reorderTo(d.id, targetId);
+      }
+    } else if (d.edge && (Date.now() - d.edgeSince) >= 400) {
+      moveItemToPage(d.id, d.edge === 'right' ? 1 : 0);
+    }
+    renderApps();
+    if (state.task === 'apps_organisieren') finishIfDone();
+  }
+  function createFolder(keyA, keyB) {
+    var fid = 'f' + (state.folderSeq++);
+    state.folders[fid] = { name: appLabel(keyA) + ' & ' + appLabel(keyB), items: [keyA, keyB] };
+    removeFromAllPages(keyA); removeFromAllPages(keyB);
+    currentPageOrder().push('folder:' + fid);
+    showToast('Ordner "' + state.folders[fid].name + '" erstellt.', true);
+  }
+  function mergeIntoFolder(key, fid) {
+    var folder = state.folders[fid];
+    if (!folder) return;
+    if (folder.items.indexOf(key) === -1) folder.items.push(key);
+    removeFromAllPages(key);
+    showToast('"' + appLabel(key) + '" zum Ordner "' + folder.name + '" hinzugefügt.', true);
+  }
+  function reorderTo(id, targetId) {
+    var srcPage = state.homeOrder.indexOf(id) > -1 ? state.homeOrder : state.homeOrder2;
+    var targetPage = state.homeOrder.indexOf(targetId) > -1 ? state.homeOrder : state.homeOrder2;
+    if (srcPage !== targetPage) {
+      removeFromAllPages(id);
+      var ti = targetPage.indexOf(targetId);
+      targetPage.splice(ti > -1 ? ti : targetPage.length, 0, id);
+      return;
+    }
+    var i = srcPage.indexOf(id);
+    if (i === -1) return;
+    srcPage.splice(i, 1);
+    var j = srcPage.indexOf(targetId);
+    srcPage.splice(j > -1 ? j : srcPage.length, 0, id);
+  }
+  function moveItemToPage(id, pageIdx) {
+    removeFromAllPages(id);
+    if (pageIdx === 0) state.homeOrder.push(id); else state.homeOrder2.push(id);
+    state.currentPage = pageIdx;
+  }
+  function renderPageDots() {
+    document.querySelectorAll('#pageDots .dot').forEach(function (d) {
+      d.classList.toggle('active', parseInt(d.getAttribute('data-page'), 10) === state.currentPage);
+    });
+  }
+  (function setupPageDots() {
+    document.querySelectorAll('#pageDots .dot').forEach(function (dot) {
+      var timer = null, longFired = false;
+      dot.addEventListener('pointerdown', function () {
+        longFired = false;
+        timer = setTimeout(function () { longFired = true; openHomeScreenPicker(); }, LONGPRESS_MS);
+      });
+      dot.addEventListener('pointerup', function () { clearTimeout(timer); });
+      dot.addEventListener('pointercancel', function () { clearTimeout(timer); });
+      dot.addEventListener('click', function () {
+        if (longFired) { longFired = false; return; }
+        state.currentPage = parseInt(dot.getAttribute('data-page'), 10);
+        renderApps();
+      });
+    });
+  })();
+  (function setupHomeSwipe() {
+    var wrap = document.getElementById('homeApps');
+    var sx = 0, sy = 0, active = false;
+    wrap.addEventListener('pointerdown', function (e) {
+      if (state.jiggling) return;
+      sx = e.clientX; sy = e.clientY; active = true;
+    });
+    wrap.addEventListener('pointerup', function (e) {
+      if (!active) return;
+      active = false;
+      var dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        state.currentPage = dx < 0 ? 1 : 0;
+        homeSwipeSuppressClick = true;
+        renderApps();
+      }
+    });
+  })();
+  function openFolder(fid) {
+    var folder = state.folders[fid];
+    if (!folder) return;
+    document.getElementById('folderTitle').textContent = folder.name;
+    var body = document.getElementById('folderApps');
+    body.innerHTML = '';
+    folder.items.forEach(function (key) {
+      var a = appDefs.filter(function (x) { return x.key === key; })[0];
+      if (!a) return;
+      var div = document.createElement('div');
+      div.className = 'app';
+      div.innerHTML = '<div class="icon">' + icon(a.icon) + '</div><div class="lbl">' + a.label + '</div>';
+      div.addEventListener('click', function () {
+        closeFolder();
+        openApp(a.key, a.interactive, a.label);
+      });
+      body.appendChild(div);
+    });
+    document.getElementById('folderOverlay').classList.add('open');
+  }
+  function closeFolder() { document.getElementById('folderOverlay').classList.remove('open'); }
+  document.getElementById('folderCloseBtn').onclick = closeFolder;
+
+  function openHomeScreenPicker() {
+    document.getElementById('hsCheck0').classList.toggle('on', state.mainPage === 0);
+    document.getElementById('hsCheck1').classList.toggle('on', state.mainPage === 1);
+    document.getElementById('hsPicker').classList.add('open');
+  }
+  document.querySelectorAll('#hsPicker .hs-row').forEach(function (row) {
+    row.addEventListener('click', function () {
+      state.mainPage = parseInt(row.getAttribute('data-page'), 10);
+      document.getElementById('hsCheck0').classList.toggle('on', state.mainPage === 0);
+      document.getElementById('hsCheck1').classList.toggle('on', state.mainPage === 1);
+      if (state.task === 'apps_organisieren') finishIfDone();
+    });
+  });
+  document.getElementById('hsPickerDone').onclick = function () {
+    document.getElementById('hsPicker').classList.remove('open');
+    if (state.task === 'apps_organisieren') finishIfDone();
+  };
+
+  var appConfirmTarget = null, appConfirmLabel = '';
+  function enterJiggle() {
+    if (state.jiggling) return;
+    state.jiggling = true;
+    document.getElementById('homeApps').classList.add('jiggling');
+    document.getElementById('jiggleDone').classList.add('jiggle-done-visible');
+    if (['app_loeschen', 'apps_organisieren'].indexOf(state.task) > -1 && state.step === 1 && !isTaskDone()) { state.step = 2; updateHint(); }
+  }
+  function exitJiggle() {
+    state.jiggling = false;
+    drag = null;
+    document.getElementById('homeApps').classList.remove('jiggling');
+    document.getElementById('jiggleDone').classList.remove('jiggle-done-visible');
+    renderApps();
+    if (state.task === 'apps_organisieren') finishIfDone();
+  }
+  document.getElementById('jiggleDoneBtn').onclick = exitJiggle;
+  function openAppConfirm(key, label) {
+    appConfirmTarget = key; appConfirmLabel = label;
+    document.getElementById('appConfirmName').textContent = label;
+    document.getElementById('appConfirm').classList.add('open');
+    if (state.task === 'app_loeschen' && key === 'calendar' && state.step < 3 && !isTaskDone()) { state.step = 3; updateHint(); }
+  }
+  document.getElementById('appConfirmCancel').onclick = function () {
+    document.getElementById('appConfirm').classList.remove('open');
+  };
+  document.getElementById('appConfirmDelete').onclick = function () {
+    var key = appConfirmTarget, label = appConfirmLabel;
+    document.getElementById('appConfirm').classList.remove('open');
+    var div = document.querySelector('.app[data-key="' + key + '"]');
+    if (div) div.classList.add('app-removing');
+    if (key.indexOf('folder:') === 0) {
+      var fid = key.slice(7);
+      removeFromAllPages(key);
+      delete state.folders[fid];
+      setTimeout(function () { renderApps(); }, 220);
+      showToast('Ordner "' + label + '" wurde gelöscht.', true);
+    } else {
+      state.removedApps.push(key);
+      setTimeout(function () { renderApps(); }, 220);
+      if (key === 'calendar') {
+        showToast('"' + label + '" wurde gelöscht.');
+        finishIfDone();
+      } else {
+        showToast('"' + label + '" wurde gelöscht.', true);
+      }
+    }
+  };
+
+  function renderStaticIcons() {
+    document.getElementById('flightIcon').innerHTML = icon('plane');
+    document.getElementById('wifiIcon').innerHTML = icon('wifi');
+    document.getElementById('battIcon').innerHTML = icon('battery');
+    ['flightToggleTop', 'flightToggleBottom'].forEach(function (id) {
+      document.getElementById(id).insertAdjacentHTML('afterbegin', icon('plane'));
+    });
+    ['wifiToggleTop', 'wifiToggleBottom', 'wifiToggleList'].forEach(function (id) { });
+    document.getElementById('wifiToggleTop').insertAdjacentHTML('afterbegin', icon('wifi'));
+    document.getElementById('wifiToggleBottom').insertAdjacentHTML('afterbegin', icon('wifi'));
+    document.getElementById('btToggleTop').insertAdjacentHTML('afterbegin', icon('bt'));
+    document.getElementById('btToggleBottom').insertAdjacentHTML('afterbegin', icon('bt'));
+    document.getElementById('dndToggleTop').insertAdjacentHTML('afterbegin', icon('moon'));
+    document.getElementById('dndToggleBottom').insertAdjacentHTML('afterbegin', icon('moon'));
+    document.querySelectorAll('[data-icon-inline="sun"]').forEach(function (el) { el.innerHTML = icon('sun'); });
+    document.querySelectorAll('[data-icon-inline="lock"]').forEach(function (el) { el.innerHTML = icon('lock'); });
+  }
+  renderStaticIcons();
 
   document.getElementById('guidedOn').onclick = function () { setGuided(true); };
   document.getElementById('guidedOff').onclick = function () { setGuided(false); };
@@ -314,36 +1205,46 @@
     document.getElementById('guidedOff').classList.toggle('active', !v);
   }
 
+  document.getElementById('hlOn').onclick = function () { setHighlight(true); };
+  document.getElementById('hlOff').onclick = function () { setHighlight(false); };
+  function setHighlight(v) {
+    state.highlight = v;
+    document.getElementById('hlOn').classList.toggle('active', v);
+    document.getElementById('hlOff').classList.toggle('active', !v);
+    document.body.classList.toggle('hl', v);
+  }
+  setHighlight(true);
+
   document.getElementById('startBtn').onclick = function () {
     var radios = document.getElementsByName('platform');
     for (var i = 0; i < radios.length; i++) { if (radios[i].checked) state.platform = radios[i].value; }
-    state.model = document.getElementById('model').value || (state.platform === 'android' ? 'Android-Gerät' : 'iPhone');
+    state.model = document.getElementById('model').value || 'iPhone';
     state.task = document.getElementById('taskSelectDev').value;
     resetSandbox();
     document.getElementById('sandbox').classList.add('active');
+    scheduleFit();
   };
 
   document.getElementById('newTabBtn').onclick = function () {
     var radios = document.getElementsByName('platform');
-    var plat = 'android';
+    var plat = 'ios-neu';
     for (var i = 0; i < radios.length; i++) { if (radios[i].checked) plat = radios[i].value; }
     var model = document.getElementById('model').value || '';
     var task = document.getElementById('taskSelectDev').value;
-    var url = location.href.split('?')[0] + '?auto=1&platform=' + encodeURIComponent(plat) + '&model=' + encodeURIComponent(model) + '&guided=' + (state.guided ? '1' : '0') + '&task=' + encodeURIComponent(task);
+    var url = location.href.split('?')[0] + '?auto=1&platform=' + encodeURIComponent(plat) + '&model=' + encodeURIComponent(model) + '&guided=' + (state.guided ? '1' : '0') + '&hl=' + (state.highlight ? '1' : '0') + '&task=' + encodeURIComponent(task);
     window.open(url, '_blank');
   };
 
   document.getElementById('exitBtn').onclick = function () {
+    if (PARAMS.get('auto') === '1') { leaveAuto(); return; }
     document.getElementById('sandbox').classList.remove('active');
+  };
+  document.getElementById('closedRestart').onclick = function () {
+    document.getElementById('closedNote').classList.remove('show');
+    resetSandbox();
   };
   document.getElementById('resetBtn').onclick = resetSandbox;
 
-  document.getElementById('hotspotLeft').onclick = function () { closeOverlays(); openPanel('panelNotif'); };
-  document.getElementById('hotspotRight').onclick = function () { closeOverlays(); openPanel('panelControlTop'); };
-  document.getElementById('hotspotBottom').onclick = function () { closeOverlays(); openPanel('panelControlBottom'); };
-  document.getElementById('hotspotSwipeUp').onclick = function () {
-    showToast('Das bringt Sie nur zum Startbildschirm zurück.', true);
-  };
 
   document.getElementById('flightToggleTop').onclick = toggleFlight;
   document.getElementById('flightToggleBottom').onclick = toggleFlight;
@@ -351,15 +1252,17 @@
   document.getElementById('wifiToggleBottom').onclick = function () { toggleWifiRadio(); };
   document.getElementById('btToggleTop').onclick = function () { toggleBtRadio(); };
   document.getElementById('btToggleBottom').onclick = function () { toggleBtRadio(); };
+  document.getElementById('dndToggleTop').onclick = toggleDnd;
+  document.getElementById('dndToggleBottom').onclick = toggleDnd;
   document.getElementById('brightnessTop').oninput = function (e) { setBrightness(e.target.value); };
   document.getElementById('brightnessBottom').oninput = function (e) { setBrightness(e.target.value); };
 
   document.getElementById('backSettings').onclick = function () { closeOverlays(); };
   document.getElementById('backMessages').onclick = function () { closeOverlays(); };
   document.getElementById('backCamera').onclick = function () { closeOverlays(); };
-  document.getElementById('backWifiList').onclick = function () { openApp('settings', true, 'Einstellungen'); };
-  document.getElementById('backBtList').onclick = function () { openApp('settings', true, 'Einstellungen'); };
-  document.getElementById('backDisplay').onclick = function () { openApp('settings', true, 'Einstellungen'); };
+  document.getElementById('backWifiList').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
+  document.getElementById('backBtList').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
+  document.getElementById('backDisplay').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
   document.getElementById('flightToggleSettings').onclick = toggleFlight;
   document.getElementById('wifiToggleList').onclick = function () { toggleWifiRadio(); };
   document.getElementById('btToggleList').onclick = function () { toggleBtRadio(); };
@@ -371,18 +1274,168 @@
   document.querySelectorAll('#overlayWifiList .list-item').forEach(function (el) {
     el.onclick = function () {
       var net = el.getAttribute('data-net');
+      if (!state.wifi) { showToast('Schalten Sie zuerst WLAN ein.', true); return; }
       if (el.classList.contains('lockednet')) { showToast('"' + net + '" ist gesichert. Sie kennen das Passwort nicht.', true); return; }
-      state.wifiConnectedNetwork = net;
-      state.wifi = true;
-      renderWifiBtStatus();
-      showToast('Verbunden mit "' + net + '".');
-      finishIfDone();
+      var pin = el.getAttribute('data-pin');
+      if (pin) { openWifiPin(net, pin); return; }
+      connectWifi(net);
     };
   });
+  function connectWifi(net) {
+    state.wifiConnectedNetwork = net;
+    state.wifi = true;
+    renderWifiBtStatus();
+    showToast('Verbunden mit "' + net + '".');
+    finishIfDone();
+  }
+  var wifiPinTarget = { net: '', pin: '', entry: '' };
+  function openWifiPin(net, pin) {
+    wifiPinTarget = { net: net, pin: pin, entry: '' };
+    document.getElementById('wifiPinHeader').textContent = net;
+    document.getElementById('wifiPinMsg').textContent = '';
+    showAppScreen('settings', 'overlayWifiPin');
+    renderWifiPinDots();
+  }
+  function renderWifiPinDots() { renderDots('wifiPinDots', wifiPinTarget.pin.length, wifiPinTarget.entry.length); }
+  buildPad('wifiPinPad', false, function (k) {
+    if (k === 'del') { wifiPinTarget.entry = wifiPinTarget.entry.slice(0, -1); renderWifiPinDots(); return; }
+    if (wifiPinTarget.entry.length >= wifiPinTarget.pin.length) return;
+    wifiPinTarget.entry += k; renderWifiPinDots();
+    if (wifiPinTarget.entry.length === wifiPinTarget.pin.length) {
+      setTimeout(function () {
+        if (wifiPinTarget.entry === wifiPinTarget.pin) {
+          connectWifi(wifiPinTarget.net);
+          showAppScreen('settings', 'overlayWifiList');
+        } else {
+          shake('wifiPinDots');
+          wifiPinTarget.entry = '';
+          document.getElementById('wifiPinMsg').textContent = 'Falscher Netzwerkschlüssel. Bitte erneut versuchen.';
+          renderWifiPinDots();
+        }
+      }, 180);
+    }
+  });
+  document.getElementById('backWifiPin').onclick = function () { showAppScreen('settings', 'overlayWifiList'); };
+
+  // ================= Lektion 7: Probleme lösen =================
+  document.getElementById('rowCellular').onclick = function () { showAppScreen('settings', 'overlayCellular'); renderCellular(); };
+  document.getElementById('backCellular').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
+  function renderCellular() {
+    var rs = document.getElementById('cellularRowStatus');
+    var sp = document.getElementById('simPinStatus');
+    if (rs) rs.textContent = state.simLocked ? '· SIM gesperrt' : '';
+    if (sp) sp.textContent = state.simLocked ? 'Gesperrt' : 'Entsperrt';
+  }
+  document.getElementById('rowSimPin').onclick = function () {
+    if (!state.simLocked) { showToast('Die SIM-Karte ist bereits entsperrt.', true); return; }
+    simPinEntry = '';
+    document.getElementById('simPinMsg').textContent = '';
+    showAppScreen('settings', 'overlaySimPin');
+    renderSimPinDots();
+  };
+  var simPinEntry = '';
+  function renderSimPinDots() { renderDots('simPinDots', 4, simPinEntry.length); }
+  buildPad('simPinPad', false, function (k) {
+    if (k === 'del') { simPinEntry = simPinEntry.slice(0, -1); renderSimPinDots(); return; }
+    if (simPinEntry.length >= 4) return;
+    simPinEntry += k; renderSimPinDots();
+    if (simPinEntry.length === 4) {
+      setTimeout(function () {
+        if (simPinEntry === '4821') {
+          state.simLocked = false;
+          document.getElementById('simIcon').style.display = 'none';
+          document.getElementById('notifSim').style.display = 'none';
+          renderCellular();
+          showToast('SIM-Karte entsperrt. Sie haben wieder Netz.');
+          showAppScreen('settings', 'overlayCellular');
+          finishIfDone();
+        } else {
+          shake('simPinDots');
+          simPinEntry = '';
+          document.getElementById('simPinMsg').textContent = 'Falsche SIM-PIN. Bitte erneut versuchen.';
+          renderSimPinDots();
+        }
+      }, 180);
+    }
+  });
+  document.getElementById('backSimPin').onclick = function () { showAppScreen('settings', 'overlayCellular'); };
+
+  document.getElementById('rowGeneral').onclick = function () { showAppScreen('settings', 'overlayGeneral'); };
+  document.getElementById('backGeneral').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
+
+  var STORAGE_APPS = [
+    { key: 'photos', label: 'Fotos', gb: 14.2, color: '#e8a233' },
+    { key: 'messages', label: 'Nachrichten', gb: 3.1, color: '#1d9e75' },
+    { key: 'camera', label: 'Kamera', gb: 1.8, color: '#7f77dd' }
+  ];
+  function renderStorage() {
+    var list = document.getElementById('storageList');
+    list.innerHTML = '';
+    var remaining = STORAGE_APPS.filter(function (a) { return state.removedApps.indexOf(a.key) === -1; });
+    var freeGb = state.storageDeleted ? 44.6 : 30.4;
+    document.getElementById('storageSummary').textContent = freeGb.toFixed(1) + ' GB frei von 64 GB';
+    var bar = document.getElementById('storageBar');
+    bar.innerHTML = remaining.map(function (a) {
+      var pct = (a.gb / 64 * 100).toFixed(1);
+      return '<div class="st-seg" style="width:' + pct + '%;background:' + a.color + ';"></div>';
+    }).join('');
+    remaining.forEach(function (a, i) {
+      var row = document.createElement('div');
+      row.className = 'settings-row';
+      row.innerHTML = '<span>' + a.label + '</span><span style="color:#888;">' + a.gb.toFixed(1) + ' GB ›</span>';
+      row.onclick = function () {
+        if (i === 0) { openStorageApp(a); } else { showToast('Diese App belegt wenig Speicher. Für diese Übung reicht es, die größte App zu prüfen.', true); }
+      };
+      list.appendChild(row);
+    });
+  }
+  var storageAppTarget = null;
+  function openStorageApp(a) {
+    storageAppTarget = a;
+    document.getElementById('storageAppTitle').textContent = a.label;
+    document.getElementById('storageAppNote').textContent = '"' + a.label + '" belegt ' + a.gb.toFixed(1) + ' GB Speicher – mehr als jede andere App auf diesem iPhone.';
+    showAppScreen('settings', 'overlayStorageApp');
+  }
+  document.getElementById('storageAppDelete').onclick = function () {
+    if (!storageAppTarget) return;
+    if (state.removedApps.indexOf(storageAppTarget.key) === -1) state.removedApps.push(storageAppTarget.key);
+    state.storageDeleted = true;
+    renderApps();
+    showToast('"' + storageAppTarget.label + '" wurde gelöscht. Speicherplatz wurde freigegeben.');
+    showAppScreen('settings', 'overlayStorage');
+    renderStorage();
+    finishIfDone();
+  };
+  document.getElementById('rowStorage').onclick = function () { showAppScreen('settings', 'overlayStorage'); renderStorage(); };
+  document.getElementById('backStorage').onclick = function () { showAppScreen('settings', 'overlayGeneral'); };
+  document.getElementById('backStorageApp').onclick = function () { showAppScreen('settings', 'overlayStorage'); renderStorage(); };
+
+  var BATTERY_APPS = [
+    { label: 'Kamera', pct: 42, hog: true },
+    { label: 'Safari', pct: 18 },
+    { label: 'Nachrichten', pct: 9 },
+    { label: 'Einstellungen', pct: 3 }
+  ];
+  function renderBattery() {
+    var list = document.getElementById('battList');
+    list.innerHTML = BATTERY_APPS.map(function (a) {
+      return '<div class="batt-row' + (a.hog ? ' hog' : '') + '"><span>' + a.label + '</span><span class="pct">' + a.pct + ' %</span></div>';
+    }).join('');
+    document.getElementById('lowPowerToggle').classList.toggle('on', state.lowPower);
+  }
+  document.getElementById('rowBattery').onclick = function () { showAppScreen('settings', 'overlayBattery'); renderBattery(); };
+  document.getElementById('backBattery').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
+  document.getElementById('lowPowerToggle').onclick = function () {
+    state.lowPower = !state.lowPower;
+    renderBattery();
+    showToast(state.lowPower ? 'Stromsparmodus aktiviert. Das schont den Akku.' : 'Stromsparmodus deaktiviert.', !state.lowPower);
+    finishIfDone();
+  };
 
   document.querySelectorAll('#overlayBtList .list-item').forEach(function (el) {
     el.onclick = function () {
       var dev = el.getAttribute('data-dev');
+      if (!state.bt) { showToast('Schalten Sie zuerst Bluetooth ein.', true); return; }
       if (el.classList.contains('lockeddev')) { showToast('"' + dev + '" kann nicht verbunden werden.', true); return; }
       state.btConnectedDevice = dev;
       state.bt = true;
@@ -395,78 +1448,377 @@
   document.getElementById('brightnessDisplay').oninput = function (e) { setBrightness(e.target.value); };
   document.getElementById('fontsizeDisplay').oninput = function (e) { setFontsize(e.target.value); };
 
+  var CAM_MODES = [
+    { key: 'panorama', label: 'PANORAMA' },
+    { key: 'foto', label: 'FOTO' },
+    { key: 'video', label: 'VIDEO' },
+    { key: 'portrait', label: 'PORTRÄT' }
+  ];
+  var CAM_EXPLAIN = {
+    foto: 'Foto: für normale Schnappschüsse.',
+    video: 'Video: nimmt bewegte Bilder mit Ton auf.',
+    portrait: 'Porträt: unscharfer Hintergrund, scharfe Person – gut für Personenfotos.',
+    panorama: 'Panorama: für sehr breite Landschaftsaufnahmen. Handy dabei langsam und ruhig schwenken.'
+  };
+  var recTimerId = null, recSeconds = 0;
+  function renderCamera() {
+    var wrap = document.getElementById('camModes');
+    wrap.innerHTML = '';
+    CAM_MODES.forEach(function (m) {
+      var el = document.createElement('div');
+      el.className = 'cam-mode' + (state.camMode === m.key ? ' active' : '');
+      el.textContent = m.label;
+      el.onclick = function () { setCamMode(m.key); };
+      wrap.appendChild(el);
+    });
+    document.getElementById('camExplain').textContent = CAM_EXPLAIN[state.camMode] || '';
+    var shutter = document.getElementById('shutterBtn');
+    shutter.classList.toggle('video', state.camMode === 'video');
+    shutter.classList.toggle('recording', state.camRecording);
+    document.getElementById('recIndicator').classList.toggle('show', state.camRecording);
+  }
+  function setCamMode(key) {
+    if (state.camRecording) stopRecording();
+    state.camMode = key;
+    renderCamera();
+    if (!state.camExplained[key]) { state.camExplained[key] = true; showToast(CAM_EXPLAIN[key], true); }
+    if (state.task === 'kamera' && state.step < 2 && !isTaskDone()) { state.step = 2; }
+    finishIfDone();
+  }
+  function stopRecordTimer() {
+    if (recTimerId) { clearInterval(recTimerId); recTimerId = null; }
+    recSeconds = 0;
+    var el = document.getElementById('recTime'); if (el) el.textContent = '0:00';
+  }
+  function startRecording() {
+    state.camRecording = true; recSeconds = 0; renderCamera();
+    recTimerId = setInterval(function () {
+      recSeconds++;
+      document.getElementById('recTime').textContent = Math.floor(recSeconds / 60) + ':' + String(recSeconds % 60).padStart(2, '0');
+    }, 1000);
+  }
+  function stopRecording() {
+    state.camRecording = false;
+    var dur = Math.floor(recSeconds / 60) + ':' + String(recSeconds % 60).padStart(2, '0');
+    stopRecordTimer();
+    renderCamera();
+    showToast('Video gespeichert (' + dur + ')', true);
+  }
   document.getElementById('shutterBtn').onclick = function () {
+    if (state.camMode === 'video') {
+      if (state.camRecording) stopRecording(); else startRecording();
+      return;
+    }
+    state.camShots++;
     var f = document.getElementById('flash');
     f.classList.add('fire');
-    setTimeout(function () { f.classList.remove('fire'); }, 400);
+    setTimeout(function () { f.classList.remove('fire'); }, 250);
+    showToast(state.camMode === 'portrait' ? 'Porträtfoto aufgenommen' : (state.camMode === 'panorama' ? 'Panorama aufgenommen' : 'Foto aufgenommen'), true);
   };
+  var lastHomeClick = 0;
   document.getElementById('homebtn').onclick = function () {
     var h = document.getElementById('homebtn');
     h.classList.add('pressed');
     setTimeout(function () { h.classList.remove('pressed'); }, 200);
-    closeOverlays();
+    if (state.screenOff) { wakeScreen(); return; }
+    if (state.locked) { if (document.getElementById('lsKeypad').style.display !== 'flex') requestUnlock(); return; }
+    var now = Date.now();
+    if (now - lastHomeClick < 400) { lastHomeClick = 0; openSwitcher(); return; }
+    lastHomeClick = now;
+    closeAllPanels(); closeSwitcher(); closeOverlays();
   };
 
   function openApp(key, interactive, label) {
-    if (document.getElementById('panelNotif').classList.contains('open') ||
-        document.getElementById('panelControlTop').classList.contains('open') ||
-        document.getElementById('panelControlBottom').classList.contains('open')) { return; }
+    if (anyPanelOpen() || justClosedPanel) return;
     if (!interactive) { showToast('"' + label + '" ist in dieser Demo nicht verfügbar.', true); return; }
-    closeOverlays();
-    if (key === 'settings') {
-      document.getElementById('overlaySettings').classList.add('open');
-      if (['wlan', 'bluetooth', 'anzeige'].indexOf(state.task) > -1 && state.step === 1) { state.step = 2; updateHint(); }
-    }
-    if (key === 'messages') document.getElementById('overlayMessages').classList.add('open');
-    if (key === 'camera') document.getElementById('overlayCamera').classList.add('open');
-    state.screen = key;
+    showAppScreen(key, state.appScreens[key] || APP_META[key].root);
   }
 
-  function openOverlay(id) {
-    closeOverlays();
-    document.getElementById(id).classList.add('open');
-    state.screen = id;
+  var APP_META = {
+    settings: { label: 'Einstellungen', icon: 'gear', root: 'overlaySettings', color: '#8e8e93' },
+    messages: { label: 'Nachrichten', icon: 'message', root: 'overlayMessages', color: '#1d9e75' },
+    camera: { label: 'Kamera', icon: 'camera', root: 'overlayCamera', color: '#333' },
+    browser: { label: 'Safari', icon: 'globe', root: 'overlayBrowser', color: '#0a84ff' }
+  };
+  var SCREEN_TITLES = { overlaySettings: 'Einstellungen', overlayWifiList: 'WLAN', overlayBtList: 'Bluetooth', overlayDisplay: 'Anzeige & Helligkeit', overlayMessages: 'Nachrichten', overlayCamera: 'Kamera', overlayBrowser: 'Safari',
+    overlayCode: 'Face ID & Code', overlayKeypad: 'Code', overlayAutolock: 'Automatische Sperre', overlayPrivacy: 'Datenschutz & Sicherheit', overlayTracking: 'Tracking', overlayLocation: 'Ortungsdienste', overlayLocApp: 'Standort', overlayWifiPin: 'Netzwerkschlüssel', overlayCellular: 'Mobilfunk', overlaySimPin: 'SIM-PIN', overlayGeneral: 'Allgemein', overlayStorage: 'iPhone-Speicher', overlayStorageApp: 'App', overlayBattery: 'Batterie' };
+  var OVERLAY_IDS = ['overlaySettings', 'overlayMessages', 'overlayCamera', 'overlayWifiList', 'overlayBtList', 'overlayDisplay',
+    'overlayCode', 'overlayKeypad', 'overlayAutolock', 'overlayPrivacy', 'overlayTracking', 'overlayLocation', 'overlayLocApp', 'overlayWifiPin', 'overlayBrowser', 'overlayCellular', 'overlaySimPin', 'overlayGeneral', 'overlayStorage', 'overlayStorageApp', 'overlayBattery'];
+
+  function showAppScreen(appKey, overlayId) {
+    closeSwitcher();
+    hideAllOverlays();
+    document.getElementById(overlayId).classList.add('open');
+    state.currentApp = appKey;
+    if (appKey === 'camera') {
+      renderCamera();
+      if (state.task === 'kamera' && state.step === 1 && !isTaskDone()) { state.step = 2; updateHint(); }
+    }
+    if (appKey === 'browser' && state.task === 'passwort' && state.step === 1 && !isTaskDone()) { state.step = 2; updateHint(); }
+    state.appScreens[appKey] = overlayId;
+    var i = state.recents.indexOf(appKey);
+    if (i > -1) state.recents.splice(i, 1);
+    state.recents.unshift(appKey);
+    state.screen = overlayId;
+    syncStepFromScreen();
+  }
+
+  function openOverlay(id) { showAppScreen('settings', id); }
+
+  function hideAllOverlays() {
+    OVERLAY_IDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      el.classList.remove('open', 'leaving');
+      el.style.transform = ''; el.style.transition = ''; el.style.borderRadius = '';
+    });
   }
 
   function closeOverlays() {
-    ['overlaySettings', 'overlayMessages', 'overlayCamera', 'overlayWifiList', 'overlayBtList', 'overlayDisplay'].forEach(function (id) {
-      document.getElementById(id).classList.remove('open');
-    });
+    hideAllOverlays();
+    state.codeVerified = false;
+    state.currentApp = null;
     state.screen = 'home';
   }
 
-  function openPanel(id) {
-    ['panelNotif', 'panelControlTop', 'panelControlBottom'].forEach(function (pid) {
-      if (pid !== id) document.getElementById(pid).classList.remove('open');
-    });
-    document.getElementById(id).classList.add('open');
-    document.getElementById('hotspotLeft').classList.remove('pulse');
-    document.getElementById('hotspotRight').classList.remove('pulse');
-    document.getElementById('hotspotBottom').classList.remove('pulse');
-    if (id === 'panelNotif') {
-      showToast('Das sind Ihre Mitteilungen. Hier finden Sie diese Einstellung nicht.', true);
-    } else if (state.task === 'flugmodus' && state.step === 1) {
-      state.step = 2;
+  function syncStepFromScreen() {
+    var map = {
+      wlan: { overlaySettings: 2, overlayWifiList: 3, overlayWifiPin: 4 },
+      bluetooth: { overlaySettings: 2, overlayBtList: 3 },
+      anzeige: { overlaySettings: 2, overlayDisplay: 3 },
+      code: { overlaySettings: 2, overlayCode: 3 },
+      autosperre: { overlaySettings: 2, overlayDisplay: 3, overlayAutolock: 4 },
+      tracking: { overlaySettings: 2, overlayPrivacy: 3, overlayTracking: 4 },
+      ortung: { overlaySettings: 2, overlayPrivacy: 3, overlayLocation: 4 },
+      speicher: { overlaySettings: 2, overlayGeneral: 3, overlayStorage: 4 },
+      sim: { overlaySettings: 2, overlayCellular: 3, overlaySimPin: 4 },
+      akku: { overlaySettings: 2, overlayBattery: 3 }
+    };
+    var m = map[state.task];
+    if (m && m[state.screen] && state.step < m[state.screen] && !isTaskDone()) {
+      state.step = m[state.screen];
       updateHint();
+    }
+  }
+
+  // ---------- App-Übersicht ----------
+  function openSwitcher() {
+    closeAllPanels();
+    hideAllOverlays();
+    state.screen = 'switcher';
+    renderSwitcher();
+    document.getElementById('swHint').style.display = state.guided ? 'block' : 'none';
+    document.getElementById('switcher').classList.add('open');
+  }
+  function closeSwitcher() { document.getElementById('switcher').classList.remove('open'); }
+
+  function renderSwitcher() {
+    var track = document.getElementById('swTrack');
+    track.innerHTML = '';
+    document.getElementById('swEmpty').style.display = state.recents.length ? 'none' : 'block';
+    state.recents.forEach(function (key) {
+      var meta = APP_META[key];
+      var scr = state.appScreens[key] || meta.root;
+      var card = document.createElement('div');
+      card.className = 'sw-card';
+      card.innerHTML = '<div class="sw-label"><span class="sw-ic" style="background:' + meta.color + '">' + icon(meta.icon) + '</span>' + meta.label + '</div>' +
+        '<div class="sw-preview' + (key === 'camera' ? ' dark' : '') + '"><div class="sw-bar">' + SCREEN_TITLES[scr] + '</div><div class="sw-lines"><i></i><i></i><i></i><i></i></div></div>';
+      attachCardGestures(card, key, track);
+      track.appendChild(card);
+    });
+  }
+
+  function attachCardGestures(card, key, track) {
+    var down = false, sx = 0, sy = 0, startScroll = 0, axis = null, dy = 0;
+    card.addEventListener('pointerdown', function (e) {
+      down = true; sx = e.clientX / viewScale; sy = e.clientY / viewScale; startScroll = track.scrollLeft; axis = null; dy = 0;
+      card.style.transition = 'none';
+      card.setPointerCapture(e.pointerId);
+    });
+    card.addEventListener('pointermove', function (e) {
+      if (!down) return;
+      var dx = e.clientX / viewScale - sx; dy = e.clientY / viewScale - sy;
+      if (!axis && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      if (axis === 'x') track.scrollLeft = startScroll - dx;
+      if (axis === 'y') {
+        var up = Math.min(0, dy);
+        card.style.transform = 'translateY(' + up + 'px)';
+        card.style.opacity = String(1 + up / 350);
+      }
+    });
+    function end() {
+      if (!down) return;
+      down = false;
+      if (!axis) { showAppScreen(key, state.appScreens[key] || APP_META[key].root); return; }
+      if (axis === 'y' && dy < -90) {
+        card.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+        card.style.transform = 'translateY(-420px)'; card.style.opacity = '0';
+        setTimeout(function () {
+          var i = state.recents.indexOf(key);
+          if (i > -1) state.recents.splice(i, 1);
+          delete state.appScreens[key];
+          if (state.currentApp === key) state.currentApp = null;
+          showToast('"' + APP_META[key].label + '" wurde geschlossen.', true);
+          renderSwitcher();
+        }, 200);
+        return;
+      }
+      card.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+      card.style.transform = ''; card.style.opacity = '';
+    }
+    card.addEventListener('pointerup', end);
+    card.addEventListener('pointercancel', end);
+  }
+
+  document.getElementById('switcher').addEventListener('click', function (e) {
+    var t = e.target.id;
+    if (t === 'switcher' || t === 'swTrack' || t === 'swEmpty' || t === 'swHint') { closeSwitcher(); closeOverlays(); }
+  });
+
+  // ---------- Home-Leiste unten (iPhone ohne Home-Button) ----------
+  function goHome() {
+    closeSwitcher();
+    var open = document.querySelector('.overlay.open');
+    if (open) {
+      open.style.transition = ''; open.style.transform = ''; open.style.borderRadius = '';
+      open.classList.add('leaving');
+      setTimeout(closeOverlays, 200);
+    } else {
+      closeOverlays();
+    }
+  }
+
+  (function makeHomeIndicator() {
+    var hs = document.getElementById('hotspotSwipeUp');
+    var bubble = document.getElementById('gestureBubble');
+    var dragging = false, startY = 0, raw = 0, target = null;
+    var HOME_MIN = 20, SWITCHER_MIN = 160;
+    hs.addEventListener('pointerdown', function (e) {
+      if (anyPanelOpen()) closeAllPanels();
+      dragging = true; startY = e.clientY / viewScale; raw = 0;
+      target = document.querySelector('.overlay.open');
+      hs.setPointerCapture(e.pointerId);
+    });
+    hs.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      raw = Math.max(0, startY - e.clientY / viewScale);
+      var p = Math.min(1, raw / 320);
+      if (target) {
+        target.style.transition = 'none';
+        target.style.transform = 'translateY(' + (-raw * 0.35) + 'px) scale(' + (1 - p * 0.45) + ')';
+        target.style.borderRadius = (p * 30) + 'px';
+      }
+      if (state.guided && raw > HOME_MIN) {
+        bubble.style.display = 'block';
+        bubble.textContent = raw >= SWITCHER_MIN ? 'Jetzt loslassen: App-Übersicht' : 'Jetzt loslassen: Startbildschirm';
+      } else { bubble.style.display = 'none'; }
+    });
+    function end() {
+      if (!dragging) return;
+      dragging = false;
+      bubble.style.display = 'none';
+      if (raw >= SWITCHER_MIN) { openSwitcher(); }
+      else if (raw >= HOME_MIN) { goHome(); }
+      else if (target) { target.style.transition = 'transform 0.2s ease'; target.style.transform = ''; target.style.borderRadius = ''; }
+    }
+    hs.addEventListener('pointerup', end);
+    hs.addEventListener('pointercancel', end);
+  })();
+
+  function anyPanelOpen() {
+    return document.getElementById('panelNotif').classList.contains('open') ||
+      document.getElementById('panelControlTop').classList.contains('open') ||
+      document.getElementById('panelControlBottom').classList.contains('open');
+  }
+
+  function closeAllPanels() {
+    ['panelNotif', 'panelControlTop', 'panelControlBottom'].forEach(function (id) {
+      var el = document.getElementById(id);
+      el.classList.add('snap');
+      el.classList.remove('open');
+      el.style.top = ''; el.style.bottom = '';
+    });
+  }
+
+  function openPanelFully(id) {
+    closeAllPanels();
+    var el = document.getElementById(id);
+    el.classList.add('snap');
+    el.style.top = ''; el.style.bottom = '';
+    el.classList.add('open');
+    if (id === 'panelNotif') {
+      showToast(state.task === 'sim' ? 'In der Mitteilung steht schon, was zu tun ist: Einstellungen, dann Mobilfunk, dann SIM-PIN.' : 'Das sind Ihre Mitteilungen. Hier finden Sie diese Einstellung nicht.', true);
+    } else if (['flugmodus', 'nichtstoeren', 'internet'].indexOf(state.task) > -1 && state.step === 1) {
+      state.step = 2; updateHint();
     } else if (['wlan', 'bluetooth'].indexOf(state.task) > -1) {
       showToast('Hier können Sie ' + (state.task === 'wlan' ? 'WLAN' : 'Bluetooth') + ' nur an- oder ausschalten. Das genaue Verbinden geschieht in den Einstellungen.', true);
     }
-    setTimeout(function () {
-      document.addEventListener('click', outsideCloseOnce, { once: true, capture: true });
-    }, 0);
+    document.getElementById('hotspotLeft').classList.remove('pulse');
+    document.getElementById('hotspotRight').classList.remove('pulse');
+    document.getElementById('hotspotTopFull').classList.remove('pulse');
+    document.getElementById('hotspotBottom').classList.remove('pulse');
   }
-  function outsideCloseOnce(e) {
+  var justClosedPanel = false;
+  document.addEventListener('pointerdown', function (e) {
+    if (!anyPanelOpen()) return;
     var panels = ['panelNotif', 'panelControlTop', 'panelControlBottom'];
     var insidePanel = panels.some(function (id) { return document.getElementById(id).contains(e.target); });
-    var onHotspot = e.target.classList.contains('hotspot');
+    var onHotspot = e.target.classList && e.target.classList.contains('hotspot');
+    var onScreen = document.getElementById('screen').contains(e.target);
     if (!insidePanel && !onHotspot) {
-      panels.forEach(function (id) { document.getElementById(id).classList.remove('open'); });
+      closeAllPanels();
+      if (onScreen) { justClosedPanel = true; setTimeout(function () { justClosedPanel = false; }, 350); }
     }
+  }, true);
+
+  function makeDraggable(hotspotId, panelId, edge) {
+    var hotspot = document.getElementById(hotspotId);
+    var panel = document.getElementById(panelId);
+    var dragging = false, startY = 0, moved = false;
+    var TRAVEL = 380;
+
+    hotspot.addEventListener('pointerdown', function (e) {
+      dragging = true; moved = false; startY = e.clientY / viewScale;
+      panel.classList.remove('snap');
+      hotspot.setPointerCapture(e.pointerId);
+    });
+    hotspot.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var dy = e.clientY / viewScale - startY;
+      var raw = edge === 'top' ? dy : -dy;
+      if (Math.abs(raw) > 6) moved = true;
+      var progress = Math.max(0, Math.min(1, raw / TRAVEL));
+      var val = -420 + progress * (420 + 44);
+      if (edge === 'top') { panel.style.top = val + 'px'; panel.style.bottom = ''; }
+      else { panel.style.bottom = val + 'px'; panel.style.top = ''; }
+      if (progress > 0.05) {
+        ['panelNotif', 'panelControlTop', 'panelControlBottom'].forEach(function (id) {
+          if (id !== panelId) { var o = document.getElementById(id); o.classList.remove('open'); o.style.top = ''; o.style.bottom = ''; }
+        });
+      }
+    });
+    function endDrag(e) {
+      if (!dragging) return;
+      dragging = false;
+      var current = edge === 'top' ? parseFloat(panel.style.top || -420) : parseFloat(panel.style.bottom || -420);
+      var progress = (current + 420) / (420 + 44);
+      panel.classList.add('snap');
+      panel.style.top = ''; panel.style.bottom = '';
+      if (progress > 0.35) { openPanelFully(panelId); }
+      else { panel.classList.remove('open'); }
+      setTimeout(function () { moved = false; }, 50);
+    }
+    hotspot.addEventListener('pointerup', endDrag);
+    hotspot.addEventListener('pointercancel', endDrag);
+    hotspot.addEventListener('click', function () {
+      if (moved) return;
+      if (anyPanelOpen() && document.getElementById(panelId).classList.contains('open')) return;
+      openPanelFully(panelId);
+    });
   }
 
   function toggleFlight() {
     state.flight = !state.flight;
-    document.getElementById('flightIcon').style.display = state.flight ? 'inline' : 'none';
+    document.getElementById('flightIcon').style.display = state.flight ? 'inline-flex' : 'none';
     ['flightToggleTop', 'flightToggleBottom'].forEach(function (id) { document.getElementById(id).classList.toggle('on', state.flight); });
     document.getElementById('flightToggleSettings').classList.toggle('on', state.flight);
     if (state.flight) {
@@ -479,6 +1831,12 @@
     finishIfDone();
   }
 
+  function toggleDnd() {
+    state.dnd = !state.dnd;
+    ['dndToggleTop', 'dndToggleBottom'].forEach(function (id) { document.getElementById(id).classList.toggle('on', state.dnd); });
+    showToast(state.dnd ? 'Nicht stören ist an. Anrufe und Mitteilungen bleiben stumm.' : 'Nicht stören ist aus.', !state.dnd);
+    finishIfDone();
+  }
   function toggleWifiRadio() { setRadioWifi(!state.wifi); }
   function toggleBtRadio() { setRadioBt(!state.bt); }
 
@@ -510,6 +1868,14 @@
     document.querySelectorAll('#overlayBtList .list-item .devcheck').forEach(function (el) {
       el.textContent = (state.btConnectedDevice === 'Kopfhörer XY') ? '✓' : '';
     });
+    document.querySelectorAll('#overlayWifiList .list-item').forEach(function (el) {
+      el.style.opacity = state.wifi ? '1' : '0.45';
+      el.style.pointerEvents = state.wifi ? 'auto' : 'none';
+    });
+    document.querySelectorAll('#overlayBtList .list-item').forEach(function (el) {
+      el.style.opacity = state.bt ? '1' : '0.45';
+      el.style.pointerEvents = state.bt ? 'auto' : 'none';
+    });
   }
 
   function setBrightness(v) {
@@ -518,7 +1884,6 @@
     document.getElementById('brightnessBottom').value = v;
     document.getElementById('brightnessDisplay').value = v;
     document.getElementById('dimmer').style.opacity = (1 - state.brightness / 100) * 0.75;
-    if (state.task === 'anzeige' && state.step === 3) { state.step = 4; }
     finishIfDone();
   }
   function setFontsize(v) {
@@ -541,17 +1906,43 @@
     if (state.task === 'wlan') return state.wifiConnectedNetwork === 'Zuhause';
     if (state.task === 'bluetooth') return state.btConnectedDevice === 'Kopfhörer XY';
     if (state.task === 'anzeige') return state.brightness >= 70 && state.fontsize >= 70;
+    if (state.task === 'code') return !!state.passcode || state.biometric;
+    if (state.task === 'nichtstoeren') return state.dnd === true;
+    if (state.task === 'passwort') return state.pwSaved === true;
+    if (state.task === 'notruf') return state.sosCalled === true;
+    if (state.task === 'app_loeschen') return state.removedApps.indexOf('calendar') > -1;
+    if (state.task === 'kamera') return state.camMode === 'video';
+    if (state.task === 'autosperre') return state.autolock === '2 Minuten';
+    if (state.task === 'sperren') return state.unlockedWithCode;
+    if (state.task === 'tracking') return state.trackingAllowed === false;
+    if (state.task === 'ortung') return state.loc['Taschenlampe Pro'] === 'Nie';
+    if (state.task === 'speicher') return state.storageDeleted === true;
+    if (state.task === 'sim') return state.simLocked === false;
+    if (state.task === 'akku') return state.lowPower === true;
+    if (state.task === 'internet') return !state.flight && state.wifiConnectedNetwork === 'Zuhause';
+    if (state.task === 'apps_organisieren') return Object.keys(state.folders).length > 0 && state.homeOrder2.length > 0 && state.mainPage === 1;
     return false;
   }
 
+  function computeInternetStep() {
+    if (state.flight) return anyPanelOpen() ? 2 : 1;
+    if (!state.wifi) return 3;
+    return 4;
+  }
+  function computeOrganizeStep() {
+    var hasFolder = Object.keys(state.folders).length > 0;
+    if (!state.jiggling && !hasFolder) return 1;
+    if (state.jiggling && state.homeOrder2.length > 0) return 4;
+    if (state.jiggling && hasFolder) return 3;
+    if (state.jiggling) return 2;
+    if (!state.jiggling && state.homeOrder2.length > 0 && state.mainPage !== 1) return 5;
+    return 6;
+  }
   function finishIfDone() {
-    if (isTaskDone()) {
-      var steps = getStepsForTask();
-      state.step = steps.length;
-      updateHint();
-    } else {
-      updateHint();
-    }
+    if (isTaskDone()) { state.step = getStepsForTask().length; }
+    else if (state.task === 'internet') { state.step = computeInternetStep(); }
+    else if (state.task === 'apps_organisieren') { state.step = computeOrganizeStep(); }
+    updateHint();
   }
 
   function resetSandbox() {
@@ -559,17 +1950,60 @@
     setRadioWifi(true, true); setRadioBt(false, true);
     state.wifiConnectedNetwork = null; state.btConnectedDevice = null;
     state.brightness = 30; state.fontsize = 20;
-    document.getElementById('panelNotif').classList.remove('open');
-    document.getElementById('panelControlTop').classList.remove('open');
-    document.getElementById('panelControlBottom').classList.remove('open');
+    closeAllPanels();
+    closeSwitcher();
     closeOverlays();
+    state.recents = []; state.appScreens = {};
+    state.passcode = state.task === 'sperren' ? '123456' : null;
+    state.codeVerified = false; state.biometric = false; state.dnd = false; state.autolock = '30 Sekunden';
+    state.trackingAllowed = true; state.trackApps = JSON.parse(JSON.stringify(TRACK_DEFAULT));
+    state.locMaster = true; state.loc = JSON.parse(JSON.stringify(LOC_DEFAULT)); state.locApp = null;
+    state.locked = false; state.screenOff = false; state.unlockedWithCode = false; state.volume = 5;
+    kp.len = 6; kp.entry = ''; kp.temp = ''; ls.entry = '';
+    state.camMode = 'foto'; state.camRecording = false; state.camExplained = {}; state.camShots = 0;
+    stopRecordTimer(); renderCamera();
+    state.pwSuggested = false; state.pwSaved = false;
+    document.getElementById('pwPassword').value = '';
+    document.getElementById('pwPassword').type = 'password';
+    document.getElementById('pwSuggest').classList.remove('show');
+    document.getElementById('pwWeakNote').style.display = 'none';
+    document.getElementById('pwSaveDialog').style.display = 'none';
+    state.sosCalled = false;
+    document.getElementById('sosOverlay').classList.remove('open');
+    document.getElementById('sosKnob').style.left = '2px';
+    state.jiggling = false; state.removedApps = [];
+    state.storageDeleted = false; state.lowPower = false;
+    state.homeOrder = appDefs.map(function (a) { return a.key; });
+    state.homeOrder2 = []; state.folders = {}; state.folderSeq = 1; state.currentPage = 0; state.mainPage = 0;
+    drag = null; homeSwipeSuppressClick = false;
+    document.getElementById('folderOverlay').classList.remove('open');
+    document.getElementById('hsPicker').classList.remove('open');
+    state.simLocked = state.task === 'sim';
+    document.getElementById('notifSim').style.display = state.simLocked ? 'block' : 'none';
+    document.getElementById('homeApps').classList.remove('jiggling');
+    document.getElementById('jiggleDone').classList.remove('jiggle-done-visible');
+    document.getElementById('appConfirm').classList.remove('open');
+    renderApps();
+    document.getElementById('lsKeypad').style.display = 'none';
+    document.getElementById('lsInfo').style.display = 'flex';
+    setLockUI(); renderCodeScreen(); renderAutolock(); renderPrivacy(); renderTracking(); renderLocation();
     document.getElementById('flightIcon').style.display = 'none';
     document.getElementById('flightToggleTop').classList.remove('on');
     document.getElementById('flightToggleBottom').classList.remove('on');
     document.getElementById('flightToggleSettings').classList.remove('on');
+    document.getElementById('simIcon').style.display = state.simLocked ? 'inline-flex' : 'none';
+    if (state.task === 'internet') {
+      state.flight = true;
+      setRadioWifi(false, true);
+      document.getElementById('flightIcon').style.display = 'inline-flex';
+      document.getElementById('flightToggleTop').classList.add('on');
+      document.getElementById('flightToggleBottom').classList.add('on');
+      document.getElementById('flightToggleSettings').classList.add('on');
+    }
     setBrightness(30);
     setFontsize(20);
     renderWifiBtStatus();
+    renderCellular();
     document.getElementById('modelLabel').textContent = state.model;
     document.getElementById('taskbarText').textContent = TASKS[state.task] ? TASKS[state.task].taskbar : '';
     applyPlatformLayout();
@@ -578,38 +2012,116 @@
   }
 
   function applyPlatformLayout() {
-    var isAndroidOrNew = state.platform !== 'ios-alt';
-    document.getElementById('hotspotLeft').style.display = isAndroidOrNew ? 'block' : 'none';
-    document.getElementById('hotspotRight').style.display = isAndroidOrNew ? 'block' : 'none';
-    document.getElementById('hotspotBottom').style.display = isAndroidOrNew ? 'none' : 'block';
-    document.getElementById('hotspotSwipeUp').style.display = isAndroidOrNew ? 'block' : 'none';
-    document.getElementById('notch').style.display = state.platform === 'ios-neu' ? 'block' : 'none';
-    document.getElementById('homebtn').style.display = state.platform === 'ios-alt' ? 'block' : 'none';
-    document.getElementById('homebar').style.display = state.platform === 'ios-alt' ? 'none' : 'block';
+    var isAlt = state.platform === 'ios-alt';
+    document.getElementById('hotspotLeft').style.display = isAlt ? 'none' : 'block';
+    document.getElementById('hotspotRight').style.display = isAlt ? 'none' : 'block';
+    document.getElementById('hotspotTopFull').style.display = isAlt ? 'block' : 'none';
+    document.getElementById('hotspotBottom').style.display = isAlt ? 'block' : 'none';
+    document.getElementById('hotspotSwipeUp').style.display = isAlt ? 'none' : 'block';
+    document.getElementById('notch').style.display = isAlt ? 'none' : 'block';
+    document.getElementById('homebtn').style.display = isAlt ? 'block' : 'none';
+    document.getElementById('homebar').style.display = isAlt ? 'none' : 'block';
+    var cl = codeLabel();
+    document.getElementById('codeRowLabel').textContent = cl;
+    document.getElementById('codeHeader').textContent = cl;
+    SCREEN_TITLES.overlayCode = cl;
+    document.getElementById('bioLabel').textContent = isAlt ? 'Fingerabdruck hinzufügen' : 'Face ID einrichten';
+    document.getElementById('lsBottomText').textContent = isAlt ? 'Zum Öffnen Home-Taste drücken' : 'Zum Öffnen nach oben wischen';
+    lsSwipeShow();
+    document.getElementById('sideBtn').classList.toggle('pulse-btn', state.guided && state.task === 'sperren');
     document.getElementById('hotspotLeft').classList.remove('pulse');
     document.getElementById('hotspotRight').classList.remove('pulse');
+    document.getElementById('hotspotTopFull').classList.remove('pulse');
     document.getElementById('hotspotBottom').classList.remove('pulse');
-    if (state.guided && state.task === 'flugmodus') {
-      if (isAndroidOrNew) document.getElementById('hotspotRight').classList.add('pulse');
-      else document.getElementById('hotspotBottom').classList.add('pulse');
+    if (state.guided && ['flugmodus', 'nichtstoeren', 'internet'].indexOf(state.task) > -1) {
+      if (isAlt) document.getElementById('hotspotBottom').classList.add('pulse');
+      else document.getElementById('hotspotRight').classList.add('pulse');
     }
   }
 
   function getStepsForTask() {
     var gesture = state.platform === 'ios-alt'
       ? 'Wischen Sie vom unteren Bildschirmrand nach oben.'
-      : 'Wischen Sie oben rechts nach unten, nicht oben links.';
+      : 'Wischen Sie von oben rechts (neben der Kamera-Aussparung) nach unten, nicht oben links.';
     if (state.task === 'flugmodus') {
-      return ['Schritt 1: ' + gesture, 'Schritt 2: Tippen Sie auf das Flugzeug-Symbol.', 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.'];
+      var closeText = state.platform === 'ios-alt'
+        ? 'Geschafft! Wischen Sie das Kontrollzentrum nach unten weg, oder beginnen Sie mit "Zurücksetzen" von vorne.'
+        : 'Geschafft! Wischen Sie das Kontrollzentrum nach oben weg, oder beginnen Sie mit "Zurücksetzen" von vorne.';
+      return ['Schritt 1: ' + gesture, 'Schritt 2: Tippen Sie auf das Flugzeug-Symbol.', closeText];
     }
     if (state.task === 'wlan') {
-      return ['Schritt 1: Öffnen Sie die App "Einstellungen".', 'Schritt 2: Tippen Sie auf "WLAN".', 'Schritt 3: Wählen Sie das Netzwerk "Zuhause" aus.', 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.'];
+      return ['Schritt 1: Öffnen Sie die App "Einstellungen".', 'Schritt 2: Tippen Sie auf "WLAN".', 'Schritt 3: Wählen Sie das Netzwerk "Zuhause" aus.', 'Schritt 4: Geben Sie den Netzwerkschlüssel ein: 1 2 3 4', 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.'];
     }
     if (state.task === 'bluetooth') {
       return ['Schritt 1: Öffnen Sie die App "Einstellungen".', 'Schritt 2: Tippen Sie auf "Bluetooth".', 'Schritt 3: Wählen Sie "Kopfhörer XY" aus.', 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.'];
     }
     if (state.task === 'anzeige') {
       return ['Schritt 1: Öffnen Sie die App "Einstellungen".', 'Schritt 2: Tippen Sie auf "Anzeige & Helligkeit".', 'Schritt 3: Schieben Sie beide Regler deutlich nach rechts.', 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.'];
+    }
+    var done = 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.';
+    var s1 = 'Schritt 1: Öffnen Sie die App "Einstellungen".';
+    if (state.task === 'code') {
+      var bioName = state.platform === 'ios-alt' ? 'Touch ID' : 'Face ID';
+      return [s1, 'Schritt 2: Tippen Sie auf "' + codeLabel() + '".',
+        'Schritt 3: Wählen Sie entweder "Code aktivieren" oder "' + bioName + ' einrichten".',
+        'Schritt 4: Geben Sie eine Zahlenkombination ein, die Sie sich gut merken können – zum Beispiel ein für Sie wichtiges Datum, aber keine allzu bekannte Jahreszahl.',
+        'Schritt 5: Geben Sie dieselbe Zahlenkombination zur Bestätigung noch einmal ein.', done];
+    }
+    if (state.task === 'nichtstoeren') {
+      return ['Schritt 1: ' + gesture, 'Schritt 2: Tippen Sie auf das Mond-Symbol.', done];
+    }
+    if (state.task === 'kamera') {
+      return [s1.replace('Einstellungen', 'Kamera'), 'Schritt 2: Sie sehen unten mehrere Kameramodi. Tippen Sie auf "VIDEO".', done];
+    }
+    if (state.task === 'passwort') {
+      return [s1.replace('Einstellungen', 'Safari'), 'Schritt 2: Tippen Sie in das Feld "Passwort".', 'Schritt 3: Tippen Sie auf den Vorschlag für ein starkes Passwort, oder geben Sie selbst ein sicheres Passwort ein.', 'Schritt 4: Tippen Sie auf "Konto erstellen" und danach auf "Speichern".', done];
+    }
+    if (state.task === 'notruf') {
+      return ['Schritt 1: Drücken Sie 5-mal schnell hintereinander auf die Seitentaste.', 'Schritt 2: Schieben Sie den roten Regler ganz nach rechts, um den Notruf zu simulieren.', done];
+    }
+    if (state.task === 'app_loeschen') {
+      return ['Schritt 1: Halten Sie den Finger etwas länger auf ein beliebiges App-Symbol, bis alle Symbole wackeln.', 'Schritt 2: Tippen Sie auf das kleine Minus-Zeichen bei "Kalender".', 'Schritt 3: Bestätigen Sie mit "App löschen".', done];
+    }
+    if (state.task === 'autosperre') {
+      return [s1, 'Schritt 2: Tippen Sie auf "Anzeige & Helligkeit".', 'Schritt 3: Tippen Sie unten auf "Automatische Sperre".', 'Schritt 4: Wählen Sie "2 Minuten".', done];
+    }
+    if (state.task === 'sperren') {
+      var alt = state.platform === 'ios-alt';
+      return ['Schritt 1: Drücken Sie die Seitentaste rechts am iPhone. Der Bildschirm geht aus.',
+        alt ? 'Schritt 2: Drücken Sie die Home-Taste, um den Bildschirm einzuschalten.' : 'Schritt 2: Tippen Sie auf den dunklen Bildschirm, um ihn einzuschalten.',
+        alt ? 'Schritt 3: Drücken Sie die Home-Taste noch einmal.' : 'Schritt 3: Wischen Sie vom unteren Bildschirmrand nach oben.',
+        'Schritt 4: Geben Sie Ihren Code ein: 1 2 3 4 5 6', done];
+    }
+    if (state.task === 'tracking') {
+      return [s1, 'Schritt 2: Tippen Sie auf "Datenschutz & Sicherheit".', 'Schritt 3: Tippen Sie auf "Tracking".', 'Schritt 4: Schalten Sie "Apps erlauben, Tracking anzufordern" aus.', done];
+    }
+    if (state.task === 'ortung') {
+      return [s1, 'Schritt 2: Tippen Sie auf "Datenschutz & Sicherheit".', 'Schritt 3: Tippen Sie auf "Ortungsdienste".', 'Schritt 4: Tippen Sie auf "Taschenlampe Pro".', 'Schritt 5: Wählen Sie "Nie".', done];
+    }
+    if (state.task === 'speicher') {
+      return [s1, 'Schritt 2: Tippen Sie auf "Allgemein".', 'Schritt 3: Tippen Sie auf "iPhone-Speicher".',
+        'Schritt 4: Die App ganz oben in der Liste belegt am meisten Speicher. Tippen Sie darauf.',
+        'Schritt 5: Tippen Sie auf "App löschen" und bestätigen Sie.', done];
+    }
+    if (state.task === 'sim') {
+      return [s1 + ' (Tipp: Auch die Mitteilung oben verrät, was zu tun ist.)', 'Schritt 2: Tippen Sie auf "Mobilfunk".', 'Schritt 3: Tippen Sie auf "SIM-PIN".', 'Schritt 4: Geben Sie die SIM-PIN ein: 4 8 2 1', done];
+    }
+    if (state.task === 'akku') {
+      return [s1, 'Schritt 2: Tippen Sie auf "Batterie".', 'Schritt 3: Schauen Sie, welche App am meisten Akku verbraucht (ganz oben, rot markiert). Schalten Sie dann den "Stromsparmodus" ein.', done];
+    }
+    if (state.task === 'internet') {
+      return ['Schritt 1: Prüfen Sie die Statusleiste: Das Flugzeug-Symbol zeigt, dass der Flugmodus an ist. ' + gesture,
+        'Schritt 2: Tippen Sie auf das Flugzeug-Symbol, um den Flugmodus auszuschalten.',
+        'Schritt 3: Der Flugmodus ist aus, aber WLAN ist noch ausgeschaltet. Schalten Sie WLAN ein, zum Beispiel in den Einstellungen.',
+        'Schritt 4: Öffnen Sie Einstellungen, dann WLAN, wählen Sie "Zuhause" und geben Sie den Schlüssel ein: 1 2 3 4', done];
+    }
+    if (state.task === 'apps_organisieren') {
+      return ['Schritt 1: Halten Sie den Finger etwas länger auf ein beliebiges App-Symbol, bis alle Symbole wackeln.',
+        'Schritt 2: Ziehen Sie die App "Mail" auf die App "Kalender". Halten Sie kurz still, bis sich ein Ordner öffnet, und lassen Sie dann los.',
+        'Schritt 3: Ziehen Sie die App "Fotos" ganz an den rechten Bildschirmrand und halten Sie kurz, bis die zweite Seite erscheint. Lassen Sie sie dort los.',
+        'Schritt 4: Tippen Sie auf "Fertig", um die Bearbeitung der Symbole zu beenden.',
+        'Schritt 5: Halten Sie den Finger auf die Punkte unten, um den Startbildschirm auszuwählen.',
+        'Schritt 6: Wählen Sie "Seite 2" aus und tippen Sie auf "Fertig".', done];
     }
     return [];
   }
@@ -621,19 +2133,573 @@
     hb.textContent = steps[state.step - 1] || steps[steps.length - 1] || '';
   }
 
+  function makePanelClosable(panelId, edge) {
+    var panel = document.getElementById(panelId);
+    var dragging = false, startY = 0;
+    var OPEN_POS = 44;
+    panel.addEventListener('pointerdown', function (e) {
+      if (!panel.classList.contains('open')) return;
+      if (e.target.closest('.toggleicon, input')) return;
+      dragging = true; startY = e.clientY / viewScale;
+      panel.classList.remove('snap');
+      panel.setPointerCapture(e.pointerId);
+    });
+    panel.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var dy = e.clientY / viewScale - startY;
+      var raw = edge === 'top' ? -dy : dy;
+      if (raw < 0) raw = 0;
+      var val = OPEN_POS - raw;
+      if (edge === 'top') panel.style.top = val + 'px'; else panel.style.bottom = val + 'px';
+    });
+    function end() {
+      if (!dragging) return;
+      dragging = false;
+      var cur = edge === 'top' ? parseFloat(panel.style.top || OPEN_POS) : parseFloat(panel.style.bottom || OPEN_POS);
+      var closedBy = OPEN_POS - cur;
+      panel.classList.add('snap');
+      panel.style.top = ''; panel.style.bottom = '';
+      if (closedBy > 70) {
+        panel.classList.remove('open');
+        if (panelId !== 'panelNotif') showToast('Kontrollzentrum geschlossen', true);
+      }
+    }
+    panel.addEventListener('pointerup', end);
+    panel.addEventListener('pointercancel', end);
+  }
+  makePanelClosable('panelNotif', 'top');
+  makePanelClosable('panelControlTop', 'top');
+  makePanelClosable('panelControlBottom', 'bottom');
+
+  makeDraggable('hotspotLeft', 'panelNotif', 'top');
+  makeDraggable('hotspotRight', 'panelControlTop', 'top');
+  makeDraggable('hotspotTopFull', 'panelNotif', 'top');
+  makeDraggable('hotspotBottom', 'panelControlBottom', 'bottom');
+
+  // ================= Sicherheit & Datenschutz =================
+  var AUTOLOCK_OPTS = ['30 Sekunden', '1 Minute', '2 Minuten', '3 Minuten', '4 Minuten', '5 Minuten', 'Nie'];
+  var LOC_OPTS = ['Nie', 'Nächstes Mal fragen', 'Beim Verwenden der App', 'Immer'];
+  var LOC_DEFAULT = { 'Karten': 'Beim Verwenden der App', 'Wetter': 'Immer', 'Kamera': 'Beim Verwenden der App', 'Taschenlampe Pro': 'Immer' };
+  var TRACK_DEFAULT = { 'Spiele-App': true, 'Shopping-App': true };
+
+  function codeLabel() { return state.platform === 'ios-alt' ? 'Touch ID & Code' : 'Face ID & Code'; }
+
+  document.querySelectorAll('.dead-row').forEach(function (el) {
+    el.onclick = function () { showToast('"' + el.querySelector('span').textContent + '" ist in dieser Übung nicht verfügbar.', true); };
+  });
+
+  function renderDots(dotsId, len, filled) {
+    var d = document.getElementById(dotsId); d.innerHTML = '';
+    for (var i = 0; i < len; i++) { var sp = document.createElement('span'); if (i < filled) sp.className = 'f'; d.appendChild(sp); }
+  }
+  function shake(id) { var el = document.getElementById(id); el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
+  function buildPad(padId, dark, onKey) {
+    var pad = document.getElementById(padId); pad.innerHTML = '';
+    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del'].forEach(function (k) {
+      var b = document.createElement('button');
+      b.className = 'kp-key' + (dark ? ' dark' : '') + (k === '' ? ' blank' : '') + (k === 'del' ? ' del' : '');
+      b.textContent = k === 'del' ? 'Löschen' : k;
+      if (k !== '') b.onclick = function () { onKey(k); };
+      pad.appendChild(b);
+    });
+  }
+
+  // ----- Face ID & Code -----
+  document.getElementById('rowCode').onclick = function () {
+    if (state.passcode && !state.codeVerified) openKeypad('verify'); else { openOverlay('overlayCode'); renderCodeScreen(); }
+  };
+  document.getElementById('backCode').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
+  document.getElementById('rowBiometric').onclick = function () {
+    if (!state.passcode) {
+      showToast((state.platform === 'ios-alt' ? 'Touch ID' : 'Face ID') + ' braucht zuerst einen Code als Rückfallebene, falls die Erkennung einmal nicht klappt.', true);
+      openKeypad('new1');
+      return;
+    }
+    if (state.biometric) {
+      state.biometric = false; renderCodeScreen();
+      showToast((state.platform === 'ios-alt' ? 'Touch ID' : 'Face ID') + ' deaktiviert.', true);
+      finishIfDone();
+      return;
+    }
+    runBiometricSetup();
+  };
+  function runBiometricSetup() {
+    var alt = state.platform === 'ios-alt';
+    var ring = document.getElementById('bioRing');
+    ring.className = 'bio-ring scanning';
+    ring.innerHTML = icon(alt ? 'fingerprint' : 'faceid');
+    document.getElementById('bioTitle').textContent = alt ? 'Bitte legen Sie Ihren Finger auf' : 'Bitte schauen Sie auf den Bildschirm';
+    document.getElementById('bioSub').textContent = alt ? 'Legen Sie Ihren Finger wiederholt auf die Home-Taste.' : 'Halten Sie das iPhone in normalem Abstand vor Ihr Gesicht.';
+    document.getElementById('bioModal').classList.add('open');
+    setTimeout(function () {
+      ring.className = 'bio-ring ok';
+      document.getElementById('bioTitle').textContent = alt ? 'Fingerabdruck erkannt' : 'Face ID eingerichtet';
+      document.getElementById('bioSub').textContent = '';
+      setTimeout(function () {
+        document.getElementById('bioModal').classList.remove('open');
+        state.biometric = true;
+        renderCodeScreen();
+        showToast((alt ? 'Touch ID' : 'Face ID') + ' eingerichtet.');
+        finishIfDone();
+      }, 700);
+    }, 1400);
+  }
+  document.getElementById('rowCodeToggle').onclick = function () {
+    if (!state.passcode) { openKeypad('new1'); return; }
+    state.passcode = null;
+    renderCodeScreen();
+    showToast('Code deaktiviert. Ihr iPhone ist jetzt nicht mehr geschützt.', true);
+    finishIfDone();
+  };
+  document.getElementById('rowCodeChange').onclick = function () { openKeypad('new1'); };
+  function renderCodeScreen() {
+    var on = !!state.passcode;
+    document.getElementById('codeToggleLabel').textContent = on ? 'Code deaktivieren' : 'Code aktivieren';
+    document.getElementById('rowCodeChange').style.display = on ? 'flex' : 'none';
+    document.getElementById('bioStatus').textContent = state.biometric ? '✓ Eingerichtet' : '';
+    var notes = [];
+    if (on) notes.push('✓ Ihr iPhone ist mit einem Code geschützt.');
+    else notes.push('Ohne Code kann jede Person, die Ihr iPhone in die Hand nimmt, es benutzen.');
+    if (state.biometric) notes.push((state.platform === 'ios-alt' ? 'Touch ID' : 'Face ID') + ' ist eingerichtet: Sie können Ihr iPhone damit entsperren, ohne jedes Mal den Code einzutippen. Der Code bleibt als Rückfallebene bestehen.');
+    document.getElementById('codeNote').textContent = notes.join(' ');
+  }
+
+  var kp = { mode: null, len: 6, entry: '', temp: '' };
+  function openKeypad(mode) {
+    kp.mode = mode; kp.entry = '';
+    if (mode === 'new1') { kp.temp = ''; kp.len = 6; }
+    if (mode === 'verify') kp.len = state.passcode.length;
+    document.getElementById('kpMsg').textContent = '';
+    document.getElementById('kpSheet').style.display = 'none';
+    document.getElementById('kpWeak').style.display = 'none';
+    showAppScreen('settings', 'overlayKeypad');
+    if (state.task === 'code' && mode === 'new1' && !isTaskDone()) { state.step = 4; updateHint(); }
+    renderKp();
+  }
+  function renderKp() {
+    var titles = { new1: 'Code eingeben', new2: 'Code bestätigen', verify: 'Code eingeben' };
+    document.getElementById('kpTitle').textContent = titles[kp.mode] || '';
+    document.getElementById('kpHeader').textContent = kp.mode === 'verify' ? codeLabel() : 'Code festlegen';
+    document.getElementById('kpOptions').style.display = kp.mode === 'new1' ? 'block' : 'none';
+    renderDots('kpDots', kp.len, kp.entry.length);
+  }
+  buildPad('kpPad', false, function (k) {
+    if (k === 'del') { kp.entry = kp.entry.slice(0, -1); renderKp(); return; }
+    if (kp.entry.length >= kp.len) return;
+    kp.entry += k; renderKp();
+    if (kp.entry.length === kp.len) setTimeout(kpComplete, 180);
+  });
+  function isWeakCode(c) {
+    if (/^(\d)\1+$/.test(c)) return true;
+    var up = true, down = true;
+    for (var i = 1; i < c.length; i++) {
+      var d = c.charCodeAt(i) - c.charCodeAt(i - 1);
+      if (d !== 1) up = false;
+      if (d !== -1) down = false;
+    }
+    return up || down;
+  }
+  function goNew2() {
+    kp.temp = kp.entry; kp.mode = 'new2'; kp.entry = '';
+    document.getElementById('kpWeak').style.display = 'none';
+    document.getElementById('kpMsg').textContent = '';
+    if (state.task === 'code' && !isTaskDone()) { state.step = 5; updateHint(); }
+    renderKp();
+  }
+  function kpComplete() {
+    if (kp.mode === 'new1') {
+      if (isWeakCode(kp.entry)) { document.getElementById('kpWeak').style.display = 'flex'; return; }
+      goNew2(); return;
+    }
+    if (kp.mode === 'new2') {
+      if (kp.entry === kp.temp) {
+        state.passcode = kp.temp; state.codeVerified = true;
+        showAppScreen('settings', 'overlayCode'); renderCodeScreen();
+        if (state.passcode.length < 6) showToast('Code festgelegt. Ein längerer Code ist sicherer.', true);
+        else showToast('Ihr Code wurde festgelegt.');
+        if (state.task === 'code') showToast('Tipp: Unter "' + codeLabel() + '" können Sie jetzt zusätzlich ' + (state.platform === 'ios-alt' ? 'Touch ID' : 'Face ID') + ' einrichten.', true);
+        finishIfDone();
+      } else {
+        shake('kpDots');
+        kp.mode = 'new1'; kp.entry = ''; kp.temp = '';
+        document.getElementById('kpMsg').textContent = 'Die Codes stimmen nicht überein. Bitte erneut versuchen.';
+        if (state.task === 'code' && !isTaskDone()) { state.step = 4; updateHint(); }
+        renderKp();
+      }
+      return;
+    }
+    if (kp.mode === 'verify') {
+      if (kp.entry === state.passcode) { state.codeVerified = true; showAppScreen('settings', 'overlayCode'); renderCodeScreen(); }
+      else { shake('kpDots'); kp.entry = ''; document.getElementById('kpMsg').textContent = 'Falscher Code. Bitte erneut versuchen.'; renderKp(); }
+    }
+  }
+  document.getElementById('kpWeakUse').onclick = goNew2;
+  document.getElementById('kpWeakChange').onclick = function () { kp.entry = ''; document.getElementById('kpWeak').style.display = 'none'; renderKp(); };
+  document.getElementById('kpOptions').onclick = function () { document.getElementById('kpSheet').style.display = 'flex'; };
+  document.querySelectorAll('#kpSheet [data-len]').forEach(function (el) {
+    el.onclick = function () {
+      var v = el.getAttribute('data-len');
+      document.getElementById('kpSheet').style.display = 'none';
+      if (v === 'alpha') { showToast('Ein eigener Buchstaben-Code ist in dieser Übung nicht verfügbar.', true); return; }
+      if (v === 'cancel') return;
+      kp.len = Number(v); kp.entry = ''; renderKp();
+    };
+  });
+  document.getElementById('backKeypad').onclick = function () {
+    if (kp.mode === 'verify') { showAppScreen('settings', 'overlaySettings'); return; }
+    showAppScreen('settings', 'overlayCode'); renderCodeScreen();
+  };
+
+  // ----- Automatische Sperre -----
+  document.getElementById('rowAutolock').onclick = function () { openOverlay('overlayAutolock'); renderAutolock(); };
+  document.getElementById('backAutolock').onclick = function () { showAppScreen('settings', 'overlayDisplay'); };
+  function renderAutolock() {
+    document.getElementById('autolockValue').textContent = state.autolock;
+    var list = document.getElementById('autolockList'); list.innerHTML = '';
+    AUTOLOCK_OPTS.forEach(function (o) {
+      var row = document.createElement('div'); row.className = 'list-item';
+      row.innerHTML = '<span>' + o + '</span><span class="check">' + (state.autolock === o ? '✓' : '') + '</span>';
+      row.onclick = function () {
+        state.autolock = o; renderAutolock();
+        if (o === 'Nie') showToast('Achtung: Ihr iPhone bleibt dann offen, wenn Sie es irgendwo liegen lassen.', true);
+        finishIfDone();
+      };
+      list.appendChild(row);
+    });
+  }
+
+  // ----- Datenschutz & Sicherheit -----
+  document.getElementById('rowPrivacy').onclick = function () { openOverlay('overlayPrivacy'); renderPrivacy(); };
+  document.getElementById('backPrivacy').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
+  document.getElementById('rowLocation').onclick = function () { openOverlay('overlayLocation'); renderLocation(); };
+  document.getElementById('backLocation').onclick = function () { showAppScreen('settings', 'overlayPrivacy'); renderPrivacy(); };
+  document.getElementById('rowTracking').onclick = function () { openOverlay('overlayTracking'); renderTracking(); };
+  document.getElementById('backTracking').onclick = function () { showAppScreen('settings', 'overlayPrivacy'); renderPrivacy(); };
+  document.getElementById('backLocApp').onclick = function () { showAppScreen('settings', 'overlayLocation'); renderLocation(); };
+  function renderPrivacy() { document.getElementById('locStatus').textContent = state.locMaster ? 'An' : 'Aus'; }
+
+  function renderTracking() {
+    document.getElementById('trackToggle').classList.toggle('on', state.trackingAllowed);
+    var list = document.getElementById('trackAppList'); list.innerHTML = '';
+    list.style.display = state.trackingAllowed ? 'block' : 'none';
+    Object.keys(state.trackApps).forEach(function (name) {
+      var row = document.createElement('div'); row.className = 'settings-row';
+      row.innerHTML = '<span>' + name + '</span><div class="mini-toggle' + (state.trackApps[name] ? ' on' : '') + '"><div class="dot"></div></div>';
+      row.querySelector('.mini-toggle').onclick = function () { state.trackApps[name] = !state.trackApps[name]; renderTracking(); };
+      list.appendChild(row);
+    });
+  }
+  document.getElementById('trackToggle').onclick = function () {
+    state.trackingAllowed = !state.trackingAllowed;
+    renderTracking();
+    showToast(state.trackingAllowed
+      ? 'Apps dürfen wieder fragen, ob sie Sie verfolgen dürfen.'
+      : 'Apps dürfen Sie jetzt nicht mehr über andere Apps und Websites hinweg verfolgen.', state.trackingAllowed);
+    finishIfDone();
+  };
+
+  function renderLocation() {
+    document.getElementById('locMasterToggle').classList.toggle('on', state.locMaster);
+    var list = document.getElementById('locList'); list.innerHTML = '';
+    list.style.opacity = state.locMaster ? '1' : '0.4';
+    list.style.pointerEvents = state.locMaster ? 'auto' : 'none';
+    Object.keys(state.loc).forEach(function (app) {
+      var row = document.createElement('div'); row.className = 'list-item';
+      row.innerHTML = '<span>' + app + '<span class="sub">' + state.loc[app] + '</span></span><span>›</span>';
+      row.onclick = function () { openLocApp(app); };
+      list.appendChild(row);
+    });
+  }
+  document.getElementById('locMasterToggle').onclick = function () {
+    state.locMaster = !state.locMaster; renderLocation(); renderPrivacy();
+    if (!state.locMaster) showToast('Achtung: Jetzt sieht keine App mehr Ihren Standort, auch Karten nicht. Meist ist es besser, einzelne Apps einzuschränken.', true);
+    else showToast('Ortungsdienste eingeschaltet', true);
+    finishIfDone();
+  };
+  function openLocApp(app) {
+    state.locApp = app;
+    SCREEN_TITLES.overlayLocApp = app;
+    openOverlay('overlayLocApp');
+    document.getElementById('locAppTitle').textContent = app;
+    renderLocApp();
+    if (state.task === 'ortung' && !isTaskDone() && app === 'Taschenlampe Pro' && state.step < 5) { state.step = 5; updateHint(); }
+  }
+  function renderLocApp() {
+    var app = state.locApp; var list = document.getElementById('locOptList'); list.innerHTML = '';
+    LOC_OPTS.forEach(function (o) {
+      var row = document.createElement('div'); row.className = 'list-item';
+      row.innerHTML = '<span>' + o + '</span><span class="check">' + (state.loc[app] === o ? '✓' : '') + '</span>';
+      row.onclick = function () {
+        state.loc[app] = o; renderLocApp();
+        if (o === 'Nie') showToast('"' + app + '" kann Ihren Standort nicht mehr sehen.');
+        else if (o === 'Immer') showToast('Achtung: "' + app + '" kann Ihren Standort jetzt jederzeit sehen, auch im Hintergrund.', true);
+        finishIfDone();
+      };
+      list.appendChild(row);
+    });
+  }
+  document.getElementById('preciseToggle').onclick = function () {
+    var el = document.getElementById('preciseToggle'); el.classList.toggle('on');
+    showToast(el.classList.contains('on') ? 'Genauer Standort an' : 'Nur ungefährer Standort', true);
+  };
+
+  // ----- Sperren, Sperrbildschirm, Tasten -----
+  var ls = { entry: '' };
+  function lsSwipeShow() {
+    var keypadOpen = document.getElementById('lsKeypad').style.display === 'flex';
+    document.getElementById('lsSwipe').style.display = (state.platform === 'ios-alt' || keypadOpen) ? 'none' : 'block';
+  }
+  function setLockUI() {
+    document.getElementById('screenOff').style.display = state.screenOff ? 'block' : 'none';
+    document.getElementById('lockscreen').style.display = state.locked ? 'flex' : 'none';
+  }
+  function updateLockTime() {
+    var n = new Date();
+    document.getElementById('lsTime').textContent = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+    document.getElementById('lsDate').textContent = n.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+  var sidePressTimes = [];
+  function pressSide() {
+    document.getElementById('sideBtn').classList.remove('pulse-btn');
+    if (state.task === 'notruf') {
+      var now = Date.now();
+      sidePressTimes.push(now);
+      sidePressTimes = sidePressTimes.filter(function (t) { return now - t < 2500; });
+      if (sidePressTimes.length >= 5) {
+        sidePressTimes = [];
+        openSOS();
+      } else if (state.guided) {
+        showToast('Seitentaste gedrückt (' + sidePressTimes.length + ' von 5, schnell hintereinander).', true);
+      }
+      return;
+    }
+    if (state.screenOff) { wakeScreen(); return; }
+    if (state.locked) { state.screenOff = true; setLockUI(); return; }
+    closeAllPanels(); closeSwitcher();
+    state.locked = true; state.screenOff = true; state.codeVerified = false;
+    document.getElementById('lsKeypad').style.display = 'none';
+    document.getElementById('lsInfo').style.display = 'flex';
+    lsSwipeShow();
+    updateLockTime();
+    setLockUI();
+    if (state.task === 'sperren' && state.step === 1) { state.step = 2; updateHint(); }
+  }
+  function wakeScreen() {
+    state.screenOff = false; setLockUI();
+    if (state.task === 'sperren' && state.step === 2) { state.step = 3; updateHint(); }
+  }
+  function requestUnlock() {
+    if (!state.passcode) { unlockPhone(false); return; }
+    ls.entry = '';
+    document.getElementById('lsMsg').textContent = '';
+    document.getElementById('lsInfo').style.display = 'none';
+    document.getElementById('lsKeypad').style.display = 'flex';
+    lsSwipeShow();
+    renderLs();
+    if (state.task === 'sperren' && state.step < 4) { state.step = 4; updateHint(); }
+  }
+  function unlockPhone(withCode) {
+    state.locked = false; setLockUI();
+    if (withCode) state.unlockedWithCode = true;
+    showToast(withCode ? 'Entsperrt' : 'Entsperrt. Ohne Code ist Ihr iPhone nicht geschützt.', !withCode);
+    finishIfDone();
+  }
+  function renderLs() { renderDots('lsDots', state.passcode ? state.passcode.length : 6, ls.entry.length); }
+  buildPad('lsPad', true, function (k) {
+    if (!state.passcode) return;
+    if (k === 'del') { ls.entry = ls.entry.slice(0, -1); renderLs(); return; }
+    var len = state.passcode.length;
+    if (ls.entry.length >= len) return;
+    ls.entry += k; renderLs();
+    if (ls.entry.length === len) setTimeout(function () {
+      if (ls.entry === state.passcode) unlockPhone(true);
+      else { shake('lsDots'); ls.entry = ''; document.getElementById('lsMsg').textContent = 'Falscher Code'; renderLs(); }
+    }, 180);
+  });
+  document.getElementById('lsCancel').onclick = function () {
+    document.getElementById('lsKeypad').style.display = 'none';
+    document.getElementById('lsInfo').style.display = 'flex';
+    lsSwipeShow();
+  };
+  document.getElementById('sideBtn').onclick = pressSide;
+  document.getElementById('screenOff').onclick = function () { if (state.platform !== 'ios-alt') wakeScreen(); };
+  (function makeLockSwipe() {
+    var z = document.getElementById('lsSwipe'); var down = false, sy = 0;
+    z.addEventListener('pointerdown', function (e) { down = true; sy = e.clientY; z.setPointerCapture(e.pointerId); });
+    z.addEventListener('pointerup', function (e) { if (!down) return; down = false; if (sy - e.clientY > 40) requestUnlock(); });
+    z.addEventListener('pointercancel', function () { down = false; });
+  })();
+  function changeVolume(d) {
+    state.volume = Math.max(0, Math.min(10, state.volume + d));
+    showToast('Lautstärke: ' + state.volume + ' von 10', true);
+  }
+  document.getElementById('volUp').onclick = function () { changeVolume(1); };
+  document.getElementById('volDown').onclick = function () { changeVolume(-1); };
+
+  // ----- Notruf SOS -----
+  function openSOS() {
+    closeAllPanels(); closeSwitcher(); closeOverlays();
+    document.getElementById('sosOverlay').classList.add('open');
+    document.getElementById('sosKnob').style.left = '2px';
+    if (state.task === 'notruf' && state.step === 1 && !isTaskDone()) { state.step = 2; updateHint(); }
+  }
+  document.getElementById('sosCancel').onclick = function () {
+    document.getElementById('sosOverlay').classList.remove('open');
+    showToast('Notruf abgebrochen.', true);
+  };
+  (function makeSosSlider() {
+    var knob = document.getElementById('sosKnob');
+    var track = document.getElementById('sosTrack');
+    var dragging = false, startX = 0, startLeft = 2;
+    knob.addEventListener('pointerdown', function (e) {
+      dragging = true; startX = e.clientX / viewScale; startLeft = parseFloat(knob.style.left) || 2;
+      knob.setPointerCapture(e.pointerId);
+    });
+    knob.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var max = track.offsetWidth - knob.offsetWidth - 4;
+      var val = Math.max(2, Math.min(max, startLeft + (e.clientX / viewScale - startX)));
+      knob.style.left = val + 'px';
+    });
+    function end() {
+      if (!dragging) return;
+      dragging = false;
+      var max = track.offsetWidth - knob.offsetWidth - 4;
+      var cur = parseFloat(knob.style.left) || 2;
+      if (cur / max > 0.82) {
+        state.sosCalled = true;
+        document.getElementById('sosOverlay').classList.remove('open');
+        showToast('Notruf simuliert. Im Ernstfall würde jetzt tatsächlich der Notruf gewählt.');
+        finishIfDone();
+      } else {
+        knob.style.left = '2px';
+      }
+    }
+    knob.addEventListener('pointerup', end);
+    knob.addEventListener('pointercancel', end);
+  })();
+
+  function genPassword() {
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!?#';
+    var out = '';
+    for (var i = 0; i < 12; i++) out += chars[Math.floor(Math.random() * chars.length)];
+    return out;
+  }
+  (function setupPasswordManager() {
+    var field = document.getElementById('pwPassword');
+    var suggest = document.getElementById('pwSuggest');
+    var weakNote = document.getElementById('pwWeakNote');
+    field.addEventListener('focus', function () {
+      if (!field.value && !state.pwSuggested) {
+        suggest.classList.add('show');
+        if (state.task === 'passwort' && state.step < 3 && !isTaskDone()) { state.step = 3; updateHint(); }
+      }
+    });
+    field.addEventListener('input', function () {
+      suggest.classList.remove('show');
+      weakNote.style.display = (field.value.length > 0 && field.value.length < 8) ? 'block' : 'none';
+    });
+    suggest.onclick = function () {
+      field.value = genPassword();
+      field.type = 'text';
+      state.pwSuggested = true;
+      suggest.classList.remove('show');
+      weakNote.style.display = 'none';
+      showToast('Starkes Passwort eingefügt.', true);
+    };
+    document.getElementById('pwEye').onclick = function () {
+      field.type = field.type === 'password' ? 'text' : 'password';
+    };
+    document.getElementById('pwSubmit').onclick = function () {
+      if (!field.value) { showToast('Bitte legen Sie zuerst ein Passwort fest.', true); return; }
+      if (state.task === 'passwort' && state.step < 4 && !isTaskDone()) { state.step = 4; updateHint(); }
+      document.getElementById('pwSaveDialog').style.display = 'flex';
+    };
+    document.getElementById('pwSaveYes').onclick = function () {
+      document.getElementById('pwSaveDialog').style.display = 'none';
+      state.pwSaved = true;
+      showToast('Passwort im Schlüsselbund gespeichert.');
+      finishIfDone();
+    };
+    document.getElementById('pwSaveNo').onclick = function () {
+      document.getElementById('pwSaveDialog').style.display = 'none';
+      showToast('Nicht gespeichert. Sie müssten sich dieses Passwort selbst merken.', true);
+    };
+  })();
+
+  var fitScale = 1;
+  var zoomIdx = 2;
+  var ZOOM_LEVELS = [70, 85, 100, 115, 130, 150];
+  function applyZoom() {
+    viewScale = fitScale * ZOOM_LEVELS[zoomIdx] / 100;
+    document.getElementById('phoneZoomWrap').style.transform = 'scale(' + viewScale + ')';
+    document.getElementById('zoomLabel').textContent = ZOOM_LEVELS[zoomIdx] + '%';
+  }
+  function computeFit() {
+    var st = document.getElementById('stage');
+    var w = st.clientWidth, h = st.clientHeight;
+    if (!w || !h) return null;
+    // Seitenrand mind. 28 px: so kollidiert die Rand-Zone der Simulation nicht mit der Zurueck-Wischgeste des Browsers.
+    var f = Math.min((w - 56) / 320, (h - 20) / 664);
+    return Math.max(0.4, Math.min(1.5, f));
+  }
+  function applyFit() {
+    var f = computeFit();
+    if (f) fitScale = f;
+    applyZoom();
+  }
+  function scheduleFit() { requestAnimationFrame(function () { requestAnimationFrame(applyFit); }); }
+  window.addEventListener('resize', scheduleFit);
+  window.addEventListener('orientationchange', function () { setTimeout(applyFit, 250); });
+  (function setupZoom() {
+    document.getElementById('zoomIn').onclick = function () { zoomIdx = Math.min(ZOOM_LEVELS.length - 1, zoomIdx + 1); applyZoom(); };
+    document.getElementById('zoomOut').onclick = function () { zoomIdx = Math.max(0, zoomIdx - 1); applyZoom(); };
+    applyZoom();
+  })();
+  // Aufgabentext auf schmalen Bildschirmen: Tippen klappt den vollen Text auf.
+  document.getElementById('taskbarText').addEventListener('click', function () { this.classList.toggle('open'); });
+
+  function startSandboxAuto(params) {
+    state.platform = params.get('platform') || 'ios-neu';
+    state.model = params.get('model') || '';
+    state.guided = params.get('guided') !== '0';
+    state.task = params.get('task') || 'flugmodus';
+    setHighlight(params.get('hl') !== '0');
+    document.getElementById('setup').style.display = 'none';
+    resetSandbox();
+    document.getElementById('sandbox').classList.add('active');
+    if (!IS_EMBEDDED && document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(function () {});
+    }
+    if (!IS_EMBEDDED || FULL) document.getElementById('exitBtn').textContent = '\u2039 Schlie\u00dfen';
+    scheduleFit();
+  }
+  function leaveAuto() {
+    if (window.opener) { window.close(); }
+    else if (history.length > 1) { history.back(); }
+    setTimeout(function () { document.getElementById('closedNote').classList.add('show'); }, 250);
+  }
   (function checkAutoStart() {
-    var params = new URLSearchParams(location.search);
+    var params = PARAMS;
     if (params.get('auto') === '1') {
-      state.platform = params.get('platform') || 'android';
-      state.model = params.get('model') || '';
-      state.guided = params.get('guided') !== '0';
-      state.task = params.get('task') || 'flugmodus';
-      document.getElementById('setup').style.display = 'none';
-      resetSandbox();
-      document.getElementById('sandbox').classList.add('active');
-      document.documentElement.requestFullscreen && document.documentElement.requestFullscreen().catch(function(){});
+      var narrow = window.innerWidth < 520;
+      if (IS_EMBEDDED && !FULL && narrow && params.get('launch') !== '0') {
+        // Kleiner Bildschirm + eingebettet: Uebung in eigenem Fenster starten (keine Scroll-Falle, volle Groesse).
+        state.task = params.get('task') || 'flugmodus';
+        document.getElementById('setup').style.display = 'none';
+        document.getElementById('launchTask').textContent = (TASKS[state.task] || {}).taskbar || '';
+        document.getElementById('launch').classList.add('show');
+        document.getElementById('launchBtn').onclick = function () {
+          var u = new URL(location.href);
+          u.searchParams.set('full', '1');
+          var w = window.open(u.toString(), '_blank');
+          if (!w) { location.href = u.toString(); }
+        };
+        return;
+      }
+      startSandboxAuto(params);
     } else {
-      var t = new URLSearchParams(location.search).get('task');
+      var t = params.get('task');
       if (t) document.getElementById('taskSelectDev').value = t;
     }
   })();
