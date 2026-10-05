@@ -401,14 +401,14 @@
       <h2>Übung öffnen</h2>
       <p class="launch-task" id="launchTask"></p>
       <button id="launchBtn">Übung im Vollbild starten</button>
-      <p class="launch-note">Die Übung öffnet sich in einem neuen Fenster. Wenn Sie fertig sind, tippen Sie dort auf &bdquo;Schließen&ldquo; und kehren zu dieser Lektion zurück.</p>
+      <p class="launch-note">Die Übung öffnet sich im Vollbild. Wenn Sie fertig sind, tippen Sie oben auf &bdquo;Zur Lektion&ldquo; und kehren zu dieser Lektion zurück.</p>
       <p class="launch-note">Tipp: Auf einem iPad oder Computer lässt sich die Übung bequemer bedienen.</p>
     </div>
   </div>
 
   <div id="closedNote">
     <div class="launch-card">
-      <p>Sie können dieses Fenster jetzt schließen und zu Ihrer Lektion zurückkehren.</p>
+      <p>Sie können jetzt zu Ihrer Lektion zurückkehren (Zurück-Taste Ihres Browsers oder Fenster schließen).</p>
       <button id="closedRestart">Übung noch einmal von vorn</button>
     </div>
   </div>
@@ -2671,12 +2671,13 @@
     if (!IS_EMBEDDED && document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen().catch(function () {});
     }
-    if (!IS_EMBEDDED || FULL) document.getElementById('exitBtn').textContent = '\u2039 Schlie\u00dfen';
+    if (!IS_EMBEDDED || FULL) document.getElementById('exitBtn').textContent = (PARAMS.get('nav') === 'same' ? '\u2039 Zur Lektion' : '\u2039 Schlie\u00dfen');
     scheduleFit();
   }
   function leaveAuto() {
-    if (window.opener) { window.close(); }
+    if (PARAMS.get('nav') === 'tab' && window.opener) { window.close(); }
     else if (history.length > 1) { history.back(); }
+    else if (window.opener) { window.close(); }
     setTimeout(function () { document.getElementById('closedNote').classList.add('show'); }, 250);
   }
   (function checkAutoStart() {
@@ -2692,8 +2693,19 @@
         document.getElementById('launchBtn').onclick = function () {
           var u = new URL(location.href);
           u.searchParams.set('full', '1');
-          var w = window.open(u.toString(), '_blank');
-          if (!w) { location.href = u.toString(); }
+          // 1. Wahl: im selben Tab oeffnen (Schliessen = Zurueck zur Lektion, kein Tab-Wechsel).
+          u.searchParams.set('nav', 'same');
+          var left = false;
+          window.addEventListener('pagehide', function () { left = true; });
+          try { window.top.location.href = u.toString(); }
+          catch (e) { try { location.href = u.toString(); left = true; } catch (e2) {} }
+          // Fallback (z. B. wenn die Lektionsseite Navigation sperrt): eigenes Fenster.
+          setTimeout(function () {
+            if (left || document.visibilityState === 'hidden') return;
+            u.searchParams.set('nav', 'tab');
+            var w = window.open(u.toString(), '_blank');
+            if (!w) { location.href = u.toString(); }
+          }, 1500);
         };
         return;
       }
