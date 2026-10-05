@@ -1949,7 +1949,7 @@
     state.flight = false; state.step = 1; state.screen = 'home';
     setRadioWifi(true, true); setRadioBt(false, true);
     state.wifiConnectedNetwork = null; state.btConnectedDevice = null;
-    state.brightness = 30; state.fontsize = 20;
+    state.brightness = state.task === 'anzeige' ? 50 : 100; state.fontsize = 20;
     closeAllPanels();
     closeSwitcher();
     closeOverlays();
@@ -2000,7 +2000,7 @@
       document.getElementById('flightToggleBottom').classList.add('on');
       document.getElementById('flightToggleSettings').classList.add('on');
     }
-    setBrightness(30);
+    setBrightness(state.task === 'anzeige' ? 50 : 100);
     setFontsize(20);
     renderWifiBtStatus();
     renderCellular();
