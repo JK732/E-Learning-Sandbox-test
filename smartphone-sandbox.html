@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>iPhone-Sandbox</title>
+<title>Smartphone-Sandbox</title>
 <style>
   :root {
     --brand: #0e6a80;
@@ -339,18 +339,78 @@
     .legend { font-size: 11px; padding: 3px 10px; }
     #zoomBar { display: none; }
   }
+
+  /* ===== Android-Modus (Samsung One UI, Gestennavigation) ===== */
+  .phone:not(.android) [data-plat="and"] { display: none !important; }
+  .phone.android [data-plat="ios"] { display: none !important; }
+  .phone.android { border-radius: 40px; background: #16181c; }
+  .phone.android .screen { border-radius: 32px; background: linear-gradient(165deg, #cfe3f5 0%, #dfe2f6 55%, #ecd9ec 100%); }
+  .notch { pointer-events: none; }
+  .phone.android .notch { width: 11px; height: 11px; border-radius: 50%; top: 13px; }
+  .phone.android .homebar { width: 92px; height: 4px; background: #222; bottom: 8px; }
+  .phone.android .statusbar { padding: 0 24px; font-size: 12px; }
+  .phone.android .app .icon { width: 48px; height: 48px; border-radius: 17px; box-shadow: none; }
+  .phone.android .app .lbl { font-size: 10px; color: #1c1c1e; }
+  .phone.android #homeApps { min-height: 400px; align-content: start; }
+  .phone.android .overlay { background: #f4f5f7; }
+  .phone.android .overlay-header { background: #f4f5f7; color: #111; font-size: 17px; font-weight: 600; padding: 14px 12px 12px 16px; }
+  .phone.android .overlay-header button { color: #111; }
+  .phone.android .overlay-header button:active { background: rgba(0,0,0,0.08); }
+  .phone.android .settings-row, .phone.android .list-item { border-radius: 18px; padding: 13px 16px; }
+  .phone.android .mini-toggle.on { background: #3d8bfd; }
+  .phone.android .check { color: #3d8bfd; }
+  .phone.android .form-submit, .phone.android .folder-header button, .phone.android #jiggleDoneBtn { background: #3d8bfd; }
+  .phone.android .kp-link { color: #3d8bfd; }
+  .phone.android .kp-dialog-inner button, .phone.android .kp-sheet-inner div { color: #3d8bfd; }
+  .phone.android #overlaySettings .overlay-body { display: flex; flex-direction: column; }
+  .phone.android #rowConnections { order: 1; } .phone.android #rowSound { order: 2; } .phone.android #rowNotif { order: 3; }
+  .phone.android #rowDisplay { order: 4; } .phone.android #rowCode { order: 5; } .phone.android #rowCellular { order: 6; }
+  .phone.android #rowPrivacy { order: 7; } .phone.android #rowLocationRoot { order: 8; } .phone.android #rowGeneral { order: 9; }
+  .phone.android [data-len="alpha"] { display: none; }
+  /* Schnelleinstellungen */
+  .phone.android .panel { background: rgba(246,247,250,0.98); color: #222; border-radius: 26px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+  .phone.android .panel:not(.bottompanel) { top: -520px; }
+  .phone.android .panel:not(.bottompanel).open { top: 38px; }
+  .phone.android .panel-title { color: #666; font-size: 12px; font-weight: 600; }
+  .phone.android .toggleicon { background: transparent; color: #444; padding: 4px 2px; }
+  .phone.android .toggleicon svg { width: 44px; height: 44px; padding: 11px; border-radius: 50%; background: #dfe3ea; color: #444; }
+  .phone.android .toggleicon.on { background: transparent; }
+  .phone.android .toggleicon.on svg { background: #3d8bfd; color: #fff; }
+  .phone.android .toggleicon .lbl { font-size: 9.5px; color: #333; }
+  .phone.android #wifiToggleTop { order: 1; } .phone.android #btToggleTop { order: 2; }
+  .phone.android #dndToggleTop { order: 3; } .phone.android #flightToggleTop { order: 4; }
+  .phone.android .panel-slider-row { color: #555; margin: 12px 0; }
+  .phone.android .notif-item { background: #fff; color: #222; }
+  .phone.android .grabber { background: #bbb; }
+  /* Menue beim langen Druecken auf eine App */
+  #appMenu { display: none; position: absolute; z-index: 24; background: #fff; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.3); padding: 6px 0; min-width: 118px; }
+  #appMenu.open { display: block; }
+  #appMenu div { padding: 10px 16px; font-size: 13px; color: #111; cursor: pointer; white-space: nowrap; }
+  #appMenu div:active { background: #eee; }
+  .apps.nowobble.jiggling .app:not(.app-removing) { animation: none !important; }
+  .apps.nowobble .app-badge { display: none !important; }
+  .apps.nowobble .app { outline: 0; }
+  .apps.nowobble.jiggling .app .icon { box-shadow: 0 0 0 2px rgba(61,139,253,0.45); }
+  /* Zurueck-Wischgeste vom Rand */
+  .backedge { display: none; position: absolute; top: 120px; bottom: 70px; width: 18px; z-index: 21; touch-action: none; }
+  #backEdgeL { left: 0; } #backEdgeR { right: 0; }
+  .phone.android.overlay-open .backedge { display: block; }
+  body.hl .backedge { background: rgba(232,162,51,0.24); }
+  body.hl #backEdgeL { border-right: 2px dashed var(--accent); }
+  body.hl #backEdgeR { border-left: 2px dashed var(--accent); }
 </style>
 </head>
 <body>
 <div id="app">
 
   <div id="setup" class="card">
-    <h1>iPhone-Sandbox – Einrichtung</h1>
+    <h1>Smartphone-Sandbox – Einrichtung</h1>
 
-    <label>iPhone-Typ</label>
+    <label>Gerätetyp</label>
     <div class="radio-row">
       <label><input type="radio" name="platform" value="ios-neu" checked> iPhone (neu, Wischgesten, ohne Home-Button)</label>
       <label><input type="radio" name="platform" value="ios-alt"> iPhone (älter, mit Home-Button)</label>
+      <label><input type="radio" name="platform" value="android"> Android (Samsung One UI, Gestennavigation)</label>
     </div>
 
     <label for="model">Modellname (optional)</label>
@@ -460,10 +520,12 @@
           </div>
           <div id="jiggleDone"><button id="jiggleDoneBtn">Fertig</button></div>
           <div class="app-confirm" id="appConfirm"><div class="app-confirm-box">
-            <p><b id="appConfirmName">App</b>löschen? Damit werden auch alle Daten dieser App gelöscht.</p>
-            <button class="danger" id="appConfirmDelete">App löschen</button>
+            <p id="appConfirmText"><b id="appConfirmName">App</b><span id="appConfirmQ">löschen? Damit werden auch alle Daten dieser App gelöscht.</span></p>
+            <button class="danger" id="appConfirmDelete" data-and="OK">App löschen</button>
             <button id="appConfirmCancel">Abbrechen</button>
           </div></div>
+          <div id="appMenu"><div id="appMenuSelect">Auswählen</div><div id="appMenuUninstall">Deinstallieren</div></div>
+          <div class="backedge" id="backEdgeL"></div><div class="backedge" id="backEdgeR"></div>
           <div class="dimmer" id="dimmer"></div>
 
           <div class="hotspot hotspot-left" id="hotspotLeft"></div>
@@ -527,6 +589,11 @@
             <div class="panel-slider-row"><span data-icon-inline="sun"></span>
               <input type="range" id="brightnessTop" min="0" max="100" value="30">
             </div>
+            <div data-plat="and">
+              <div class="notif-item" id="notifSimA" style="display:none;"><span class="app-name">Telefon</span>SIM-Karte gesperrt. Öffnen Sie Einstellungen, dann Biometrische Daten und Sicherheit, dann SIM-Kartensperre.</div>
+              <div class="notif-item"><span class="app-name">Wetter</span>Heute sonnig, 21°C</div>
+              <div class="notif-item"><span class="app-name">Kalender</span>Erinnerung: Arzttermin 15:00 Uhr</div>
+            </div>
             <div class="grabber"></div>
           </div>
 
@@ -547,16 +614,32 @@
           <div class="overlay" id="overlaySettings">
             <div class="overlay-header"><button id="backSettings" style="display:none;">‹</button> Einstellungen</div>
             <div class="overlay-body">
-              <div class="settings-row" id="rowWifi"><span>WLAN <span id="wifiRowStatus" style="color:#888;"></span></span><span>›</span></div>
-              <div class="settings-row" id="rowBt"><span>Bluetooth <span id="btRowStatus" style="color:#888;"></span></span><span>›</span></div>
-              <div class="settings-row"><span>Flugmodus</span><div class="mini-toggle" id="flightToggleSettings"><div class="dot"></div></div></div>
+              <div class="settings-row" id="rowWifi" data-plat="ios"><span>WLAN <span id="wifiRowStatus" style="color:#888;"></span></span><span>›</span></div>
+              <div class="settings-row" id="rowBt" data-plat="ios"><span>Bluetooth <span id="btRowStatus" style="color:#888;"></span></span><span>›</span></div>
+              <div class="settings-row" data-plat="ios"><span>Flugmodus</span><div class="mini-toggle" id="flightToggleSettings"><div class="dot"></div></div></div>
+              <div class="settings-row" id="rowConnections" data-plat="and"><span>Verbindungen</span><span>›</span></div>
+              <div class="settings-row dead-row" id="rowSound" data-plat="and"><span>Töne und Vibration</span><span>›</span></div>
+              <div class="settings-row dead-row" id="rowNotif" data-plat="and"><span>Benachrichtigungen</span><span>›</span></div>
               <div class="settings-row" id="rowDisplay"><span>Anzeige &amp; Helligkeit</span><span>›</span></div>
               <div class="settings-row" id="rowCellular"><span>Mobilfunk <span id="cellularRowStatus" style="color:#888;"></span></span><span>›</span></div>
-              <div class="settings-row" id="rowBattery"><span>Batterie</span><span>›</span></div>
+              <div class="settings-row" id="rowBattery" data-plat="ios"><span>Batterie</span><span>›</span></div>
               <div class="settings-row" id="rowGeneral"><span>Allgemein</span><span>›</span></div>
               <div class="settings-row" id="rowCode"><span id="codeRowLabel">Face ID &amp; Code</span><span>›</span></div>
               <div class="settings-row" id="rowPrivacy"><span>Datenschutz &amp; Sicherheit</span><span>›</span></div>
-              <div class="settings-row dead-row"><span>Töne &amp; Haptik</span><span>›</span></div>
+              <div class="settings-row" id="rowLocationRoot" data-plat="and"><span>Standort <span id="locRootStatus" style="color:#888;"></span></span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="ios"><span>Töne &amp; Haptik</span><span>›</span></div>
+            </div>
+          </div>
+
+          <div class="overlay" id="overlayConnections">
+            <div class="overlay-header"><button id="backConnections">‹</button> Verbindungen</div>
+            <div class="overlay-body">
+              <div class="settings-row" id="rowWifiA"><span>WLAN <span id="wifiRowStatusA" style="color:#888;"></span></span><span>›</span></div>
+              <div class="settings-row" id="rowBtA"><span>Bluetooth <span id="btRowStatusA" style="color:#888;"></span></span><span>›</span></div>
+              <div class="settings-row"><span>Flugmodus</span><div class="mini-toggle" id="flightToggleConn"><div class="dot"></div></div></div>
+              <div class="settings-row dead-row"><span>Mobile Netzwerke</span><span>›</span></div>
+              <div class="settings-row dead-row"><span>Datennutzung</span><span>›</span></div>
+              <div class="settings-row dead-row"><span>Mobiler Hotspot und Tethering</span><span>›</span></div>
             </div>
           </div>
 
@@ -655,12 +738,14 @@
           <div class="overlay" id="overlayPrivacy">
             <div class="overlay-header"><button id="backPrivacy">‹</button> Datenschutz &amp; Sicherheit</div>
             <div class="overlay-body">
-              <div class="settings-row" id="rowLocation"><span>Ortungsdienste</span><span><span id="locStatus" style="color:#888;">An</span> ›</span></div>
+              <div class="settings-row" id="rowLocation" data-plat="ios"><span>Ortungsdienste</span><span><span id="locStatus" style="color:#888;">An</span> ›</span></div>
               <div class="settings-row" id="rowTracking"><span>Tracking</span><span>›</span></div>
-              <div class="settings-row dead-row"><span>Kontakte</span><span>›</span></div>
-              <div class="settings-row dead-row"><span>Fotos</span><span>›</span></div>
-              <div class="settings-row dead-row"><span>Mikrofon</span><span>›</span></div>
-              <div class="settings-row dead-row"><span>Kamera</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="ios"><span>Kontakte</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="ios"><span>Fotos</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="ios"><span>Mikrofon</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="ios"><span>Kamera</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="and"><span>Berechtigungsmanager</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="and"><span>Nutzungs- und Diagnosedaten</span><span>›</span></div>
             </div>
           </div>
 
@@ -668,7 +753,7 @@
             <div class="overlay-header"><button id="backTracking">‹</button> Tracking</div>
             <div class="overlay-body">
               <div class="settings-row"><span>Apps erlauben, Tracking anzufordern</span><div class="mini-toggle" id="trackToggle"><div class="dot"></div></div></div>
-              <div class="note">Ist diese Option aus, dürfen Apps Sie nicht fragen, ob sie Ihre Aktivitäten in anderen Apps und auf Websites verfolgen dürfen.</div>
+              <div class="note" data-and="Ist diese Option aus, dürfen Apps Ihre Werbe-ID nicht mehr nutzen, um ein Werbeprofil von Ihnen zu erstellen. Sie sehen dann weiterhin Werbung, aber nicht mehr auf Sie zugeschnitten.">Ist diese Option aus, dürfen Apps Sie nicht fragen, ob sie Ihre Aktivitäten in anderen Apps und auf Websites verfolgen dürfen.</div>
               <div id="trackAppList"></div>
             </div>
           </div>
@@ -677,6 +762,7 @@
             <div class="overlay-header"><button id="backLocation">‹</button> Ortungsdienste</div>
             <div class="overlay-body">
               <div class="settings-row"><span>Ortungsdienste</span><div class="mini-toggle" id="locMasterToggle"><div class="dot"></div></div></div>
+              <div class="settings-row" id="rowLocPerms" data-plat="and"><span>App-Berechtigungen</span><span>›</span></div>
               <div id="locList"></div>
               <div class="note">Tipp: Überlegen Sie bei jeder App, ob sie Ihren Standort wirklich braucht.</div>
             </div>
@@ -695,7 +781,7 @@
             <div class="overlay-header" style="display:flex;"><span>Safari</span></div>
             <div class="overlay-body" style="padding:0;">
               <div class="browser-bar">🔒 meinshop.de</div>
-              <div class="note" style="margin:0 8px 4px;">Ein Passwort-Manager – auf dem iPhone heißt er Schlüsselbund – merkt sich für Sie starke, einzigartige Passwörter. Sie müssen sich dann nur noch den Code für Ihr iPhone merken.</div>
+              <div class="note" style="margin:0 8px 4px;" data-and="Ein Passwort-Manager merkt sich für Sie starke, einzigartige Passwörter. Sie müssen sich dann nur noch die PIN für Ihr Smartphone merken.">Ein Passwort-Manager – auf dem iPhone heißt er Schlüsselbund – merkt sich für Sie starke, einzigartige Passwörter. Sie müssen sich dann nur noch den Code für Ihr iPhone merken.</div>
               <div class="form-block">
                 <label>Konto erstellen</label>
                 <label style="margin-top:6px;">E-Mail-Adresse</label>
@@ -720,8 +806,11 @@
           <div class="overlay" id="overlayCellular">
             <div class="overlay-header"><button id="backCellular">‹</button> Mobilfunk</div>
             <div class="overlay-body">
-              <div class="settings-row dead-row"><span>Mobile Daten</span><span>›</span></div>
-              <div class="settings-row dead-row"><span>Datenroaming</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="ios"><span>Mobile Daten</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="ios"><span>Datenroaming</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="and"><span>Fingerabdrücke</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="and"><span>Gesichtserkennung</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="and"><span>Google Play Protect</span><span>›</span></div>
               <div class="settings-row" id="rowSimPin"><span>SIM-PIN</span><span><span id="simPinStatus" style="color:#888;"></span> ›</span></div>
             </div>
           </div>
@@ -739,9 +828,12 @@
           <div class="overlay" id="overlayGeneral">
             <div class="overlay-header"><button id="backGeneral">‹</button> Allgemein</div>
             <div class="overlay-body">
-              <div class="settings-row dead-row"><span>Info</span><span>›</span></div>
-              <div class="settings-row dead-row"><span>Softwareupdate</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="ios"><span>Info</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="ios"><span>Softwareupdate</span><span>›</span></div>
+              <div class="settings-row" id="rowBatteryA" data-plat="and"><span>Akku</span><span>›</span></div>
               <div class="settings-row" id="rowStorage"><span>iPhone-Speicher</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="and"><span>Arbeitsspeicher</span><span>›</span></div>
+              <div class="settings-row dead-row" data-plat="and"><span>Geräteschutz</span><span>›</span></div>
             </div>
           </div>
 
@@ -758,7 +850,7 @@
             <div class="overlay-header"><button id="backStorageApp">‹</button> <span id="storageAppTitle">App</span></div>
             <div class="overlay-body">
               <div class="note" id="storageAppNote"></div>
-              <button class="st-btn danger" id="storageAppDelete">App löschen</button>
+              <button class="st-btn danger" id="storageAppDelete" data-and="Deinstallieren">App löschen</button>
             </div>
           </div>
 
@@ -830,7 +922,8 @@
     gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.6V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.6 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.6 1z"/></svg>',
     faceid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h-.5A1.5 1.5 0 004 5.5V7M18 4h.5A1.5 1.5 0 0120 5.5V7M6 20h-.5A1.5 1.5 0 014 18.5V17M18 20h.5a1.5 1.5 0 001.5-1.5V17M9 10v1.5M15 10v1.5M8.5 15.5c1 1 2 1.3 3.5 1.3s2.5-.3 3.5-1.3"/></svg>',
     fingerprint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3a7 7 0 00-7 7c0 2.5.5 4 1.5 6M12 3a7 7 0 017 7c0 1-.1 2-.3 3M8.5 20a11 11 0 002-4.5M12 6.5A3.5 3.5 0 008.5 10c0 2.5-.5 4.5-1.8 6.8M12 6.5A3.5 3.5 0 0115.5 10c0 1 0 2-.2 3M11 20c1.6-1.8 2.5-3.6 2.8-5.5M15 17.5c.6-1 1-2.2 1.2-3.5"/></svg>',
-    moon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/></svg>'
+    moon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/></svg>',
+    dnd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M8 12h8"/></svg>'
   };
 
   function icon(name) { return ICONS[name] || ''; }
@@ -860,6 +953,91 @@
     apps_organisieren: { label: 'Apps verschieben, Ordner und Startbildschirm', taskbar: 'Halten Sie eine App gedrückt, bis alle Symbole wackeln. Ziehen Sie dann Apps mit dem Finger an ihren neuen Platz – genau wie auf einem echten iPhone.' }
   };
 
+  var TASKS_AND = {
+    flugmodus: 'Aktivieren Sie den Flugmodus.',
+    wlan: 'Verbinden Sie sich mit dem WLAN "Zuhause". Das Passwort lautet: 1 2 3 4',
+    bluetooth: 'Koppeln Sie Ihre Bluetooth-Kopfhörer.',
+    anzeige: 'Machen Sie den Bildschirm heller und die Schrift größer.',
+    code: 'Schützen Sie Ihr Smartphone: mit einer PIN oder mit Ihrem Fingerabdruck.',
+    nichtstoeren: 'Aktivieren Sie "Nicht stören", damit Sie eine Zeit lang nicht gestört werden.',
+    kamera: 'Öffnen Sie die Kamera und wechseln Sie in den Video-Modus.',
+    passwort: 'Erstellen Sie im Browser ein Konto mit einem sicheren Passwort und speichern Sie es im Passwortmanager.',
+    notruf: 'Lernen Sie, wie Sie im Notfall schnell einen Notruf absetzen können.',
+    app_loeschen: 'Deinstallieren Sie die App "Kalender" vom Startbildschirm.',
+    autosperre: 'Stellen Sie ein, dass sich der Bildschirm Ihres Smartphones nach 2 Minuten automatisch ausschaltet und sperrt.',
+    sperren: 'Sperren Sie Ihr Smartphone und entsperren Sie es wieder. Ihre PIN lautet: 1 2 3 4 5 6',
+    tracking: 'Schalten Sie personalisierte Werbung aus, damit Apps Ihre Werbe-ID nicht mehr nutzen.',
+    ortung: 'Die App "Taschenlampe Pro" soll Ihren Standort nicht mehr sehen dürfen.',
+    speicher: 'Problem: Ihr Smartphone meldet "Speicher voll". Finden Sie unter "Akku und Gerätewartung" heraus, welche App am meisten Speicher belegt, und deinstallieren Sie sie.',
+    sim: 'Problem: Nach einem Neustart ist Ihre SIM-Karte gesperrt, Sie haben kein Netz. Entsperren Sie sie in den Einstellungen. Ihre SIM-PIN lautet: 4 8 2 1',
+    akku: 'Problem: Der Akku ist ständig schnell leer. Finden Sie heraus, welche App am meisten Akku verbraucht, und schalten Sie "Energiesparen" ein.',
+    internet: 'Problem: Sie haben kein Internet. Schalten Sie den Flugmodus aus und verbinden Sie sich mit dem WLAN "Zuhause" (Passwort: 1 2 3 4).',
+    apps_organisieren: 'Halten Sie eine App gedrückt, bis ein kleines Menü erscheint. Ziehen Sie dann Apps mit dem Finger an ihren neuen Platz – genau wie auf einem echten Smartphone.'
+  };
+  function isAndroid() { return state.platform === 'android'; }
+  function bioName() { return state.platform === 'android' ? 'Fingerabdruck' : bioName(); }
+  function taskText(t) {
+    t = t || state.task;
+    if (isAndroid() && TASKS_AND[t]) return TASKS_AND[t];
+    return TASKS[t] ? TASKS[t].taskbar : '';
+  }
+
+  // Android-Texte: ganze Textknoten (EXACT) und Satzteile (RULES)
+  var AND_EXACT = {
+    'Anzeige & Helligkeit': 'Display', 'Mobilfunk': 'Biometrische Daten und Sicherheit', 'Batterie': 'Akku', 'Allgemein': 'Akku und Gerätewartung',
+    'Face ID & Code': 'Sperrbildschirm und AOD', 'Touch ID & Code': 'Sperrbildschirm und AOD', 'Datenschutz & Sicherheit': 'Datenschutz',
+    'Ortungsdienste': 'Standort', 'Tracking': 'Werbung', 'Apps erlauben, Tracking anzufordern': 'Personalisierte Werbung zulassen',
+    'iPhone-Speicher': 'Speicher', 'Automatische Sperre': 'Bildschirm-Timeout', 'Safari': 'Chrome', 'Kontrollzentrum': 'Schnelleinstellungen',
+    'Stromsparmodus': 'Energiesparen', 'Code': 'PIN', 'Code eingeben': 'PIN eingeben', 'Code bestätigen': 'PIN bestätigen', 'Code festlegen': 'PIN festlegen',
+    'Codeoptionen': 'PIN-Optionen', '6-stelliger Zahlencode': '6-stellige PIN', '4-stelliger Zahlencode': '4-stellige PIN',
+    'Code aktivieren': 'Bildschirmsperrtyp: PIN', 'Code deaktivieren': 'PIN entfernen', 'Code ändern': 'PIN ändern',
+    'Falscher Code': 'Falsche PIN', 'Notruf SOS': 'Notfall-SOS', 'Netzwerkschlüssel': 'WLAN-Passwort', 'Netzwerkschlüssel eingeben': 'WLAN-Passwort eingeben',
+    'SIM-PIN': 'SIM-Kartensperre', 'SIM-PIN eingeben': 'SIM-PIN eingeben', 'Genauer Standort': 'Genauen Standort verwenden',
+    'Nie': 'Nicht zulassen', 'Nächstes Mal fragen': 'Jedes Mal fragen', 'Beim Verwenden der App': 'Nur bei Nutzung der App zulassen', 'Immer': 'Immer zulassen',
+    'Startbildschirm': 'Hauptseite festlegen', 'Kein Netz (SIM gesperrt)': 'Kein Netz'
+  };
+  var AND_RULES = [
+    [/Der Schlüsselbund/g, 'Der Passwortmanager'], [/im Schlüsselbund/g, 'im Passwortmanager'], [/Schlüsselbund/g, 'Passwortmanager'],
+    [/Passwort sichern\?/g, 'Passwort speichern?'], [/Netzwerkschlüssel/g, 'WLAN-Passwort'],
+    [/Ihr iPhone/g, 'Ihr Smartphone'], [/diesem iPhone/g, 'diesem Smartphone'], [/dem iPhone/g, 'dem Smartphone'], [/iPhone/g, 'Smartphone'],
+    [/Kontrollzentrum/g, 'Schnelleinstellungen'], [/Stromsparmodus/g, 'Energiesparen'],
+    [/Ihren Code/g, 'Ihre PIN'], [/Ihr Code/g, 'Ihre PIN'], [/Ein längerer Code/g, 'Eine längere PIN'], [/Die Codes stimmen nicht überein/g, 'Die PINs stimmen nicht überein'],
+    [/Code festgelegt/g, 'PIN festgelegt'], [/Code deaktiviert/g, 'PIN entfernt'], [/Ohne Code/g, 'Ohne PIN'], [/mit einem Code geschützt/g, 'mit einer PIN geschützt'],
+    [/ohne jedes Mal den Code einzutippen/g, 'ohne jedes Mal die PIN einzutippen'], [/Der Code bleibt als Rückfallebene bestehen/g, 'Die PIN bleibt als Rückfallebene bestehen'],
+    [/einen Code als Rückfallebene/g, 'eine PIN als Rückfallebene'], [/Falscher Code/g, 'Falsche PIN'],
+    [/Ortungsdienste eingeschaltet/g, 'Standort eingeschaltet'],
+    [/^"([^"]+)" wurde gelöscht\./, '"$1" wurde deinstalliert.'],
+    [/Apps dürfen wieder fragen, ob sie Sie verfolgen dürfen\./g, 'Personalisierte Werbung ist wieder erlaubt.'],
+    [/Apps dürfen Sie jetzt nicht mehr über andere Apps und Websites hinweg verfolgen\./g, 'Personalisierte Werbung ist aus. Apps dürfen Ihre Werbe-ID nicht mehr nutzen.'],
+    [/Zugriff auf den Standort erlauben/g, 'Zugriff auf den Standort'],
+    [/Schalten Sie zuerst WLAN ein/g, 'Schalten Sie zuerst WLAN ein']
+  ];
+  function AND(str) {
+    if (state.platform !== 'android' || typeof str !== 'string') return str;
+    var t = str.trim();
+    if (Object.prototype.hasOwnProperty.call(AND_EXACT, t)) return str.replace(t, AND_EXACT[t]);
+    AND_RULES.forEach(function (r) { str = str.replace(r[0], r[1]); });
+    return str;
+  }
+  function retextAll(on) {
+    var root = document.getElementById('screen');
+    if (!root) return;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    var n;
+    while ((n = w.nextNode())) {
+      if (n.__o === undefined) n.__o = n.nodeValue;
+      var p = n.parentNode, alt = p && p.getAttribute ? p.getAttribute('data-and') : null;
+      var v = on ? (alt !== null ? alt : AND(n.__o)) : n.__o;
+      if (n.nodeValue !== v) n.nodeValue = v;
+    }
+  }
+  var retextQueued = false;
+  new MutationObserver(function () {
+    if (retextQueued || state.platform !== 'android') return;
+    retextQueued = true;
+    Promise.resolve().then(function () { retextQueued = false; retextAll(true); });
+  }).observe(document.getElementById('screen'), { childList: true, subtree: true });
+
   var state = {
     platform: 'ios-neu', model: '', guided: true, task: 'flugmodus', step: 1, screen: 'home',
     flight: false, wifi: true, bt: false, wifiConnectedNetwork: null, btConnectedDevice: null,
@@ -886,6 +1064,19 @@
   ];
 
   var LONGPRESS_MS = 550;
+  var ORIG_LABELS = null;
+  function applyPlatformData() {
+    var and = isAndroid();
+    if (!ORIG_LABELS) ORIG_LABELS = { photos: 'Fotos', browser: 'Safari', mail: 'Mail', storage0: 'Fotos', batt1: 'Safari' };
+    appDefs.forEach(function (a) {
+      if (a.key === 'photos') a.label = and ? 'Galerie' : ORIG_LABELS.photos;
+      if (a.key === 'browser') a.label = and ? 'Chrome' : ORIG_LABELS.browser;
+      if (a.key === 'mail') a.label = and ? 'Gmail' : ORIG_LABELS.mail;
+    });
+    APP_META.browser.label = and ? 'Chrome' : 'Safari';
+    STORAGE_APPS[0].label = and ? 'Galerie' : ORIG_LABELS.storage0;
+    BATTERY_APPS[1].label = and ? 'Chrome' : ORIG_LABELS.batt1;
+  }
 
   function appLabel(key) {
     if (key.indexOf('folder:') === 0) {
@@ -934,7 +1125,7 @@
       div.addEventListener('pointerdown', function (e) {
         if (e.target.closest && e.target.closest('.app-badge')) return;
         if (state.jiggling) { startDrag(div, id, e); return; }
-        pressTimer = setTimeout(function () { enterJiggle(); }, LONGPRESS_MS);
+        pressTimer = setTimeout(function () { enterJiggle(isFolder ? null : id, div); }, LONGPRESS_MS);
       });
       div.addEventListener('pointermove', function (e) { clearTimeout(pressTimer); onDragMove(e); });
       div.addEventListener('pointerup', function (e) { clearTimeout(pressTimer); onDragEnd(e); });
@@ -969,6 +1160,7 @@
     return null;
   }
   function startDrag(el, id, e) {
+    hideAppMenu();
     drag = { id: id, el: el, startX: e.clientX / viewScale, startY: e.clientY / viewScale, moved: false, hoverEl: null, hoverSince: 0, edge: null, edgeSince: 0 };
     el.classList.add('dragging');
     try { el.setPointerCapture(e.pointerId); } catch (err) {}
@@ -1130,15 +1322,35 @@
   };
 
   var appConfirmTarget = null, appConfirmLabel = '';
-  function enterJiggle() {
+  function hideAppMenu() { document.getElementById('appMenu').classList.remove('open'); }
+  var appMenuTarget = null;
+  function showAppMenu(id, tile) {
+    var menu = document.getElementById('appMenu');
+    var scr = document.getElementById('screen').getBoundingClientRect();
+    var r = tile.getBoundingClientRect();
+    var left = (r.left - scr.left) / viewScale + (r.width / viewScale) / 2 - 59;
+    var top = (r.bottom - scr.top) / viewScale + 2;
+    left = Math.max(8, Math.min(left, scr.width / viewScale - 130));
+    if (top > 470) top = (r.top - scr.top) / viewScale - 90;
+    menu.style.left = left + 'px'; menu.style.top = top + 'px';
+    appMenuTarget = id;
+    menu.classList.add('open');
+  }
+  function enterJiggle(menuId, tile) {
     if (state.jiggling) return;
     state.jiggling = true;
     document.getElementById('homeApps').classList.add('jiggling');
+    if (isAndroid()) {
+      document.getElementById('homeApps').classList.add('nowobble');
+      if (menuId && tile) showAppMenu(menuId, tile);
+    }
     document.getElementById('jiggleDone').classList.add('jiggle-done-visible');
     if (['app_loeschen', 'apps_organisieren'].indexOf(state.task) > -1 && state.step === 1 && !isTaskDone()) { state.step = 2; updateHint(); }
   }
   function exitJiggle() {
     state.jiggling = false;
+    hideAppMenu();
+    document.getElementById('homeApps').classList.remove('nowobble');
     drag = null;
     document.getElementById('homeApps').classList.remove('jiggling');
     document.getElementById('jiggleDone').classList.remove('jiggle-done-visible');
@@ -1146,9 +1358,28 @@
     if (state.task === 'apps_organisieren') finishIfDone();
   }
   document.getElementById('jiggleDoneBtn').onclick = exitJiggle;
+  document.getElementById('appMenuSelect').onclick = function () { hideAppMenu(); showToast('"Auswählen" ist in dieser Übung nicht verfügbar.', true); };
+  document.getElementById('appMenuUninstall').onclick = function () {
+    var id = appMenuTarget; hideAppMenu();
+    if (id) openAppConfirm(id, appLabel(id));
+  };
+  // Android: Tippen auf freie Flaeche beendet den Bearbeitungsmodus, langes Druecken auf freie Flaeche waehlt die Hauptseite.
+  (function androidHomeBackground() {
+    var wrap = document.getElementById('homeApps'); var t = null;
+    wrap.addEventListener('click', function (e) {
+      if (isAndroid() && state.jiggling && e.target === wrap) exitJiggle();
+    });
+    wrap.addEventListener('pointerdown', function (e) {
+      if (!isAndroid() || state.jiggling || e.target !== wrap) return;
+      t = setTimeout(function () { openHomeScreenPicker(); }, LONGPRESS_MS);
+    });
+    ['pointerup', 'pointercancel', 'pointermove'].forEach(function (ev) { wrap.addEventListener(ev, function () { clearTimeout(t); }); });
+  })();
   function openAppConfirm(key, label) {
     appConfirmTarget = key; appConfirmLabel = label;
-    document.getElementById('appConfirmName').textContent = label;
+    document.getElementById('appConfirmName').textContent = isAndroid() ? label + ' ' : label;
+    document.getElementById('appConfirmQ').textContent = isAndroid() ? 'Diese App deinstallieren?' : 'löschen? Damit werden auch alle Daten dieser App gelöscht.';
+    hideAppMenu();
     document.getElementById('appConfirm').classList.add('open');
     if (state.task === 'app_loeschen' && key === 'calendar' && state.step < 3 && !isTaskDone()) { state.step = 3; updateHint(); }
   }
@@ -1169,6 +1400,7 @@
     } else {
       state.removedApps.push(key);
       setTimeout(function () { renderApps(); }, 220);
+      if (isAndroid() && state.jiggling) { setTimeout(exitJiggle, 230); }
       if (key === 'calendar') {
         showToast('"' + label + '" wurde gelöscht.');
         finishIfDone();
@@ -1218,7 +1450,7 @@
   document.getElementById('startBtn').onclick = function () {
     var radios = document.getElementsByName('platform');
     for (var i = 0; i < radios.length; i++) { if (radios[i].checked) state.platform = radios[i].value; }
-    state.model = document.getElementById('model').value || 'iPhone';
+    state.model = document.getElementById('model').value || (state.platform === 'android' ? '' : 'iPhone');
     state.task = document.getElementById('taskSelectDev').value;
     resetSandbox();
     document.getElementById('sandbox').classList.add('active');
@@ -1260,8 +1492,8 @@
   document.getElementById('backSettings').onclick = function () { closeOverlays(); };
   document.getElementById('backMessages').onclick = function () { closeOverlays(); };
   document.getElementById('backCamera').onclick = function () { closeOverlays(); };
-  document.getElementById('backWifiList').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
-  document.getElementById('backBtList').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
+  document.getElementById('backWifiList').onclick = function () { showAppScreen('settings', isAndroid() ? 'overlayConnections' : 'overlaySettings'); };
+  document.getElementById('backBtList').onclick = function () { showAppScreen('settings', isAndroid() ? 'overlayConnections' : 'overlaySettings'); };
   document.getElementById('backDisplay').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
   document.getElementById('flightToggleSettings').onclick = toggleFlight;
   document.getElementById('wifiToggleList').onclick = function () { toggleWifiRadio(); };
@@ -1269,6 +1501,17 @@
 
   document.getElementById('rowWifi').onclick = function () { openOverlay('overlayWifiList'); if (state.task === 'wlan' && state.step === 2) { state.step = 3; updateHint(); } };
   document.getElementById('rowBt').onclick = function () { openOverlay('overlayBtList'); if (state.task === 'bluetooth' && state.step === 2) { state.step = 3; updateHint(); } };
+  document.getElementById('rowConnections').onclick = function () { openOverlay('overlayConnections'); };
+  document.getElementById('backConnections').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
+  document.getElementById('rowWifiA').onclick = function () { document.getElementById('rowWifi').onclick(); };
+  document.getElementById('rowBtA').onclick = function () { document.getElementById('rowBt').onclick(); };
+  document.getElementById('flightToggleConn').onclick = function () { toggleFlight(); };
+  document.getElementById('rowLocationRoot').onclick = function () { openOverlay('overlayLocation'); renderLocation(); };
+  document.getElementById('rowLocPerms').onclick = function () {
+    state.locPermsOpen = true; renderLocation();
+    if (state.task === 'ortung' && !isTaskDone() && state.step < 4) { state.step = 4; updateHint(); }
+  };
+  document.getElementById('rowBatteryA').onclick = function () { document.getElementById('rowBattery').onclick(); };
   document.getElementById('rowDisplay').onclick = function () { openOverlay('overlayDisplay'); if (state.task === 'anzeige' && state.step === 2) { state.step = 3; updateHint(); } };
 
   document.querySelectorAll('#overlayWifiList .list-item').forEach(function (el) {
@@ -1344,7 +1587,7 @@
         if (simPinEntry === '4821') {
           state.simLocked = false;
           document.getElementById('simIcon').style.display = 'none';
-          document.getElementById('notifSim').style.display = 'none';
+          document.getElementById('notifSim').style.display = 'none'; document.getElementById('notifSimA').style.display = 'none';
           renderCellular();
           showToast('SIM-Karte entsperrt. Sie haben wieder Netz.');
           showAppScreen('settings', 'overlayCellular');
@@ -1424,7 +1667,7 @@
     document.getElementById('lowPowerToggle').classList.toggle('on', state.lowPower);
   }
   document.getElementById('rowBattery').onclick = function () { showAppScreen('settings', 'overlayBattery'); renderBattery(); };
-  document.getElementById('backBattery').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
+  document.getElementById('backBattery').onclick = function () { showAppScreen('settings', isAndroid() ? 'overlayGeneral' : 'overlaySettings'); };
   document.getElementById('lowPowerToggle').onclick = function () {
     state.lowPower = !state.lowPower;
     renderBattery();
@@ -1460,18 +1703,26 @@
     portrait: 'Porträt: unscharfer Hintergrund, scharfe Person – gut für Personenfotos.',
     panorama: 'Panorama: für sehr breite Landschaftsaufnahmen. Handy dabei langsam und ruhig schwenken.'
   };
+  function camModes() {
+    if (isAndroid()) return [{ key: 'portrait', label: 'PORTRÄT' }, { key: 'foto', label: 'FOTO' }, { key: 'video', label: 'VIDEO' }, { key: 'panorama', label: 'MEHR' }];
+    return CAM_MODES;
+  }
+  function camExplain(key) {
+    if (isAndroid() && key === 'panorama') return 'Mehr: hier finden Sie weitere Aufnahmearten, zum Beispiel Panorama für sehr breite Landschaftsaufnahmen.';
+    return CAM_EXPLAIN[key];
+  }
   var recTimerId = null, recSeconds = 0;
   function renderCamera() {
     var wrap = document.getElementById('camModes');
     wrap.innerHTML = '';
-    CAM_MODES.forEach(function (m) {
+    camModes().forEach(function (m) {
       var el = document.createElement('div');
       el.className = 'cam-mode' + (state.camMode === m.key ? ' active' : '');
       el.textContent = m.label;
       el.onclick = function () { setCamMode(m.key); };
       wrap.appendChild(el);
     });
-    document.getElementById('camExplain').textContent = CAM_EXPLAIN[state.camMode] || '';
+    document.getElementById('camExplain').textContent = camExplain(state.camMode) || '';
     var shutter = document.getElementById('shutterBtn');
     shutter.classList.toggle('video', state.camMode === 'video');
     shutter.classList.toggle('recording', state.camRecording);
@@ -1481,7 +1732,7 @@
     if (state.camRecording) stopRecording();
     state.camMode = key;
     renderCamera();
-    if (!state.camExplained[key]) { state.camExplained[key] = true; showToast(CAM_EXPLAIN[key], true); }
+    if (!state.camExplained[key]) { state.camExplained[key] = true; showToast(camExplain(key), true); }
     if (state.task === 'kamera' && state.step < 2 && !isTaskDone()) { state.step = 2; }
     finishIfDone();
   }
@@ -1540,9 +1791,9 @@
     camera: { label: 'Kamera', icon: 'camera', root: 'overlayCamera', color: '#333' },
     browser: { label: 'Safari', icon: 'globe', root: 'overlayBrowser', color: '#0a84ff' }
   };
-  var SCREEN_TITLES = { overlaySettings: 'Einstellungen', overlayWifiList: 'WLAN', overlayBtList: 'Bluetooth', overlayDisplay: 'Anzeige & Helligkeit', overlayMessages: 'Nachrichten', overlayCamera: 'Kamera', overlayBrowser: 'Safari',
+  var SCREEN_TITLES = { overlayConnections: 'Verbindungen', overlaySettings: 'Einstellungen', overlayWifiList: 'WLAN', overlayBtList: 'Bluetooth', overlayDisplay: 'Anzeige & Helligkeit', overlayMessages: 'Nachrichten', overlayCamera: 'Kamera', overlayBrowser: 'Safari',
     overlayCode: 'Face ID & Code', overlayKeypad: 'Code', overlayAutolock: 'Automatische Sperre', overlayPrivacy: 'Datenschutz & Sicherheit', overlayTracking: 'Tracking', overlayLocation: 'Ortungsdienste', overlayLocApp: 'Standort', overlayWifiPin: 'Netzwerkschlüssel', overlayCellular: 'Mobilfunk', overlaySimPin: 'SIM-PIN', overlayGeneral: 'Allgemein', overlayStorage: 'iPhone-Speicher', overlayStorageApp: 'App', overlayBattery: 'Batterie' };
-  var OVERLAY_IDS = ['overlaySettings', 'overlayMessages', 'overlayCamera', 'overlayWifiList', 'overlayBtList', 'overlayDisplay',
+  var OVERLAY_IDS = ['overlayConnections', 'overlaySettings', 'overlayMessages', 'overlayCamera', 'overlayWifiList', 'overlayBtList', 'overlayDisplay',
     'overlayCode', 'overlayKeypad', 'overlayAutolock', 'overlayPrivacy', 'overlayTracking', 'overlayLocation', 'overlayLocApp', 'overlayWifiPin', 'overlayBrowser', 'overlayCellular', 'overlaySimPin', 'overlayGeneral', 'overlayStorage', 'overlayStorageApp', 'overlayBattery'];
 
   function showAppScreen(appKey, overlayId) {
@@ -1581,6 +1832,18 @@
   }
 
   function syncStepFromScreen() {
+    var MAP_AND = {
+      wlan: { overlaySettings: 2, overlayConnections: 3, overlayWifiList: 4, overlayWifiPin: 5 },
+      bluetooth: { overlaySettings: 2, overlayConnections: 3, overlayBtList: 4 },
+      anzeige: { overlaySettings: 2, overlayDisplay: 3 },
+      code: { overlaySettings: 2, overlayCode: 3 },
+      autosperre: { overlaySettings: 2, overlayDisplay: 3, overlayAutolock: 4 },
+      tracking: { overlaySettings: 2, overlayPrivacy: 3, overlayTracking: 4 },
+      ortung: { overlaySettings: 2, overlayLocation: 3, overlayLocApp: 5 },
+      speicher: { overlaySettings: 2, overlayGeneral: 3, overlayStorage: 4, overlayStorageApp: 5 },
+      sim: { overlaySettings: 2, overlayCellular: 3, overlaySimPin: 4 },
+      akku: { overlaySettings: 2, overlayGeneral: 3, overlayBattery: 4 }
+    };
     var map = {
       wlan: { overlaySettings: 2, overlayWifiList: 3, overlayWifiPin: 4 },
       bluetooth: { overlaySettings: 2, overlayBtList: 3 },
@@ -1593,7 +1856,7 @@
       sim: { overlaySettings: 2, overlayCellular: 3, overlaySimPin: 4 },
       akku: { overlaySettings: 2, overlayBattery: 3 }
     };
-    var m = map[state.task];
+    var m = (isAndroid() ? MAP_AND : map)[state.task];
     if (m && m[state.screen] && state.step < m[state.screen] && !isTaskDone()) {
       state.step = m[state.screen];
       updateHint();
@@ -1675,6 +1938,31 @@
   });
 
   // ---------- Home-Leiste unten (iPhone ohne Home-Button) ----------
+  function goBack() {
+    if (anyPanelOpen()) { closeAllPanels(); return; }
+    if (document.getElementById('appConfirm').classList.contains('open')) { document.getElementById('appConfirm').classList.remove('open'); return; }
+    if (document.getElementById('folderOverlay').classList.contains('open')) { closeFolder(); return; }
+    if (document.getElementById('hsPicker').classList.contains('open')) { document.getElementById('hsPicker').classList.remove('open'); return; }
+    if (document.getElementById('switcher').classList.contains('open')) { closeSwitcher(); closeOverlays(); return; }
+    var open = document.querySelector('.overlay.open');
+    if (!open) return;
+    var btn = open.querySelector('.overlay-header button');
+    if (btn && btn.style.display !== 'none') btn.click(); else goHome();
+  }
+  (function makeBackSwipe() {
+    [['backEdgeL', 1], ['backEdgeR', -1]].forEach(function (cfg) {
+      var el = document.getElementById(cfg[0]); var dir = cfg[1]; var down = false, sx = 0;
+      el.addEventListener('pointerdown', function (e) { down = true; sx = e.clientX / viewScale; el.setPointerCapture(e.pointerId); });
+      el.addEventListener('pointerup', function (e) { if (!down) return; down = false; if ((e.clientX / viewScale - sx) * dir > 45) goBack(); });
+      el.addEventListener('pointercancel', function () { down = false; });
+    });
+  })();
+  function syncOverlayOpenClass() {
+    var any = !!document.querySelector('.overlay.open') && !document.getElementById('switcher').classList.contains('open');
+    document.getElementById('phone').classList.toggle('overlay-open', any);
+  }
+  new MutationObserver(syncOverlayOpenClass).observe(document.getElementById('screen'), { attributes: true, subtree: true, attributeFilter: ['class'] });
+
   function goHome() {
     closeSwitcher();
     var open = document.querySelector('.overlay.open');
@@ -1752,6 +2040,7 @@
     } else if (['wlan', 'bluetooth'].indexOf(state.task) > -1) {
       showToast('Hier können Sie ' + (state.task === 'wlan' ? 'WLAN' : 'Bluetooth') + ' nur an- oder ausschalten. Das genaue Verbinden geschieht in den Einstellungen.', true);
     }
+    if (isAndroid() && state.task === 'sim' && id === 'panelControlTop') showToast('In der Mitteilung steht schon, was zu tun ist: Einstellungen, dann Biometrische Daten und Sicherheit, dann SIM-Kartensperre.', true);
     document.getElementById('hotspotLeft').classList.remove('pulse');
     document.getElementById('hotspotRight').classList.remove('pulse');
     document.getElementById('hotspotTopFull').classList.remove('pulse');
@@ -1770,13 +2059,19 @@
     }
   }, true);
 
-  function makeDraggable(hotspotId, panelId, edge) {
+  function makeDraggable(hotspotId, panelIdOrFn, edge) {
     var hotspot = document.getElementById(hotspotId);
+    var panelId = typeof panelIdOrFn === 'function' ? panelIdOrFn() : panelIdOrFn;
     var panel = document.getElementById(panelId);
+    function syncPanel() {
+      panelId = typeof panelIdOrFn === 'function' ? panelIdOrFn() : panelIdOrFn;
+      panel = document.getElementById(panelId);
+    }
     var dragging = false, startY = 0, moved = false;
     var TRAVEL = 380;
 
     hotspot.addEventListener('pointerdown', function (e) {
+      syncPanel();
       dragging = true; moved = false; startY = e.clientY / viewScale;
       panel.classList.remove('snap');
       hotspot.setPointerCapture(e.pointerId);
@@ -1810,6 +2105,7 @@
     hotspot.addEventListener('pointerup', endDrag);
     hotspot.addEventListener('pointercancel', endDrag);
     hotspot.addEventListener('click', function () {
+      syncPanel();
       if (moved) return;
       if (anyPanelOpen() && document.getElementById(panelId).classList.contains('open')) return;
       openPanelFully(panelId);
@@ -1821,6 +2117,7 @@
     document.getElementById('flightIcon').style.display = state.flight ? 'inline-flex' : 'none';
     ['flightToggleTop', 'flightToggleBottom'].forEach(function (id) { document.getElementById(id).classList.toggle('on', state.flight); });
     document.getElementById('flightToggleSettings').classList.toggle('on', state.flight);
+    document.getElementById('flightToggleConn').classList.toggle('on', state.flight);
     if (state.flight) {
       if (state.wifi) setRadioWifi(false, true);
       if (state.bt) setRadioBt(false, true);
@@ -1860,6 +2157,8 @@
 
   function renderWifiBtStatus() {
     document.getElementById('wifiRowStatus').textContent = state.wifiConnectedNetwork ? ('· ' + state.wifiConnectedNetwork) : (state.wifi ? '· An' : '· Aus');
+    document.getElementById('wifiRowStatusA').textContent = document.getElementById('wifiRowStatus').textContent;
+    document.getElementById('btRowStatusA').textContent = state.btConnectedDevice ? ('· ' + state.btConnectedDevice) : (state.bt ? '· An' : '· Aus');
     document.getElementById('btRowStatus').textContent = state.btConnectedDevice ? ('· ' + state.btConnectedDevice) : (state.bt ? '· An' : '· Aus');
     document.querySelectorAll('#overlayWifiList .list-item').forEach(function (el) {
       var nc = el.querySelector('.netcheck');
@@ -1895,7 +2194,7 @@
 
   function showToast(msg, neutral) {
     var t = document.getElementById('toast');
-    t.textContent = msg;
+    t.textContent = AND(msg);
     t.classList.toggle('neutral', !!neutral);
     t.classList.add('show');
     setTimeout(function () { t.classList.remove('show'); }, 2400);
@@ -1946,6 +2245,8 @@
   }
 
   function resetSandbox() {
+    applyPlatformData();
+    state.locPermsOpen = false;
     state.flight = false; state.step = 1; state.screen = 'home';
     setRadioWifi(true, true); setRadioBt(false, true);
     state.wifiConnectedNetwork = null; state.btConnectedDevice = null;
@@ -1979,7 +2280,7 @@
     document.getElementById('folderOverlay').classList.remove('open');
     document.getElementById('hsPicker').classList.remove('open');
     state.simLocked = state.task === 'sim';
-    document.getElementById('notifSim').style.display = state.simLocked ? 'block' : 'none';
+    document.getElementById('notifSim').style.display = state.simLocked ? 'block' : 'none'; document.getElementById('notifSimA').style.display = state.simLocked ? 'block' : 'none';
     document.getElementById('homeApps').classList.remove('jiggling');
     document.getElementById('jiggleDone').classList.remove('jiggle-done-visible');
     document.getElementById('appConfirm').classList.remove('open');
@@ -1991,6 +2292,7 @@
     document.getElementById('flightToggleTop').classList.remove('on');
     document.getElementById('flightToggleBottom').classList.remove('on');
     document.getElementById('flightToggleSettings').classList.remove('on');
+    document.getElementById('flightToggleConn').classList.remove('on');
     document.getElementById('simIcon').style.display = state.simLocked ? 'inline-flex' : 'none';
     if (state.task === 'internet') {
       state.flight = true;
@@ -1999,13 +2301,14 @@
       document.getElementById('flightToggleTop').classList.add('on');
       document.getElementById('flightToggleBottom').classList.add('on');
       document.getElementById('flightToggleSettings').classList.add('on');
+      document.getElementById('flightToggleConn').classList.add('on');
     }
     setBrightness(state.task === 'anzeige' ? 50 : 100);
     setFontsize(20);
     renderWifiBtStatus();
     renderCellular();
-    document.getElementById('modelLabel').textContent = state.model;
-    document.getElementById('taskbarText').textContent = TASKS[state.task] ? TASKS[state.task].taskbar : '';
+    document.getElementById('modelLabel').textContent = state.model || (isAndroid() ? '14:32' : '');
+    document.getElementById('taskbarText').textContent = taskText();
     applyPlatformLayout();
     state.step = 1;
     updateHint();
@@ -2013,9 +2316,12 @@
 
   function applyPlatformLayout() {
     var isAlt = state.platform === 'ios-alt';
-    document.getElementById('hotspotLeft').style.display = isAlt ? 'none' : 'block';
-    document.getElementById('hotspotRight').style.display = isAlt ? 'none' : 'block';
-    document.getElementById('hotspotTopFull').style.display = isAlt ? 'block' : 'none';
+    var and = isAndroid();
+    var fp = isAlt || and;
+    document.getElementById('phone').classList.toggle('android', and);
+    document.getElementById('hotspotLeft').style.display = (isAlt || and) ? 'none' : 'block';
+    document.getElementById('hotspotRight').style.display = (isAlt || and) ? 'none' : 'block';
+    document.getElementById('hotspotTopFull').style.display = (isAlt || and) ? 'block' : 'none';
     document.getElementById('hotspotBottom').style.display = isAlt ? 'block' : 'none';
     document.getElementById('hotspotSwipeUp').style.display = isAlt ? 'none' : 'block';
     document.getElementById('notch').style.display = isAlt ? 'none' : 'block';
@@ -2025,8 +2331,10 @@
     document.getElementById('codeRowLabel').textContent = cl;
     document.getElementById('codeHeader').textContent = cl;
     SCREEN_TITLES.overlayCode = cl;
-    document.getElementById('bioLabel').textContent = isAlt ? 'Fingerabdruck hinzufügen' : 'Face ID einrichten';
+    document.getElementById('bioLabel').textContent = fp ? 'Fingerabdruck hinzufügen' : 'Face ID einrichten';
     document.getElementById('lsBottomText').textContent = isAlt ? 'Zum Öffnen Home-Taste drücken' : 'Zum Öffnen nach oben wischen';
+    var dnd = document.querySelector('#dndToggleTop svg');
+    if (dnd) dnd.outerHTML = icon(and ? 'dnd' : 'moon');
     lsSwipeShow();
     document.getElementById('sideBtn').classList.toggle('pulse-btn', state.guided && state.task === 'sperren');
     document.getElementById('hotspotLeft').classList.remove('pulse');
@@ -2035,11 +2343,48 @@
     document.getElementById('hotspotBottom').classList.remove('pulse');
     if (state.guided && ['flugmodus', 'nichtstoeren', 'internet'].indexOf(state.task) > -1) {
       if (isAlt) document.getElementById('hotspotBottom').classList.add('pulse');
+      else if (and) document.getElementById('hotspotTopFull').classList.add('pulse');
       else document.getElementById('hotspotRight').classList.add('pulse');
     }
+    retextAll(and);
+  }
+
+  function getStepsAndroid() {
+    var g = 'Wischen Sie vom oberen Bildschirmrand nach unten.';
+    var done = 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.';
+    var s1 = 'Schritt 1: Öffnen Sie die App "Einstellungen".';
+    var t = state.task;
+    if (t === 'flugmodus') return ['Schritt 1: ' + g, 'Schritt 2: Tippen Sie auf "Flugmodus" (Flugzeug-Symbol).', 'Geschafft! Wischen Sie die Schnelleinstellungen nach oben weg, oder beginnen Sie mit "Zurücksetzen" von vorne.'];
+    if (t === 'wlan') return [s1, 'Schritt 2: Tippen Sie auf "Verbindungen".', 'Schritt 3: Tippen Sie auf "WLAN".', 'Schritt 4: Wählen Sie das Netzwerk "Zuhause" aus.', 'Schritt 5: Geben Sie das Passwort ein: 1 2 3 4', done];
+    if (t === 'bluetooth') return [s1, 'Schritt 2: Tippen Sie auf "Verbindungen".', 'Schritt 3: Tippen Sie auf "Bluetooth".', 'Schritt 4: Schalten Sie Bluetooth mit dem Schalter ein und wählen Sie dann "Kopfhörer XY" aus.', done];
+    if (t === 'anzeige') return [s1, 'Schritt 2: Tippen Sie auf "Display".', 'Schritt 3: Schieben Sie beide Regler deutlich nach rechts.', done];
+    if (t === 'code') return [s1, 'Schritt 2: Tippen Sie auf "Sperrbildschirm und AOD".', 'Schritt 3: Tippen Sie auf "Bildschirmsperrtyp: PIN" oder auf "Fingerabdruck hinzufügen".',
+      'Schritt 4: Geben Sie eine Zahlenkombination ein, die Sie sich gut merken können – zum Beispiel ein für Sie wichtiges Datum, aber keine allzu bekannte Jahreszahl.',
+      'Schritt 5: Geben Sie dieselbe Zahlenkombination zur Bestätigung noch einmal ein.', done];
+    if (t === 'nichtstoeren') return ['Schritt 1: ' + g, 'Schritt 2: Tippen Sie auf "Nicht stören".', done];
+    if (t === 'kamera') return ['Schritt 1: Öffnen Sie die App "Kamera".', 'Schritt 2: Sie sehen unten mehrere Kameramodi. Tippen Sie auf "VIDEO".', done];
+    if (t === 'passwort') return ['Schritt 1: Öffnen Sie die App "Chrome".', 'Schritt 2: Tippen Sie in das Feld "Passwort".', 'Schritt 3: Tippen Sie auf den Vorschlag für ein starkes Passwort, oder geben Sie selbst ein sicheres Passwort ein.', 'Schritt 4: Tippen Sie auf "Konto erstellen" und danach auf "Speichern".', done];
+    if (t === 'notruf') return ['Schritt 1: Drücken Sie 5-mal schnell hintereinander auf die Seitentaste (Ein/Aus-Taste).', 'Schritt 2: Schieben Sie den roten Regler ganz nach rechts, um den Notruf zu simulieren.', done];
+    if (t === 'app_loeschen') return ['Schritt 1: Halten Sie den Finger etwas länger auf die App "Kalender", bis ein kleines Menü erscheint.', 'Schritt 2: Tippen Sie im Menü auf "Deinstallieren".', 'Schritt 3: Bestätigen Sie mit "OK".', done];
+    if (t === 'autosperre') return [s1, 'Schritt 2: Tippen Sie auf "Display".', 'Schritt 3: Tippen Sie auf "Bildschirm-Timeout".', 'Schritt 4: Wählen Sie "2 Minuten".', done];
+    if (t === 'sperren') return ['Schritt 1: Drücken Sie die Seitentaste rechts am Smartphone. Der Bildschirm geht aus.', 'Schritt 2: Tippen Sie auf den dunklen Bildschirm, um ihn einzuschalten.', 'Schritt 3: Wischen Sie vom unteren Bildschirmrand nach oben.', 'Schritt 4: Geben Sie Ihre PIN ein: 1 2 3 4 5 6', done];
+    if (t === 'tracking') return [s1, 'Schritt 2: Tippen Sie auf "Datenschutz".', 'Schritt 3: Tippen Sie auf "Werbung".', 'Schritt 4: Schalten Sie "Personalisierte Werbung zulassen" aus.', done];
+    if (t === 'ortung') return [s1, 'Schritt 2: Tippen Sie auf "Standort".', 'Schritt 3: Tippen Sie auf "App-Berechtigungen".', 'Schritt 4: Tippen Sie auf "Taschenlampe Pro".', 'Schritt 5: Wählen Sie "Nicht zulassen".', done];
+    if (t === 'speicher') return [s1, 'Schritt 2: Tippen Sie auf "Akku und Gerätewartung".', 'Schritt 3: Tippen Sie auf "Speicher".', 'Schritt 4: Die App ganz oben in der Liste belegt am meisten Speicher. Tippen Sie darauf.', 'Schritt 5: Tippen Sie auf "Deinstallieren".', done];
+    if (t === 'sim') return [s1 + ' (Tipp: Auch die Mitteilung oben verrät, was zu tun ist. Wischen Sie dazu vom oberen Rand nach unten.)', 'Schritt 2: Tippen Sie auf "Biometrische Daten und Sicherheit".', 'Schritt 3: Tippen Sie auf "SIM-Kartensperre".', 'Schritt 4: Geben Sie die SIM-PIN ein: 4 8 2 1', done];
+    if (t === 'akku') return [s1, 'Schritt 2: Tippen Sie auf "Akku und Gerätewartung".', 'Schritt 3: Tippen Sie auf "Akku".', 'Schritt 4: Schauen Sie, welche App am meisten Akku verbraucht (ganz oben, rot markiert). Schalten Sie dann "Energiesparen" ein.', done];
+    if (t === 'internet') return ['Schritt 1: Prüfen Sie die Statusleiste: Das Flugzeug-Symbol zeigt, dass der Flugmodus an ist. ' + g, 'Schritt 2: Tippen Sie auf "Flugmodus", um ihn auszuschalten.', 'Schritt 3: Der Flugmodus ist aus, aber WLAN ist noch ausgeschaltet. Schalten Sie WLAN ein, zum Beispiel in den Einstellungen unter "Verbindungen".', 'Schritt 4: Öffnen Sie Einstellungen, dann "Verbindungen", dann "WLAN", wählen Sie "Zuhause" und geben Sie das Passwort ein: 1 2 3 4', done];
+    if (t === 'apps_organisieren') return ['Schritt 1: Halten Sie den Finger etwas länger auf ein beliebiges App-Symbol, bis ein kleines Menü erscheint.',
+      'Schritt 2: Ziehen Sie die App "Gmail" auf die App "Kalender". Halten Sie kurz still, bis sich ein Ordner bildet, und lassen Sie dann los.',
+      'Schritt 3: Ziehen Sie die App "Galerie" ganz an den rechten Bildschirmrand und halten Sie kurz, bis die zweite Seite erscheint. Lassen Sie sie dort los.',
+      'Schritt 4: Tippen Sie auf "Fertig", um die Bearbeitung der Symbole zu beenden.',
+      'Schritt 5: Halten Sie den Finger auf eine freie Stelle des Startbildschirms (oder auf die Punkte unten), um die Hauptseite auszuwählen.',
+      'Schritt 6: Wählen Sie "Seite 2" aus und tippen Sie auf "Fertig".', done];
+    return [];
   }
 
   function getStepsForTask() {
+    if (isAndroid()) return getStepsAndroid();
     var gesture = state.platform === 'ios-alt'
       ? 'Wischen Sie vom unteren Bildschirmrand nach oben.'
       : 'Wischen Sie von oben rechts (neben der Kamera-Aussparung) nach unten, nicht oben links.';
@@ -2173,16 +2518,17 @@
 
   makeDraggable('hotspotLeft', 'panelNotif', 'top');
   makeDraggable('hotspotRight', 'panelControlTop', 'top');
-  makeDraggable('hotspotTopFull', 'panelNotif', 'top');
+  makeDraggable('hotspotTopFull', function () { return isAndroid() ? 'panelControlTop' : 'panelNotif'; }, 'top');
   makeDraggable('hotspotBottom', 'panelControlBottom', 'bottom');
 
   // ================= Sicherheit & Datenschutz =================
   var AUTOLOCK_OPTS = ['30 Sekunden', '1 Minute', '2 Minuten', '3 Minuten', '4 Minuten', '5 Minuten', 'Nie'];
+  function autolockOpts() { return isAndroid() ? ['15 Sekunden', '30 Sekunden', '1 Minute', '2 Minuten', '5 Minuten', '10 Minuten'] : AUTOLOCK_OPTS; }
   var LOC_OPTS = ['Nie', 'Nächstes Mal fragen', 'Beim Verwenden der App', 'Immer'];
   var LOC_DEFAULT = { 'Karten': 'Beim Verwenden der App', 'Wetter': 'Immer', 'Kamera': 'Beim Verwenden der App', 'Taschenlampe Pro': 'Immer' };
   var TRACK_DEFAULT = { 'Spiele-App': true, 'Shopping-App': true };
 
-  function codeLabel() { return state.platform === 'ios-alt' ? 'Touch ID & Code' : 'Face ID & Code'; }
+  function codeLabel() { return isAndroid() ? 'Sperrbildschirm und AOD' : (state.platform === 'ios-alt' ? 'Touch ID & Code' : 'Face ID & Code'); }
 
   document.querySelectorAll('.dead-row').forEach(function (el) {
     el.onclick = function () { showToast('"' + el.querySelector('span').textContent + '" ist in dieser Übung nicht verfügbar.', true); };
@@ -2211,25 +2557,25 @@
   document.getElementById('backCode').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
   document.getElementById('rowBiometric').onclick = function () {
     if (!state.passcode) {
-      showToast((state.platform === 'ios-alt' ? 'Touch ID' : 'Face ID') + ' braucht zuerst einen Code als Rückfallebene, falls die Erkennung einmal nicht klappt.', true);
+      showToast(bioName() + ' braucht zuerst einen Code als Rückfallebene, falls die Erkennung einmal nicht klappt.', true);
       openKeypad('new1');
       return;
     }
     if (state.biometric) {
       state.biometric = false; renderCodeScreen();
-      showToast((state.platform === 'ios-alt' ? 'Touch ID' : 'Face ID') + ' deaktiviert.', true);
+      showToast(bioName() + ' deaktiviert.', true);
       finishIfDone();
       return;
     }
     runBiometricSetup();
   };
   function runBiometricSetup() {
-    var alt = state.platform === 'ios-alt';
+    var alt = state.platform !== 'ios-neu';
     var ring = document.getElementById('bioRing');
     ring.className = 'bio-ring scanning';
     ring.innerHTML = icon(alt ? 'fingerprint' : 'faceid');
     document.getElementById('bioTitle').textContent = alt ? 'Bitte legen Sie Ihren Finger auf' : 'Bitte schauen Sie auf den Bildschirm';
-    document.getElementById('bioSub').textContent = alt ? 'Legen Sie Ihren Finger wiederholt auf die Home-Taste.' : 'Halten Sie das iPhone in normalem Abstand vor Ihr Gesicht.';
+    document.getElementById('bioSub').textContent = alt ? (isAndroid() ? 'Legen Sie Ihren Finger wiederholt auf den Fingerabdrucksensor.' : 'Legen Sie Ihren Finger wiederholt auf die Home-Taste.') : 'Halten Sie das iPhone in normalem Abstand vor Ihr Gesicht.';
     document.getElementById('bioModal').classList.add('open');
     setTimeout(function () {
       ring.className = 'bio-ring ok';
@@ -2239,7 +2585,7 @@
         document.getElementById('bioModal').classList.remove('open');
         state.biometric = true;
         renderCodeScreen();
-        showToast((alt ? 'Touch ID' : 'Face ID') + ' eingerichtet.');
+        showToast(bioName() + ' eingerichtet.');
         finishIfDone();
       }, 700);
     }, 1400);
@@ -2260,7 +2606,7 @@
     var notes = [];
     if (on) notes.push('✓ Ihr iPhone ist mit einem Code geschützt.');
     else notes.push('Ohne Code kann jede Person, die Ihr iPhone in die Hand nimmt, es benutzen.');
-    if (state.biometric) notes.push((state.platform === 'ios-alt' ? 'Touch ID' : 'Face ID') + ' ist eingerichtet: Sie können Ihr iPhone damit entsperren, ohne jedes Mal den Code einzutippen. Der Code bleibt als Rückfallebene bestehen.');
+    if (state.biometric) notes.push(bioName() + ' ist eingerichtet: Sie können Ihr iPhone damit entsperren, ohne jedes Mal den Code einzutippen. Der Code bleibt als Rückfallebene bestehen.');
     document.getElementById('codeNote').textContent = notes.join(' ');
   }
 
@@ -2317,7 +2663,7 @@
         showAppScreen('settings', 'overlayCode'); renderCodeScreen();
         if (state.passcode.length < 6) showToast('Code festgelegt. Ein längerer Code ist sicherer.', true);
         else showToast('Ihr Code wurde festgelegt.');
-        if (state.task === 'code') showToast('Tipp: Unter "' + codeLabel() + '" können Sie jetzt zusätzlich ' + (state.platform === 'ios-alt' ? 'Touch ID' : 'Face ID') + ' einrichten.', true);
+        if (state.task === 'code') showToast('Tipp: Unter "' + codeLabel() + '" können Sie jetzt zusätzlich ' + bioName() + ' einrichten.', true);
         finishIfDone();
       } else {
         shake('kpDots');
@@ -2356,7 +2702,7 @@
   function renderAutolock() {
     document.getElementById('autolockValue').textContent = state.autolock;
     var list = document.getElementById('autolockList'); list.innerHTML = '';
-    AUTOLOCK_OPTS.forEach(function (o) {
+    autolockOpts().forEach(function (o) {
       var row = document.createElement('div'); row.className = 'list-item';
       row.innerHTML = '<span>' + o + '</span><span class="check">' + (state.autolock === o ? '✓' : '') + '</span>';
       row.onclick = function () {
@@ -2372,11 +2718,11 @@
   document.getElementById('rowPrivacy').onclick = function () { openOverlay('overlayPrivacy'); renderPrivacy(); };
   document.getElementById('backPrivacy').onclick = function () { showAppScreen('settings', 'overlaySettings'); };
   document.getElementById('rowLocation').onclick = function () { openOverlay('overlayLocation'); renderLocation(); };
-  document.getElementById('backLocation').onclick = function () { showAppScreen('settings', 'overlayPrivacy'); renderPrivacy(); };
+  document.getElementById('backLocation').onclick = function () { showAppScreen('settings', isAndroid() ? 'overlaySettings' : 'overlayPrivacy'); renderPrivacy(); };
   document.getElementById('rowTracking').onclick = function () { openOverlay('overlayTracking'); renderTracking(); };
   document.getElementById('backTracking').onclick = function () { showAppScreen('settings', 'overlayPrivacy'); renderPrivacy(); };
   document.getElementById('backLocApp').onclick = function () { showAppScreen('settings', 'overlayLocation'); renderLocation(); };
-  function renderPrivacy() { document.getElementById('locStatus').textContent = state.locMaster ? 'An' : 'Aus'; }
+  function renderPrivacy() { document.getElementById('locStatus').textContent = state.locMaster ? 'An' : 'Aus'; document.getElementById('locRootStatus').textContent = state.locMaster ? '· An' : '· Aus'; }
 
   function renderTracking() {
     document.getElementById('trackToggle').classList.toggle('on', state.trackingAllowed);
@@ -2401,6 +2747,7 @@
   function renderLocation() {
     document.getElementById('locMasterToggle').classList.toggle('on', state.locMaster);
     var list = document.getElementById('locList'); list.innerHTML = '';
+    list.style.display = (isAndroid() && !state.locPermsOpen) ? 'none' : 'block';
     list.style.opacity = state.locMaster ? '1' : '0.4';
     list.style.pointerEvents = state.locMaster ? 'auto' : 'none';
     Object.keys(state.loc).forEach(function (app) {
@@ -2513,7 +2860,7 @@
     ls.entry += k; renderLs();
     if (ls.entry.length === len) setTimeout(function () {
       if (ls.entry === state.passcode) unlockPhone(true);
-      else { shake('lsDots'); ls.entry = ''; document.getElementById('lsMsg').textContent = 'Falscher Code'; renderLs(); }
+      else { shake('lsDots'); ls.entry = ''; document.getElementById('lsMsg').textContent = AND('Falscher Code'); renderLs(); }
     }, 180);
   });
   document.getElementById('lsCancel').onclick = function () {
@@ -2687,8 +3034,9 @@
       if (IS_EMBEDDED && !FULL && narrow && params.get('launch') !== '0') {
         // Kleiner Bildschirm + eingebettet: Uebung in eigenem Fenster starten (keine Scroll-Falle, volle Groesse).
         state.task = params.get('task') || 'flugmodus';
+        state.platform = params.get('platform') || 'ios-neu';
         document.getElementById('setup').style.display = 'none';
-        document.getElementById('launchTask').textContent = (TASKS[state.task] || {}).taskbar || '';
+        document.getElementById('launchTask').textContent = taskText();
         document.getElementById('launch').classList.add('show');
         document.getElementById('launchBtn').onclick = function () {
           var u = new URL(location.href);
