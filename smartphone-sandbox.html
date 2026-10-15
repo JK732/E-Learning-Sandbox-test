@@ -50,13 +50,16 @@
   #taskbar #resetBtn:hover { background: var(--accent-light); }
   #hintbar { background: #fff3d6; color: #6b4c00; font-size: 13.5px; padding: 9px 16px; text-align: center; min-height: 36px; border-bottom: 1px solid #f0e0b0; }
   #hintbar:empty { padding: 0; min-height: 0; border: none; }
-  #stage { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-  #zoomBar { position: absolute; right: 14px; bottom: 14px; background: #fff; border: 1px solid var(--border); border-radius: 30px; padding: 6px 10px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); z-index: 60; }
-  #zoomBar button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--brand-darkest); font-size: 16px; font-weight: 700; cursor: pointer; line-height: 1; }
+  #stage { flex: 1; min-height: 0; min-width: 0; position: relative; overflow: hidden; }
+  /* Zoom: Das Smartphone wird nie mehr abgeschnitten, bei starker Vergroesserung scrollt die Buehne. */
+  #stageScroll { position: absolute; inset: 0; overflow: auto; display: flex; padding: 10px; -webkit-overflow-scrolling: touch; }
+  #phoneSizer { position: relative; flex: 0 0 auto; margin: auto; }
+  #phoneZoomWrap { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  #zoomBar { position: absolute; right: 14px; bottom: 14px; padding: 4px 8px; background: #fff; border: 1px solid var(--border); border-radius: 30px; padding: 6px 10px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); z-index: 60; }
+  #zoomBar button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--brand-darkest); font-size: 16px; font-weight: 700; cursor: pointer; line-height: 1; }
   #zoomBar button:hover { background: #eef4f6; }
-  #zoomLabel { font-size: 12px; color: var(--text-soft); min-width: 34px; text-align: center; }
+  #zoomLabel { font-size: 15px; font-weight: 600; color: var(--text-soft); min-width: 34px; text-align: center; }
 
-  #phoneZoomWrap { transform: scale(1); transition: transform 0.15s ease; }
   .phone { width: 320px; height: 664px; background: #111; border-radius: 50px; position: relative; box-shadow: 0 14px 34px rgba(10,58,69,0.35); border: 2px solid #000; }
   .screen { position: absolute; inset: 5px; background: #e8ecef; border-radius: 40px; overflow: hidden; }
   .statusbar { height: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; font-size: 12px; font-weight: 600; background: transparent; position: relative; z-index: 2; }
@@ -340,6 +343,33 @@
     #zoomBar { display: none; }
   }
 
+
+  /* ===== Grosse Darstellung (v5): Seitenlayout, groessere Schrift, Grossansicht ===== */
+  @media (min-width: 521px) {
+    #taskbar .taskText { font-size: 17px; line-height: 1.35; }
+    #taskbar button { font-size: 15px; min-height: 44px; padding: 8px 16px; }
+    #hintbar { font-size: 18px; line-height: 1.35; font-weight: 600; }
+    .legend { font-size: 14px; padding: 6px 16px; }
+  }
+  #bigBtn { display: none; }
+  html.embedded #bigBtn, html.fs #bigBtn { display: inline-block; }
+  html.fs #exitBtn { display: none; }
+  /* Breite Anzeige: Aufgabe links, Smartphone rechts in voller Hoehe (Layout wird per Skript gewaehlt, wo das Smartphone groesser wird). */
+  #sandbox.side { display: grid; grid-template-columns: clamp(290px, 32vw, 360px) minmax(0, 1fr); grid-template-rows: auto auto auto 1fr; }
+  #sandbox.side #taskbar { grid-column: 1; grid-row: 1; flex-direction: column; align-items: stretch; justify-content: flex-start; padding: 16px 18px; gap: 14px; box-shadow: none; }
+  #sandbox.side #taskbar .taskText { font-size: 20px; line-height: 1.4; max-width: none; font-weight: 600; }
+  #sandbox.side #taskbar .btnRow { flex-wrap: wrap; }
+  #sandbox.side #taskbar .btnRow button { flex: 1 1 auto; }
+  #sandbox.side #hintbar { grid-column: 1; grid-row: 2; display: block; text-align: left; min-height: 0; font-size: 21px; line-height: 1.4; padding: 16px 18px; border-bottom: none; }
+  #sandbox.side #hintbar:empty { display: none; }
+  #sandbox.side .legend { grid-column: 1; grid-row: 3; text-align: left; padding: 10px 18px; font-size: 15px; }
+  #sandbox.side #stage { grid-column: 2; grid-row: 1 / span 4; }
+  #sandbox.side #zoomBar { left: 18px; right: auto; bottom: 18px; }
+  #sandbox.side #panHint { left: 18px; right: auto; bottom: 80px; max-width: 320px; }
+  #panHint { display: none; position: absolute; right: 14px; bottom: 74px; z-index: 61; background: rgba(10,58,69,0.92); color: #fff; font-size: 15px; line-height: 1.35; padding: 8px 12px; border-radius: 10px; max-width: 280px; }
+  #panHint.show { display: block; }
+  #zoomBar { z-index: 1002; }
+
   /* ===== Android-Modus (Samsung One UI, Gestennavigation) ===== */
   .phone:not(.android) [data-plat="and"] { display: none !important; }
   .phone.android [data-plat="ios"] { display: none !important; }
@@ -478,18 +508,14 @@
       <div><div class="taskLabel">Aufgabe</div><div class="taskText" id="taskbarText">Aufgabe</div></div>
       <div class="btnRow">
         <button id="resetBtn">↺ Zurücksetzen</button>
+        <button id="bigBtn">⤢ Großansicht</button>
         <button id="exitBtn">‹ Zurück</button>
       </div>
     </div>
     <div id="hintbar"></div>
     <div class="legend"><span class="sw"></span>Orange markierte Stellen lassen sich ziehen oder schieben.</div>
     <div id="stage">
-      <div id="zoomBar">
-        <button id="zoomOut" title="Kleiner">–</button>
-        <span id="zoomLabel">100%</span>
-        <button id="zoomIn" title="Größer">+</button>
-      </div>
-      <div id="phoneZoomWrap"><div class="phone" id="phone">
+      <div id="stageScroll"><div id="phoneSizer"><div id="phoneZoomWrap"><div class="phone" id="phone">
         <div class="notch" id="notch"></div>
         <div class="flash" id="flash"></div>
         <div class="screen" id="screen">
@@ -892,9 +918,15 @@
         <div class="sidebtn" id="sideBtn" title="Seitentaste"></div>
         <div class="volbtn" id="volUp" style="top:110px;" title="Lauter"></div>
         <div class="volbtn" id="volDown" style="top:160px;" title="Leiser"></div>
-      </div></div>
+      </div></div></div></div>
     </div>
     <div class="toast" id="toast"></div>
+    <div id="panHint">Mit dem Finger auf dem Smartphone ziehen, um es zu verschieben.</div>
+    <div id="zoomBar">
+        <button id="zoomOut" title="Kleiner" aria-label="Kleiner">–</button>
+        <span id="zoomLabel">100%</span>
+        <button id="zoomIn" title="Größer" aria-label="Größer">+</button>
+      </div>
   </div>
 
 </div>
@@ -2975,32 +3007,59 @@
   })();
 
   var fitScale = 1;
-  var zoomIdx = 2;
-  var ZOOM_LEVELS = [70, 85, 100, 115, 130, 150];
+  var zoomIdx = 1;
+  var ZOOM_LEVELS = [85, 100, 120, 140, 165, 200];
+  var PHONE_W = 324, PHONE_H = 668;   // Smartphone inkl. Rahmen (Pixel unskaliert)
   function applyZoom() {
     viewScale = fitScale * ZOOM_LEVELS[zoomIdx] / 100;
     document.getElementById('phoneZoomWrap').style.transform = 'scale(' + viewScale + ')';
+    var sz = document.getElementById('phoneSizer');
+    sz.style.width = Math.round(PHONE_W * viewScale) + 'px';
+    sz.style.height = Math.round(PHONE_H * viewScale) + 'px';
     document.getElementById('zoomLabel').textContent = ZOOM_LEVELS[zoomIdx] + '%';
+    document.getElementById('panHint').classList.toggle('show', zoomIdx > 1);
+    document.getElementById('zoomOut').disabled = zoomIdx === 0;
+    document.getElementById('zoomIn').disabled = zoomIdx === ZOOM_LEVELS.length - 1;
+  }
+  function fitFor(st) {
+    var w = st.clientWidth, h = st.clientHeight;
+    if (!w || !h) return 0;
+    // Seitenrand mind. 28 px: so kollidiert die Rand-Zone der Simulation nicht mit der Zurueck-Wischgeste des Browsers.
+    return Math.max(0.4, Math.min(2.6, Math.min((w - 56) / PHONE_W, (h - 20) / PHONE_H)));
   }
   function computeFit() {
-    var st = document.getElementById('stage');
-    var w = st.clientWidth, h = st.clientHeight;
-    if (!w || !h) return null;
-    // Seitenrand mind. 28 px: so kollidiert die Rand-Zone der Simulation nicht mit der Zurueck-Wischgeste des Browsers.
-    var f = Math.min((w - 56) / 320, (h - 20) / 664);
-    return Math.max(0.4, Math.min(1.5, f));
+    var sb = document.getElementById('sandbox'), st = document.getElementById('stage');
+    var vw = sb.clientWidth;
+    var best = 0, mode = '';
+    sb.classList.remove('side');
+    var fTop = fitFor(st);
+    var fSide = 0;
+    if (vw >= 720) { sb.classList.add('side'); fSide = fitFor(st); }
+    // Das Layout waehlen, in dem das Smartphone groesser wird (leichter Vorzug fuer oben, damit es nicht hin und her springt).
+    if (fSide > fTop * 1.08) { best = fSide; mode = 'side'; } else { best = fTop; mode = ''; }
+    sb.classList.toggle('side', mode === 'side');
+    return best || null;
   }
   function applyFit() {
     var f = computeFit();
     if (f) fitScale = f;
     applyZoom();
+    var sc = document.getElementById('stageScroll');
+    sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) / 2;
+    sc.scrollTop = 0;
   }
   function scheduleFit() { requestAnimationFrame(function () { requestAnimationFrame(applyFit); }); }
   window.addEventListener('resize', scheduleFit);
   window.addEventListener('orientationchange', function () { setTimeout(applyFit, 250); });
   (function setupZoom() {
-    document.getElementById('zoomIn').onclick = function () { zoomIdx = Math.min(ZOOM_LEVELS.length - 1, zoomIdx + 1); applyZoom(); };
-    document.getElementById('zoomOut').onclick = function () { zoomIdx = Math.max(0, zoomIdx - 1); applyZoom(); };
+    function centerAfterZoom() {
+      var sc = document.getElementById('stageScroll');
+      sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) / 2;
+      sc.scrollTop = Math.max(0, (sc.scrollHeight - sc.clientHeight) / 2 * 0);
+    }
+    document.getElementById('zoomIn').onclick = function () { zoomIdx = Math.min(ZOOM_LEVELS.length - 1, zoomIdx + 1); applyZoom(); centerAfterZoom(); };
+    document.getElementById('zoomOut').onclick = function () { zoomIdx = Math.max(0, zoomIdx - 1); applyZoom(); centerAfterZoom(); };
+    document.getElementById('zoomLabel').onclick = function () { zoomIdx = 1; applyZoom(); centerAfterZoom(); };
     applyZoom();
   })();
   // Aufgabentext auf schmalen Bildschirmen: Tippen klappt den vollen Text auf.
@@ -3021,6 +3080,38 @@
     if (!IS_EMBEDDED || FULL) document.getElementById('exitBtn').textContent = (PARAMS.get('nav') === 'same' ? '\u2039 Zur Lektion' : '\u2039 Schlie\u00dfen');
     scheduleFit();
   }
+  // Grossansicht: Wenn die Lektionsseite es erlaubt, echtes Vollbild (kein Seitenwechsel). Sonst eigenes Vollbild-Fenster wie am Smartphone.
+  function fsElement() { return document.fullscreenElement || document.webkitFullscreenElement || null; }
+  function onFsChange() {
+    var on = !!fsElement();
+    document.documentElement.classList.toggle('fs', on);
+    document.getElementById('bigBtn').textContent = on ? '\u2039 Zur Lektion' : '\u2922 Gro\u00dfansicht';
+    setTimeout(applyFit, 200);
+  }
+  document.addEventListener('fullscreenchange', onFsChange);
+  document.addEventListener('webkitfullscreenchange', onFsChange);
+  function openBigViewInTab() {
+    var u = new URL(location.href);
+    u.searchParams.set('full', '1'); u.searchParams.set('nav', 'same');
+    var left = false;
+    window.addEventListener('pagehide', function () { left = true; });
+    try { window.top.location.href = u.toString(); }
+    catch (e) { try { location.href = u.toString(); left = true; } catch (e2) {} }
+    setTimeout(function () {
+      if (left || document.visibilityState === 'hidden') return;
+      u.searchParams.set('nav', 'tab');
+      var w = window.open(u.toString(), '_blank');
+      if (!w) { location.href = u.toString(); }
+    }, 1500);
+  }
+  document.getElementById('bigBtn').onclick = function () {
+    if (fsElement()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+    var el = document.documentElement, req = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (!req) { openBigViewInTab(); return; }
+    var p; try { p = req.call(el); } catch (e) { openBigViewInTab(); return; }
+    if (p && p.catch) p.catch(function () { openBigViewInTab(); });
+    setTimeout(function () { if (!fsElement()) openBigViewInTab(); }, 700);   // Safari meldet kein Scheitern
+  };
   function leaveAuto() {
     if (PARAMS.get('nav') === 'tab' && window.opener) { window.close(); }
     else if (history.length > 1) { history.back(); }
