@@ -428,6 +428,266 @@
   body.hl .backedge { background: rgba(232,162,51,0.24); }
   body.hl #backEdgeL { border-right: 2px dashed var(--accent); }
   body.hl #backEdgeR { border-left: 2px dashed var(--accent); }
+
+  /* ================= WhatsApp-Simulation (v8) ================= */
+  .app[data-key="whatsapp"] .icon { background: #25b866 !important; }
+  #overlayWA { background: #fff; overflow: hidden; z-index: 15; }
+  .phone.android #overlayWA { background: #fff; }
+  #overlayWA .wa { position: absolute; inset: 0; display: flex; flex-direction: column; color: #111b21; font-size: 12px; line-height: 1.3; background: #fff; user-select: none; -webkit-user-select: none; }
+  #overlayWA .wa * { box-sizing: border-box; }
+  #overlayWA .wa svg { width: 20px; height: 20px; display: block; flex-shrink: 0; }
+  #overlayWA .wa input[type=text] { font-family: inherit; }
+  .wa-top { display: flex; align-items: center; justify-content: space-between; padding: 4px 10px 4px 14px; min-height: 46px; flex-shrink: 0; background: #fff; }
+  .wa-top.sub { padding-left: 4px; gap: 4px; border-bottom: 1px solid #e9edef; }
+  .wa-title { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; }
+  .wa-and .wa-title { font-size: 20px; color: #008069; }
+  .wa-topicons { display: flex; align-items: center; gap: 2px; }
+  .wa-ic { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #111b21; flex-shrink: 0; }
+  .wa-ic:active { background: rgba(0,0,0,0.08); }
+  .wa-ic.green { background: #00a884; color: #fff; }
+  .wa-ic.green:active { background: #008f6f; }
+  .wa-ic.green svg { width: 18px; height: 18px; }
+  .wa-pageTitle { font-size: 16px; font-weight: 600; flex: 1; padding-left: 4px; }
+  .wa-search { margin: 2px 12px 6px; background: #f0f2f5; border-radius: 20px; padding: 9px 14px; color: #667781; font-size: 12px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .wa-search svg { width: 15px; height: 15px; }
+  .wa-list { flex: 1; overflow-y: auto; overflow-x: hidden; touch-action: pan-y; position: relative; }
+  .wa-rowwrap { position: relative; overflow: hidden; }
+  .wa-swipeact { position: absolute; left: 0; top: 0; bottom: 0; width: 82px; background: #00a884; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 11px; font-weight: 600; cursor: pointer; }
+  .wa-swipeact svg { width: 18px; height: 18px; }
+  .wa-row { position: relative; display: flex; gap: 10px; align-items: center; padding: 9px 14px; background: #fff; cursor: pointer; transition: transform 0.18s ease; touch-action: pan-y; }
+  .wa-row.sel { background: #d9f2ea; }
+  .wa-row.swiped { transform: translateX(82px); }
+  .wa-av { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; font-size: 16px; flex-shrink: 0; position: relative; }
+  .wa-av.sm { width: 32px; height: 32px; font-size: 13px; }
+  .wa-av svg { width: 22px; height: 22px; }
+  .wa-av .selbadge { position: absolute; right: -2px; bottom: -2px; width: 17px; height: 17px; border-radius: 50%; background: #00a884; border: 2px solid #fff; color: #fff; display: flex; align-items: center; justify-content: center; }
+  .wa-av .selbadge svg { width: 10px; height: 10px; }
+  .wa-rbody { flex: 1; min-width: 0; border-bottom: 1px solid #f0f2f5; padding-bottom: 8px; margin-bottom: -8px; }
+  .wa-rname { font-weight: 600; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wa-rprev { color: #667781; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+  .wa-rmeta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; align-self: flex-start; margin-top: 2px; }
+  .wa-rtime { font-size: 10.5px; color: #667781; }
+  .wa-rtime.unread { color: #00a884; font-weight: 600; }
+  .wa-badge { background: #00a884; color: #fff; font-size: 10.5px; font-weight: 600; min-width: 18px; height: 18px; border-radius: 9px; display: flex; align-items: center; justify-content: center; padding: 0 5px; }
+  .wa-pinic { color: #667781; }
+  .wa-pinic svg { width: 14px; height: 14px; }
+  .wa-tabs { display: flex; border-top: 1px solid #e9edef; background: #f7f8fa; padding: 6px 2px 6px; flex-shrink: 0; }
+  .wa-tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 9.5px; color: #667781; cursor: pointer; padding: 2px 0; }
+  .wa-tab.on { color: #00a884; font-weight: 600; }
+  .wa-tab svg { width: 22px; height: 22px; }
+  .wa-and .wa-tabs { background: #fff; border-top: 1px solid #eceff1; padding: 7px 8px 6px; }
+  .wa-and .wa-tab.on .wa-tabpill { background: #d9fdd3; }
+  .wa-tabpill { width: 50px; height: 26px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+  .wa-fab { position: absolute; right: 14px; bottom: 70px; width: 48px; height: 48px; border-radius: 15px; background: #00a884; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 8px rgba(0,0,0,0.25); cursor: pointer; z-index: 3; }
+  .wa-fab svg { width: 22px; height: 22px; }
+  .wa-pad-ios { height: 14px; flex-shrink: 0; background: #f7f8fa; }
+  .wa-pad-alt { height: 50px; flex-shrink: 0; background: #f7f8fa; }
+  .wa-pad-and { height: 10px; flex-shrink: 0; }
+  .wa-menu { position: absolute; right: 8px; top: 42px; background: #fff; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.28); z-index: 20; padding: 6px 0; min-width: 160px; }
+  .wa-menu div { padding: 11px 16px; font-size: 13px; cursor: pointer; }
+  .wa-menu div:active { background: #f0f2f5; }
+  .wa-selbar { display: flex; align-items: center; gap: 4px; padding: 4px 8px; min-height: 46px; background: #fff; flex-shrink: 0; }
+  .wa-selbar .cnt { font-size: 18px; font-weight: 600; flex: 1; padding-left: 4px; }
+
+  /* Chat */
+  .wa-chathead { display: flex; align-items: center; gap: 4px; padding: 5px 6px 5px 2px; background: #fff; border-bottom: 1px solid #e9edef; flex-shrink: 0; min-height: 48px; }
+  .wa-chathead .who { flex: 1; min-width: 0; padding-left: 2px; cursor: pointer; }
+  .wa-chathead .nm { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wa-chathead .st { font-size: 10.5px; color: #667781; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wa-pinbar { display: flex; align-items: center; gap: 8px; padding: 7px 12px; background: #fff; border-bottom: 1px solid #e9edef; font-size: 11.5px; flex-shrink: 0; }
+  .wa-pinbar svg { width: 15px; height: 15px; color: #667781; }
+  .wa-pinbar b { display: block; font-size: 10.5px; color: #667781; font-weight: 600; }
+  .wa-pinbar span.t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+  .wa-unkbar { background: #fff; padding: 9px 12px 10px; border-bottom: 1px solid #e9edef; font-size: 11.5px; flex-shrink: 0; }
+  .wa-unkbar p { margin: 0 0 8px; color: #3b4a54; }
+  .wa-unkbtns { display: flex; gap: 6px; }
+  .wa-unkbtns button { flex: 1; border: 1px solid #d1d7db; background: #fff; color: #111b21; border-radius: 18px; padding: 9px 4px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .wa-unkbtns button.danger { color: #d93025; }
+  .wa-unkbtns button:active { background: #f0f2f5; }
+  .wa-msgs { flex: 1; overflow-y: auto; padding: 8px 10px 6px; background: #efeae2; display: flex; flex-direction: column; gap: 4px; touch-action: pan-y; background-image: radial-gradient(rgba(0,0,0,0.035) 1px, transparent 1px); background-size: 14px 14px; }
+  .wa-day { align-self: center; background: #fff; color: #54656f; font-size: 10.5px; padding: 3px 10px; border-radius: 8px; margin: 4px 0; box-shadow: 0 1px 0 rgba(0,0,0,0.06); }
+  .wa-sys { align-self: center; background: #fdf1c7; color: #54656f; font-size: 10.5px; padding: 4px 10px; border-radius: 8px; text-align: center; max-width: 88%; }
+  .wa-b { max-width: 82%; padding: 5px 8px 4px; border-radius: 9px; background: #fff; box-shadow: 0 1px 0 rgba(0,0,0,0.1); font-size: 13px; position: relative; word-wrap: break-word; cursor: default; }
+  .wa-b.me { align-self: flex-end; background: #d9fdd3; border-top-right-radius: 2px; }
+  .wa-b.them { align-self: flex-start; border-top-left-radius: 2px; }
+  .wa-b .snd { font-size: 11px; font-weight: 600; margin-bottom: 1px; }
+  .wa-b .tm { font-size: 9.5px; color: #667781; text-align: right; margin-top: 1px; display: flex; justify-content: flex-end; align-items: center; gap: 3px; }
+  .wa-b .tm svg { width: 13px; height: 13px; color: #53bdeb; }
+  .wa-b .pinned { color: #667781; display: inline-flex; vertical-align: middle; margin-right: 2px; }
+  .wa-b .pinned svg { width: 11px; height: 11px; }
+  .wa-b.flash { animation: waflash 1s; }
+  @keyframes waflash { 0% { background: #bfe9ff; } 100% { } }
+  .wa-voice { display: flex; align-items: center; gap: 8px; min-width: 170px; padding: 2px 0; }
+  .wa-play { width: 30px; height: 30px; border-radius: 50%; background: #00a884; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; }
+  .wa-play svg { width: 14px; height: 14px; }
+  .wa-wave { flex: 1; display: flex; align-items: center; gap: 2px; height: 26px; position: relative; }
+  .wa-wave i { display: block; width: 2.5px; background: #a5b4bb; border-radius: 2px; }
+  .wa-vdur { font-size: 10.5px; color: #667781; margin-top: -2px; }
+  .wa-photo { width: 190px; height: 142px; border-radius: 7px; overflow: hidden; margin-bottom: 2px; display: block; }
+  #overlayWA .wa .wa-photo svg { width: 100%; height: 100%; }
+  .wa-cap { padding: 2px 2px 0; }
+  .wa-map { width: 200px; height: 112px; border-radius: 7px; overflow: hidden; margin-bottom: 3px; }
+  #overlayWA .wa .wa-map svg { width: 100%; height: 100%; }
+  .wa-ltxt { padding: 1px 2px; font-size: 12.5px; }
+  .wa-ltxt small { display: block; color: #667781; font-size: 10.5px; }
+  .wa-linkbtn { border-top: 1px solid rgba(0,0,0,0.1); margin: 5px -8px 0; padding: 8px 8px 5px; text-align: center; color: #d93025; font-weight: 600; font-size: 12.5px; cursor: pointer; }
+  .wa-linkbtn.g { color: #008069; }
+  .wa-linkbtn:active { background: rgba(0,0,0,0.05); }
+  .wa-card { min-width: 190px; }
+  .wa-card .top { display: flex; gap: 9px; align-items: center; padding: 2px 0 4px; }
+  .wa-card .top b { display: block; font-size: 13px; }
+  .wa-card .top small { color: #667781; font-size: 10.5px; }
+  .wa-poll { min-width: 205px; }
+  .wa-poll .pq { font-weight: 600; font-size: 13.5px; margin-bottom: 1px; }
+  .wa-poll .ph { font-size: 10.5px; color: #667781; margin-bottom: 6px; }
+  .wa-opt { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; cursor: pointer; position: relative; }
+  .wa-opt .rd { width: 17px; height: 17px; border-radius: 50%; border: 1.7px solid #8696a0; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; color: #fff; }
+  .wa-opt.on .rd { background: #00a884; border-color: #00a884; }
+  .wa-opt .rd svg { width: 11px; height: 11px; }
+  .wa-opt .ol { flex: 1; min-width: 0; }
+  .wa-opt .ot { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; }
+  .wa-opt .bar { height: 4px; border-radius: 2px; background: #e1e6ea; margin-top: 3px; overflow: hidden; }
+  .wa-opt .bar i { display: block; height: 100%; background: #00a884; width: 0; }
+  .wa-ev { min-width: 205px; }
+  .wa-ev .evh { font-size: 10.5px; color: #667781; display: flex; align-items: center; gap: 4px; margin-bottom: 2px; }
+  .wa-ev .evh svg { width: 13px; height: 13px; }
+  .wa-ev .evn { font-weight: 700; font-size: 14px; }
+  .wa-ev .evd { font-size: 12px; color: #3b4a54; margin: 3px 0 1px; }
+  .wa-ev .evr { display: flex; gap: 4px; margin-top: 7px; }
+  .wa-ev .evr div { flex: 1; text-align: center; border: 1px solid #c5ccd0; border-radius: 16px; padding: 7px 2px; font-size: 11.5px; font-weight: 600; color: #008069; cursor: pointer; background: #fff; }
+  .wa-ev .evr div.on { background: #00a884; border-color: #00a884; color: #fff; }
+  .wa-ev .evs { font-size: 10.5px; color: #667781; margin-top: 5px; }
+  .wa-compose { display: flex; align-items: flex-end; gap: 5px; padding: 6px 7px 6px; background: #f7f8fa; flex-shrink: 0; position: relative; }
+  .wa-and .wa-compose { background: #efeae2; padding-bottom: 8px; }
+  .wa-field { flex: 1; display: flex; align-items: center; background: #fff; border-radius: 20px; padding: 0 6px; min-height: 38px; border: 1px solid #e0e4e7; gap: 2px; }
+  .wa-and .wa-field { border: none; }
+  .wa-field input { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-size: 13px; padding: 8px 4px; color: #111b21; }
+  .wa-field .wa-ic { width: 30px; height: 30px; color: #54656f; }
+  .wa-field .wa-ic svg { width: 19px; height: 19px; }
+  .wa-compose > .wa-ic { color: #54656f; width: 34px; height: 38px; border-radius: 10px; }
+  .wa-compose > .wa-ic.plus svg { width: 24px; height: 24px; }
+  .wa-mic { width: 40px; height: 40px; border-radius: 50%; background: #00a884; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; touch-action: none; }
+  .wa-ios .wa-mic { background: transparent; color: #54656f; width: 34px; }
+  .wa-ios .wa-mic.send { background: #00a884; color: #fff; width: 36px; height: 36px; }
+  .wa-mic svg { width: 21px; height: 21px; }
+  .wa-mic.hold { background: #d93025 !important; color: #fff !important; transform: scale(1.25); }
+  .wa-recbar { flex: 1; display: none; align-items: center; gap: 8px; background: #fff; border-radius: 20px; min-height: 38px; padding: 0 12px; color: #54656f; font-size: 12px; }
+  .wa-recbar .dot { width: 9px; height: 9px; border-radius: 50%; background: #d93025; animation: recBlink 1s infinite; }
+  .wa-recbar .rt { font-size: 14px; font-variant-numeric: tabular-nums; color: #111b21; }
+  .wa-recbar .sw { margin-left: auto; font-size: 11px; }
+  .wa-compose.rec .wa-field, .wa-compose.rec > .wa-ic { display: none; }
+  .wa-compose.rec .wa-recbar { display: flex; }
+  .wa-attach-ios { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.3); z-index: 18; padding: 8px 0 10px; }
+  .wa-attach-ios .row { display: flex; align-items: center; gap: 14px; padding: 11px 18px; font-size: 14px; cursor: pointer; }
+  .wa-attach-ios .row:active { background: #f0f2f5; }
+  .wa-attach-ios .row .ci { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
+  .wa-attach-ios .grab { width: 36px; height: 4px; border-radius: 2px; background: #d1d7db; margin: 0 auto 4px; }
+  .wa-attach-and { position: absolute; left: 10px; right: 10px; bottom: 58px; background: #fff; border-radius: 18px; box-shadow: 0 4px 22px rgba(0,0,0,0.3); z-index: 18; padding: 14px 10px 8px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 0; }
+  .wa-attach-and .it { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11.5px; cursor: pointer; }
+  .wa-attach-and .ci { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; }
+  .wa-attach-and .ci svg { width: 22px; height: 22px; }
+  .wa-scrim { position: absolute; inset: 0; background: rgba(0,0,0,0.35); z-index: 17; }
+
+  /* Foto-Auswahl */
+  .wa-grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; align-content: start; background: #fff; }
+  .wa-thumb { position: relative; aspect-ratio: 1 / 1; cursor: pointer; overflow: hidden; }
+  #overlayWA .wa .wa-thumb svg { width: 100%; height: 100%; display: block; }
+  .wa-thumb:active { opacity: 0.8; }
+  .wa-prevwrap { flex: 1; background: #0b141a; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  #overlayWA .wa .wa-prevwrap svg { width: 100%; height: auto; max-height: 100%; }
+  .wa-prevbar { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: #0b141a; flex-shrink: 0; }
+  .wa-prevbar .cap { flex: 1; background: #1f2c34; border-radius: 20px; padding: 0 14px; display: flex; }
+  .wa-prevbar .cap input { flex: 1; border: none; background: transparent; color: #e9edef; outline: none; font-size: 13px; padding: 10px 0; min-width: 0; }
+  .wa-prevbar .cap input::placeholder { color: #8696a0; }
+  .wa-send { width: 42px; height: 42px; border-radius: 50%; background: #00a884; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
+  .wa-send svg { width: 20px; height: 20px; }
+  .wa-send:active { background: #008f6f; }
+  .wa-dark .wa-top { background: #0b141a; color: #fff; }
+
+  /* Standort */
+  .wa-mapbig { height: 190px; flex-shrink: 0; position: relative; background: #e8e4d8; }
+  #overlayWA .wa .wa-mapbig svg { width: 100%; height: 100%; display: block; }
+  .wa-opts { flex: 1; overflow-y: auto; background: #fff; }
+  .wa-orow { display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; border-bottom: 1px solid #f0f2f5; }
+  .wa-orow:active { background: #f0f2f5; }
+  .wa-orow .ci { width: 38px; height: 38px; border-radius: 50%; background: #00a884; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .wa-orow .ci.b { background: #e9edef; color: #54656f; }
+  .wa-orow b { display: block; font-size: 13.5px; font-weight: 600; }
+  .wa-orow small { color: #667781; font-size: 11px; }
+  .wa-orow.dead { opacity: 0.55; }
+  .wa-sectitle { padding: 10px 14px 4px; font-size: 11px; color: #667781; font-weight: 600; background: #fff; }
+  .wa-sheetbox { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; border-radius: 18px 18px 0 0; z-index: 19; padding: 14px 16px 16px; box-shadow: 0 -4px 20px rgba(0,0,0,0.3); }
+  .wa-sheetbox h4 { margin: 0 0 10px; font-size: 14.5px; font-weight: 600; }
+  .wa-radio { display: flex; align-items: center; gap: 12px; padding: 11px 2px; font-size: 14px; cursor: pointer; }
+  .wa-radio .rr { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #8696a0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .wa-radio.on .rr { border-color: #00a884; }
+  .wa-radio.on .rr::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #00a884; }
+  .wa-sheetfoot { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 8px; }
+  .wa-btn { border: none; background: #00a884; color: #fff; border-radius: 22px; padding: 10px 20px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .wa-btn.ghost { background: transparent; color: #008069; }
+  .wa-btn.red { background: #d93025; }
+  .wa-btn:active { filter: brightness(0.9); }
+  .wa-btn[disabled] { opacity: 0.4; }
+  .wa-center { position: absolute; inset: 0; background: rgba(0,0,0,0.45); z-index: 25; display: flex; align-items: center; justify-content: center; padding: 22px; }
+  .wa-dlg { background: #fff; border-radius: 16px; padding: 18px 16px 12px; width: 100%; box-shadow: 0 8px 28px rgba(0,0,0,0.35); }
+  .wa-dlg h4 { margin: 0 0 6px; font-size: 15px; font-weight: 600; }
+  .wa-dlg p { margin: 0 0 10px; color: #3b4a54; font-size: 12.5px; line-height: 1.4; }
+  .wa-dlg .chk { display: flex; align-items: center; gap: 9px; font-size: 12.5px; margin: 4px 0 10px; cursor: pointer; }
+  .wa-dlg .chk .bx { width: 18px; height: 18px; border: 2px solid #8696a0; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+  .wa-dlg .chk.on .bx { background: #00a884; border-color: #00a884; }
+  .wa-dlg .chk .bx svg { width: 12px; height: 12px; }
+  .wa-dlg .stack { display: flex; flex-direction: column; margin: 4px -6px 0; }
+  .wa-dlg .stack div { padding: 12px 8px; text-align: center; font-size: 14px; font-weight: 600; color: #008069; border-top: 1px solid #eef0f2; cursor: pointer; }
+  .wa-dlg .stack div.red { color: #d93025; }
+  .wa-dlg .stack div:active { background: #f0f2f5; }
+  .wa-msgmenu { background: #fff; border-radius: 14px; width: 100%; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.4); }
+  .wa-react { display: flex; justify-content: space-around; padding: 10px 6px; font-size: 22px; border-bottom: 1px solid #eef0f2; }
+  .wa-react span { cursor: pointer; }
+  .wa-msgmenu .mi { display: flex; align-items: center; gap: 12px; padding: 12px 16px; font-size: 14px; cursor: pointer; }
+  .wa-msgmenu .mi:active { background: #f0f2f5; }
+  .wa-msgmenu .mi svg { width: 18px; height: 18px; color: #54656f; }
+  .wa-msgmenu .mi.dead { opacity: 0.5; }
+  .wa-msgprev { padding: 8px 14px; font-size: 12px; color: #54656f; background: #f7f8fa; border-bottom: 1px solid #eef0f2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Formulare */
+  .wa-form { flex: 1; overflow-y: auto; padding: 8px 14px 14px; background: #fff; position: relative; }
+  .wa-lab { font-size: 11px; color: #667781; font-weight: 600; margin: 12px 0 4px; }
+  .wa-in { width: 100%; border: none; border-bottom: 2px solid #d1d7db; padding: 9px 2px; font-size: 14px; outline: none; background: transparent; color: #111b21; font-family: inherit; border-radius: 0; }
+  .wa-in:focus { border-bottom-color: #00a884; }
+  .wa-sel { width: 100%; border: 1px solid #d1d7db; background: #fff; padding: 10px 8px; font-size: 13.5px; border-radius: 8px; color: #111b21; font-family: inherit; }
+  .wa-trow { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; font-size: 13px; }
+  .wa-formfab { position: absolute; right: 14px; bottom: 14px; }
+  .wa-hint { font-size: 11px; color: #667781; margin-top: 6px; }
+  .wa-contacts { flex: 1; overflow-y: auto; background: #fff; }
+  .wa-crow { display: flex; align-items: center; gap: 12px; padding: 8px 14px; cursor: pointer; }
+  .wa-crow:active { background: #f0f2f5; }
+  .wa-crow .cn { flex: 1; border-bottom: 1px solid #f0f2f5; padding: 6px 0 9px; margin-bottom: -9px; }
+  .wa-crow .cn b { display: block; font-size: 13.5px; font-weight: 600; }
+  .wa-crow .cn small { color: #667781; font-size: 11px; }
+  .wa-crow .ck { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #c5ccd0; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+  .wa-crow.on .ck { background: #00a884; border-color: #00a884; }
+  .wa-crow .ck svg { width: 13px; height: 13px; }
+  .wa-chips { display: flex; gap: 6px; padding: 6px 12px; flex-wrap: wrap; background: #fff; border-bottom: 1px solid #f0f2f5; min-height: 4px; }
+  .wa-chip { background: #e7f6ee; color: #075e54; border-radius: 14px; padding: 4px 10px; font-size: 11.5px; font-weight: 600; }
+  .wa-donefoot { position: absolute; right: 16px; bottom: 16px; z-index: 5; }
+  .wa-set { flex: 1; overflow-y: auto; background: #fff; }
+  .wa-prof { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 8px solid #f0f2f5; }
+  .wa-prof b { display: block; font-size: 15px; }
+  .wa-prof small { color: #667781; font-size: 11.5px; }
+  .wa-srow { display: flex; align-items: center; gap: 14px; padding: 13px 16px; cursor: pointer; font-size: 14px; }
+  .wa-srow:active { background: #f0f2f5; }
+  .wa-srow .si { color: #667781; width: 22px; display: flex; justify-content: center; }
+  .wa-srow .val { margin-left: auto; color: #667781; font-size: 12px; text-align: right; }
+  .wa-srow .sb { flex: 1; min-width: 0; }
+  .wa-srow .sb small { display: block; color: #667781; font-size: 11.5px; }
+  .wa-srow.dead { opacity: 0.6; }
+  .wa-secthead { padding: 14px 16px 4px; font-size: 12px; color: #008069; font-weight: 600; }
+  .wa-optrow { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #f3f4f5; }
+  .wa-optrow:active { background: #f0f2f5; }
+  .wa-optrow svg { color: #00a884; width: 22px; height: 22px; }
+  .wa-optrow.dead { opacity: 0.55; }
+  .wa-note { padding: 10px 16px; font-size: 11.5px; color: #667781; }
+
 </style>
 </head>
 <body>
@@ -479,7 +739,7 @@
       <option value="akku">Fehlerbehebung: Akku wird schnell leer</option>
       <option value="internet">Fehlerbehebung: Kein Internet</option>
       <option value="apps_organisieren">Startbildschirm: Apps verschieben &amp; Ordner</option>
-    </select>
+    <option value="wa_sprache">WhatsApp: Sprachnachricht senden</option><option value="wa_foto">WhatsApp: Foto senden</option><option value="wa_standort">WhatsApp: Standort senden</option><option value="wa_live">WhatsApp: Live-Standort teilen</option><option value="wa_kontakt">WhatsApp: Kontakt senden</option><option value="wa_kontakt_speichern">WhatsApp: Kontakt speichern</option><option value="wa_gruppe">WhatsApp: Gruppe anlegen</option><option value="wa_umfrage">WhatsApp: Umfrage erstellen</option><option value="wa_ereignis">WhatsApp: Ereignis erstellen</option><option value="wa_chat_pin">WhatsApp: Chat anpinnen</option><option value="wa_msg_pin">WhatsApp: Nachricht anpinnen</option><option value="wa_privat">WhatsApp: Datenschutz einstellen</option><option value="wa_betrug">WhatsApp: Betrugsnachricht blockieren</option></select>
 
     <button id="startBtn">Aufgabe starten</button>
     <button id="newTabBtn">In neuem Tab öffnen (echtes Vollbild)</button>
@@ -890,6 +1150,8 @@
             </div>
           </div>
 
+          <div class="overlay" id="overlayWA"></div>
+
           <div class="overlay" id="overlayMessages">
             <div class="overlay-header"><button id="backMessages" style="display:none;">‹</button> Nachrichten</div>
             <div class="overlay-body">
@@ -948,6 +1210,7 @@
     gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.6V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.6 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.6 1z"/></svg>',
     faceid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h-.5A1.5 1.5 0 004 5.5V7M18 4h.5A1.5 1.5 0 0120 5.5V7M6 20h-.5A1.5 1.5 0 014 18.5V17M18 20h.5a1.5 1.5 0 001.5-1.5V17M9 10v1.5M15 10v1.5M8.5 15.5c1 1 2 1.3 3.5 1.3s2.5-.3 3.5-1.3"/></svg>',
     fingerprint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 3a7 7 0 00-7 7c0 2.5.5 4 1.5 6M12 3a7 7 0 017 7c0 1-.1 2-.3 3M8.5 20a11 11 0 002-4.5M12 6.5A3.5 3.5 0 008.5 10c0 2.5-.5 4.5-1.8 6.8M12 6.5A3.5 3.5 0 0115.5 10c0 1 0 2-.2 3M11 20c1.6-1.8 2.5-3.6 2.8-5.5M15 17.5c.6-1 1-2.2 1.2-3.5"/></svg>',
+    whatsapp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-4.2A8 8 0 1 1 8.4 18.8z"/><path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 .7c-.8-.4-1.6-1.2-2-2l.7-1-1-2z" fill="currentColor" stroke="none"/></svg>',
     moon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/></svg>',
     dnd: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M8 12h8"/></svg>'
   };
@@ -1048,7 +1311,7 @@
   function retextAll(on) {
     var root = document.getElementById('screen');
     if (!root) return;
-    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function (nd) { return (nd.parentNode && nd.parentNode.closest && nd.parentNode.closest('#overlayWA')) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT; } });
     var n;
     while ((n = w.nextNode())) {
       if (n.__o === undefined) n.__o = n.nodeValue;
@@ -1086,7 +1349,8 @@
     { key: 'browser', label: 'Safari', icon: 'globe', interactive: true },
     { key: 'mail', label: 'Mail', icon: 'mail', interactive: false },
     { key: 'calendar', label: 'Kalender', icon: 'calendar', interactive: false },
-    { key: 'settings', label: 'Einstellungen', icon: 'gear', interactive: true }
+    { key: 'settings', label: 'Einstellungen', icon: 'gear', interactive: true },
+    { key: 'whatsapp', label: 'WhatsApp', icon: 'whatsapp', interactive: true }
   ];
 
   var LONGPRESS_MS = 550;
@@ -1128,6 +1392,7 @@
     var wrap = document.getElementById('homeApps');
     wrap.innerHTML = '';
     var order = currentPageOrder().filter(function (id) {
+      if (id === 'whatsapp' && String(state.task).indexOf('wa_') !== 0) return false;
       return id.indexOf('folder:') === 0 || state.removedApps.indexOf(id) === -1;
     });
     order.forEach(function (id) {
@@ -1814,12 +2079,13 @@
   var APP_META = {
     settings: { label: 'Einstellungen', icon: 'gear', root: 'overlaySettings', color: '#8e8e93' },
     messages: { label: 'Nachrichten', icon: 'message', root: 'overlayMessages', color: '#1d9e75' },
+    whatsapp: { label: 'WhatsApp', icon: 'whatsapp', root: 'overlayWA', color: '#25b866' },
     camera: { label: 'Kamera', icon: 'camera', root: 'overlayCamera', color: '#333' },
     browser: { label: 'Safari', icon: 'globe', root: 'overlayBrowser', color: '#0a84ff' }
   };
-  var SCREEN_TITLES = { overlayConnections: 'Verbindungen', overlaySettings: 'Einstellungen', overlayWifiList: 'WLAN', overlayBtList: 'Bluetooth', overlayDisplay: 'Anzeige & Helligkeit', overlayMessages: 'Nachrichten', overlayCamera: 'Kamera', overlayBrowser: 'Safari',
+  var SCREEN_TITLES = { overlayConnections: 'Verbindungen', overlaySettings: 'Einstellungen', overlayWifiList: 'WLAN', overlayBtList: 'Bluetooth', overlayDisplay: 'Anzeige & Helligkeit', overlayMessages: 'Nachrichten', overlayWA: 'WhatsApp', overlayCamera: 'Kamera', overlayBrowser: 'Safari',
     overlayCode: 'Face ID & Code', overlayKeypad: 'Code', overlayAutolock: 'Automatische Sperre', overlayPrivacy: 'Datenschutz & Sicherheit', overlayTracking: 'Tracking', overlayLocation: 'Ortungsdienste', overlayLocApp: 'Standort', overlayWifiPin: 'Netzwerkschlüssel', overlayCellular: 'Mobilfunk', overlaySimPin: 'SIM-PIN', overlayGeneral: 'Allgemein', overlayStorage: 'iPhone-Speicher', overlayStorageApp: 'App', overlayBattery: 'Batterie' };
-  var OVERLAY_IDS = ['overlayConnections', 'overlaySettings', 'overlayMessages', 'overlayCamera', 'overlayWifiList', 'overlayBtList', 'overlayDisplay',
+  var OVERLAY_IDS = ['overlayWA', 'overlayConnections', 'overlaySettings', 'overlayMessages', 'overlayCamera', 'overlayWifiList', 'overlayBtList', 'overlayDisplay',
     'overlayCode', 'overlayKeypad', 'overlayAutolock', 'overlayPrivacy', 'overlayTracking', 'overlayLocation', 'overlayLocApp', 'overlayWifiPin', 'overlayBrowser', 'overlayCellular', 'overlaySimPin', 'overlayGeneral', 'overlayStorage', 'overlayStorageApp', 'overlayBattery'];
 
   function showAppScreen(appKey, overlayId) {
@@ -1833,6 +2099,7 @@
     }
     if (appKey === 'browser' && state.task === 'passwort' && state.step === 1 && !isTaskDone()) { state.step = 2; updateHint(); }
     state.appScreens[appKey] = overlayId;
+    if (appKey === 'whatsapp') { state.screen = overlayId; WA.open(); }
     var i = state.recents.indexOf(appKey);
     if (i > -1) state.recents.splice(i, 1);
     state.recents.unshift(appKey);
@@ -2227,6 +2494,7 @@
   }
 
   function isTaskDone() {
+    if (String(state.task).indexOf('wa_') === 0) return WA.done();
     if (state.task === 'flugmodus') return state.flight;
     if (state.task === 'wlan') return state.wifiConnectedNetwork === 'Zuhause';
     if (state.task === 'bluetooth') return state.btConnectedDevice === 'Kopfhörer XY';
@@ -2273,6 +2541,7 @@
   function resetSandbox() {
     applyPlatformData();
     state.locPermsOpen = false;
+    WA.reset();
     state.flight = false; state.step = 1; state.screen = 'home';
     setRadioWifi(true, true); setRadioBt(false, true);
     state.wifiConnectedNetwork = null; state.btConnectedDevice = null;
@@ -2410,6 +2679,7 @@
   }
 
   function getStepsForTask() {
+    if (String(state.task).indexOf('wa_') === 0) return WA.steps();
     if (isAndroid()) return getStepsAndroid();
     var gesture = state.platform === 'ios-alt'
       ? 'Wischen Sie vom unteren Bildschirmrand nach oben.'
@@ -3095,6 +3365,777 @@
     else if (window.opener) { window.close(); }
     setTimeout(function () { document.getElementById('closedNote').classList.add('show'); }, 250);
   }
+
+  // ================= WhatsApp-Simulation (v8) =================
+  var WA_TASKS = {
+    wa_sprache: { label: 'WhatsApp: Sprachnachricht senden', taskbar: 'Anna fragt, ob Sie heute vorbeikommen. Antworten Sie ihr mit einer Sprachnachricht.' },
+    wa_foto: { label: 'WhatsApp: Foto senden', taskbar: 'Anna möchte ein Foto von Ihrem Garten sehen. Schicken Sie ihr ein Foto aus der Galerie.' },
+    wa_standort: { label: 'WhatsApp: Standort senden', taskbar: 'Anna fragt, wo Sie gerade sind. Schicken Sie ihr Ihren aktuellen Standort.' },
+    wa_live: { label: 'WhatsApp: Live-Standort teilen', taskbar: 'Thomas holt Sie ab. Teilen Sie Ihren Live-Standort für 1 Stunde mit ihm und beenden Sie die Freigabe danach wieder.' },
+    wa_kontakt: { label: 'WhatsApp: Kontakt senden', taskbar: 'Anna braucht die Nummer von Dr. Meier. Schicken Sie ihr den Kontakt „Dr. Meier“.' },
+    wa_kontakt_speichern: { label: 'WhatsApp: Kontakt speichern', taskbar: 'Anna hat Ihnen die Nummer des Klempners geschickt. Speichern Sie ihn als neuen Kontakt.' },
+    wa_gruppe: { label: 'WhatsApp: Gruppe anlegen', taskbar: 'Legen Sie eine neue Gruppe für Ihre Familie an: mit Anna und Thomas und dem Namen „Familie“.' },
+    wa_umfrage: { label: 'WhatsApp: Umfrage erstellen', taskbar: 'Fragen Sie die Gruppe „Familie“ mit einer Umfrage, wann Sie sich treffen, und stimmen Sie selbst ab.' },
+    wa_ereignis: { label: 'WhatsApp: Ereignis erstellen', taskbar: 'Laden Sie die Gruppe „Familie“ mit einem Ereignis zum Kaffeetrinken ein und sagen Sie selbst zu.' },
+    wa_chat_pin: { label: 'WhatsApp: Chat anpinnen', taskbar: 'Die Gruppe „Familie“ soll in Ihrer Chatliste ganz oben stehen. Pinnen Sie den Chat an.' },
+    wa_msg_pin: { label: 'WhatsApp: Nachricht anpinnen', taskbar: 'In der Gruppe „Familie“ steht eine wichtige Nachricht. Pinnen Sie sie an, damit Sie sie schnell wiederfinden.' },
+    wa_privat: { label: 'WhatsApp: Datenschutz einstellen', taskbar: 'Nur Ihre Kontakte sollen Ihr Profilbild und Ihr „Zuletzt online“ sehen. Stellen Sie das in den Einstellungen ein.' },
+    wa_betrug: { label: 'WhatsApp: Betrugsnachricht blockieren', taskbar: 'Eine unbekannte Nummer schreibt Ihnen und bittet um Geld. Blockieren Sie die Nummer.' }
+  };
+  Object.keys(WA_TASKS).forEach(function (k) { TASKS[k] = WA_TASKS[k]; });
+
+  var WA = (function () {
+    var root = document.getElementById('overlayWA');
+    var NOW = '14:32';
+    var S = null, uid = 1, recTimer = null, recStart = 0;
+    var CONTACTS = {
+      anna: { name: 'Anna', sub: 'Tochter', color: '#e17076', tel: '+49 171 5550101' },
+      thomas: { name: 'Thomas', sub: 'Sohn', color: '#5b9bd5', tel: '+49 171 5550102' },
+      monika: { name: 'Monika', sub: 'Nachbarin', color: '#e0a030', tel: '+49 171 5550103' },
+      meier: { name: 'Dr. Meier', sub: 'Hausarzt', color: '#5aad5a', tel: '+49 30 5550142' },
+      klaus: { name: 'Klaus Berger', sub: 'Klempner', color: '#8e7cc3', tel: '+49 171 5550177' }
+    };
+    var P = function (d, extra) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"' + (extra || '') + '>' + d + '</svg>'; };
+    var F = function (d) { return '<svg viewBox="0 0 24 24" fill="currentColor">' + d + '</svg>'; };
+    var I = {
+      back: P('<path d="M15 5l-7 7 7 7"/>'), backA: P('<path d="M19 12H5M11 6l-6 6 6 6"/>'),
+      video: P('<rect x="3" y="7" width="12" height="10" rx="2"/><path d="M15 11l6-3v8l-6-3"/>'),
+      phone: P('<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/>'),
+      plus: P('<path d="M12 5v14M5 12h14"/>'), cam: P('<path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13.5" r="3.2"/>'),
+      mic: P('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21"/>'),
+      send: F('<path d="M3 20.5l18-8.5L3 3.5v6.6l11 1.9-11 1.9z"/>'),
+      clip: P('<path d="M20 11.5l-8 8a5 5 0 01-7-7l9-9a3.4 3.4 0 015 5l-9 9a2 2 0 01-3-3l8-8"/>'),
+      check: P('<path d="M5 12.5l4.5 4.5L19 7.5"/>', ' stroke-width="2.6"'), dcheck: P('<path d="M2 13l4 4 8-9M10 16l1.5 1.5L21 8"/>', ' stroke-width="2.4"'),
+      pin: P('<path d="M9 4h6l-1 5 3 3v2H7v-2l3-3z"/><path d="M12 14v7"/>'), unpin: P('<path d="M9 4h6l-1 5 3 3v2H7v-2l3-3z"/><path d="M12 14v7M4 4l16 16"/>'),
+      play: F('<path d="M8 5v14l11-7z"/>'),
+      mapin: P('<path d="M12 21s-7-6-7-11a7 7 0 0114 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>'),
+      live: P('<path d="M12 21s-6-5.2-6-9.5a6 6 0 0112 0c0 4.3-6 9.5-6 9.5z"/><circle cx="12" cy="11" r="2"/><path d="M3 5a12 12 0 000 12M21 5a12 12 0 010 12" opacity=".7"/>'),
+      person: P('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>'),
+      people: P('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"/><circle cx="17" cy="9" r="2.8"/><path d="M17 14.5c3 0 4.5 1.8 4.5 4.5"/>'),
+      doc: P('<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/>'), image: P('<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 16l5-5 4 4 3-3 4 4"/>'),
+      poll: P('<path d="M6 20V10M12 20V4M18 20v-7"/>'), event: P('<rect x="4" y="6" width="16" height="14" rx="2"/><path d="M4 10.5h16M8 3.5v4M16 3.5v4"/>'),
+      smile: P('<circle cx="12" cy="12" r="8.5"/><path d="M8.5 14s1.4 2 3.5 2 3.5-2 3.5-2M9 10h.01M15 10h.01"/>'),
+      search: P('<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>'), dots: F('<circle cx="12" cy="5" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="12" cy="19" r="1.9"/>'),
+      newchat: F('<path d="M4 4h16a1 1 0 011 1v11a1 1 0 01-1 1H9l-5 4V5a1 1 0 011-1zm7 3v2.5H8.5v2H11V14h2v-2.5h2.5v-2H13V7z" fill-rule="evenodd"/>'),
+      gear: P('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3h0a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9v0a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/>'),
+      chats: P('<path d="M4 5h16v11H9l-5 4z"/>'), updates: P('<circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8.5" stroke-dasharray="4 3"/>'),
+      comm: P('<circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 19c0-3 3-5 6-5s6 2 6 5M16 15c3 0 5 1.5 5 4"/>'),
+      calls: P('<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/>'),
+      x: P('<path d="M6 6l12 12M18 6L6 18"/>'), trash: P('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'), mute: P('<path d="M4 9v6h4l5 4V5L8 9zM17 9l4 6M21 9l-4 6"/>'),
+      reply: P('<path d="M10 7L4 12l6 5v-3c5 0 8 1 10 5-1-5-4-10-10-10z"/>'), fwd: P('<path d="M14 7l6 5-6 5v-3c-5 0-8 1-10 5 1-5 4-10 10-10z"/>'),
+      copy: P('<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3"/>'),
+      lock: P('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/>'), key: P('<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/>'),
+      bell: P('<path d="M6 17V11a6 6 0 0112 0v6l2 2H4zM10 21h4"/>'), data: P('<path d="M4 7c0-2 16-2 16 0v10c0 2-16 2-16 0zM4 12c0 2 16 2 16 0"/>'), help: P('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-1 .7-1.5 1.2-1.5 2.5M12 17h.01"/>'),
+      aud: P('<path d="M4 14v-2a8 8 0 0116 0v2M4 14h3v5H5a1 1 0 01-1-1zM20 14h-3v5h2a1 1 0 001-1z"/>'),
+      wasub: ''
+    };
+    function ic(n) { return I[n] || ''; }
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function vs() { return (typeof viewScale === 'number' && viewScale > 0) ? viewScale : 1; }
+    function taskOf() { return state.task || ''; }
+    function isWaTask() { return taskOf().indexOf('wa_') === 0; }
+    function nameOf(id) { return id === 'me' ? 'Sie' : (CONTACTS[id] ? CONTACTS[id].name : id); }
+    function colorOf(id) { return CONTACTS[id] ? CONTACTS[id].color : '#8696a0'; }
+
+    // ---------- Bilder ----------
+    function scene(i) {
+      var o = '';
+      switch (i % 6) {
+        case 0: o = '<rect width="160" height="120" fill="#bfe3f0"/><circle cx="130" cy="26" r="13" fill="#ffd45a"/><path d="M0 80q40-24 80-8t80-10v58H0z" fill="#86c46f"/><path d="M0 96q50-18 100-4t60-6v34H0z" fill="#5fa352"/><g><circle cx="30" cy="100" r="4" fill="#e8434f"/><circle cx="52" cy="108" r="4" fill="#ffd45a"/><circle cx="76" cy="98" r="4" fill="#f58fb5"/><circle cx="104" cy="106" r="4" fill="#e8434f"/><circle cx="128" cy="98" r="4" fill="#ffd45a"/></g>'; break;
+        case 1: o = '<rect width="160" height="120" fill="#f3e6cf"/><rect y="86" width="160" height="34" fill="#c98b52"/><ellipse cx="80" cy="96" rx="50" ry="9" fill="#e9dcc2"/><rect x="48" y="64" width="64" height="30" rx="6" fill="#f7a8c4"/><rect x="48" y="64" width="64" height="12" rx="6" fill="#fff4f8"/><rect x="77" y="46" width="6" height="18" fill="#ffd45a"/><ellipse cx="80" cy="43" rx="4" ry="6" fill="#ff8a3d"/>'; break;
+        case 2: o = '<rect width="160" height="120" fill="#cfe9f4"/><path d="M0 70l30-30 24 22 32-36 40 44 34-24v54H0z" fill="#8fa6b5"/><rect y="74" width="160" height="46" fill="#5da7cf"/><path d="M52 98h40l-8 10H60z" fill="#a9442f"/><path d="M72 98V78l14 16z" fill="#fff"/>'; break;
+        case 3: o = '<rect width="160" height="120" fill="#a9d5ee"/><path d="M-5 100L40 36l30 40 28-52 60 76z" fill="#5d7a8c"/><path d="M40 36l-10 14 10-5 8 8zM98 24l-12 20 12-6 10 8z" fill="#fff"/><rect y="98" width="160" height="22" fill="#6aa563"/>'; break;
+        case 4: o = '<defs><linearGradient id="sg' + i + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a5a"/><stop offset="1" stop-color="#ffd8a0"/></linearGradient></defs><rect width="160" height="120" fill="url(#sg' + i + ')"/><circle cx="80" cy="78" r="26" fill="#fff2c8"/><path d="M0 84q30-14 60-4t100-8v48H0z" fill="#5b3a4e"/>'; break;
+        default: o = '<rect width="160" height="120" fill="#d7ece6"/><rect x="62" y="64" width="36" height="44" rx="10" fill="#4aa0b8"/><g><circle cx="60" cy="48" r="11" fill="#f58fb5"/><circle cx="82" cy="38" r="12" fill="#ffd45a"/><circle cx="104" cy="50" r="11" fill="#e8434f"/></g><path d="M80 64V48M70 64l-8-14M92 64l10-12" stroke="#4f9c5a" stroke-width="3"/>';
+      }
+      return '<svg viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice">' + o + '</svg>';
+    }
+    function mapSvg(withDot) {
+      return '<svg viewBox="0 0 200 112" preserveAspectRatio="xMidYMid slice"><rect width="200" height="112" fill="#ebe7da"/><rect x="122" y="6" width="68" height="44" rx="6" fill="#c9e3b4"/><path d="M-6 84C40 62 70 104 120 80s70-10 90 6" stroke="#a9d3e8" stroke-width="15" fill="none"/><path d="M0 36h200M64 0v112M146 0v112M0 104h200" stroke="#fff" stroke-width="5"/><path d="M0 62L200 22" stroke="#fff" stroke-width="3.5"/><g fill="#dcd5c3"><rect x="72" y="6" width="28" height="22" rx="2"/><rect x="8" y="44" width="46" height="26" rx="2"/><rect x="154" y="56" width="34" height="22" rx="2"/><rect x="72" y="44" width="26" height="18" rx="2"/></g>' +
+        (withDot ? '<circle cx="104" cy="52" r="18" fill="#2f7cf622"/><circle cx="104" cy="52" r="7" fill="#fff"/><circle cx="104" cy="52" r="5" fill="#2f7cf6"/>' : '<path d="M104 62s-9-8-9-15a9 9 0 0118 0c0 7-9 15-9 15z" fill="#d93025"/><circle cx="104" cy="47" r="3.4" fill="#fff"/>') + '</svg>';
+    }
+
+    // ---------- Daten ----------
+    function add(c, m) { m.id = 'm' + (uid++); m.time = m.time || NOW; c.msgs.push(m); return m; }
+    function mk(id, name, kind, msgs, extra) {
+      var c = { id: id, name: name, kind: kind, msgs: [], pinned: false, unread: 0, members: [], blocked: false, pinMsg: null, known: true };
+      (msgs || []).forEach(function (m) { add(c, m); });
+      if (extra) Object.keys(extra).forEach(function (k) { c[k] = extra[k]; });
+      return c;
+    }
+    function seed(task) {
+      uid = 1;
+      var ch = {}, order;
+      var annaTail = {
+        wa_sprache: [{ f: 'anna', t: 'text', x: 'Kommst du heute Nachmittag vorbei?', time: '10:40' }],
+        wa_foto: [{ f: 'anna', t: 'text', x: 'Hast du ein Foto von deinem Garten? Das würde ich gern sehen.', time: '10:40' }],
+        wa_standort: [{ f: 'anna', t: 'text', x: 'Wo bist du gerade? Ich bin gleich bei dir.', time: '10:40' }],
+        wa_kontakt: [{ f: 'anna', t: 'text', x: 'Schick mir bitte die Nummer von Dr. Meier.', time: '10:40' }],
+        wa_kontakt_speichern: [{ f: 'anna', t: 'text', x: 'Hier ist die Nummer vom Klempner.', time: '10:38' }, { f: 'anna', t: 'contact', cid: 'klaus', time: '10:38' }]
+      };
+      ch.anna = mk('anna', 'Anna', 'p', [{ f: 'anna', t: 'text', x: 'Guten Morgen! Alles gut bei dir?', time: '09:12' }, { f: 'me', t: 'text', x: 'Ja, alles gut. Und bei euch?', time: '09:15' }].concat(annaTail[task] || [{ f: 'anna', t: 'text', x: 'Bis später dann!', time: '10:40' }]));
+      ch.anna.unread = 1;
+      ch.thomas = mk('thomas', 'Thomas', 'p', [{ f: 'thomas', t: 'text', x: task === 'wa_live' ? 'Ich fahre jetzt los. Zeig mir bitte, wo du gerade bist.' : 'Kannst du mich anrufen?', time: '09:50' }]);
+      ch.thomas.unread = 1;
+      ch.monika = mk('monika', 'Monika', 'p', [{ f: 'me', t: 'text', x: 'Die Blumen sind wunderschön!', time: 'Gestern' }, { f: 'monika', t: 'text', x: 'Das freut mich!', time: 'Gestern' }]);
+      ch.meier = mk('meier', 'Praxis Dr. Meier', 'p', [{ f: 'meier', t: 'text', x: 'Ihr Termin am Montag um 10 Uhr ist bestätigt.', time: 'Gestern' }]);
+      ch.meier.color = '#5aad5a';
+      order = ['anna', 'thomas', 'monika', 'meier'];
+      var withGroup = ['wa_umfrage', 'wa_ereignis', 'wa_chat_pin', 'wa_msg_pin'].indexOf(task) > -1;
+      if (withGroup) {
+        ch.familie = mk('familie', 'Familie', 'g', [
+          { f: 'anna', t: 'text', x: 'Wann treffen wir uns bei Oma?', time: '08:30' },
+          { f: 'thomas', t: 'text', x: 'Samstag passt mir gut.', time: '08:41' },
+          { f: 'anna', t: 'text', x: 'Treffen am Samstag um 15 Uhr bei Oma!', time: '08:55' }
+        ], { members: ['anna', 'thomas', 'monika'] });
+        if (task === 'wa_chat_pin') order.push('familie'); else order.unshift('familie');
+      }
+      if (task === 'wa_betrug') {
+        ch.unk = mk('unk', '+49 176 5550123', 'u', [{ f: 'unk', t: 'text', x: 'Hallo Opa, mein Handy ist kaputt, das ist meine neue Nummer. Kannst du mir bitte schnell 850 Euro überweisen? Ich erkläre dir später alles.', time: '14:20' }], { known: false, color: '#8696a0' });
+        ch.unk.unread = 1;
+        order.unshift('unk');
+      }
+      return { chats: ch, order: order };
+    }
+    function fresh() {
+      var sd = seed(taskOf());
+      S = { screen: 'list', chats: sd.chats, order: sd.order, cur: null, sel: null, menu: false, attach: false, swipe: null, draft: '',
+        priv: { photo: 'Alle', seen: 'Alle', read: true }, optKey: null, flags: {}, perm: null, permDlg: false,
+        liveSheet: false, liveDur: '15 Minuten', ctSel: null, ctConfirm: false, pick: null, grpSel: [], grpName: '', msgMenu: null, pinDlg: null, pinDur: '7 Tage',
+        stopDlg: null, blockDlg: false, blockRep: true, addSheet: null, addForm: { first: 'Klaus', last: 'Berger' }, addMsg: null, noClickUntil: 0, recording: false,
+        pollForm: { q: '', o: ['', '', ''], multi: false }, evForm: { name: '', date: 'Samstag, 24. Okt.', time: '15:00', place: '' } };
+    }
+
+    // ---------- Hilfen ----------
+    function orderIds() {
+      var pinned = S.order.filter(function (id) { return S.chats[id].pinned; });
+      var rest = S.order.filter(function (id) { return !S.chats[id].pinned; });
+      return pinned.concat(rest);
+    }
+    function lastOf(c) { return c.msgs.length ? c.msgs[c.msgs.length - 1] : null; }
+    function dur(d) { return '0:' + (d < 10 ? '0' : '') + d; }
+    function preview(c) {
+      var m = lastOf(c); if (!m) return '';
+      var pre = m.f === 'me' ? 'Sie: ' : (c.kind === 'g' && m.f !== 'me' && m.t !== 'sys' ? nameOf(m.f) + ': ' : '');
+      switch (m.t) {
+        case 'text': return pre + m.x; case 'sys': return m.x; case 'voice': return pre + 'Sprachnachricht (' + dur(m.d) + ')';
+        case 'photo': return pre + 'Foto'; case 'loc': return pre + 'Standort'; case 'live': return pre + 'Live-Standort';
+        case 'contact': return pre + 'Kontakt: ' + CONTACTS[m.cid].name; case 'poll': return pre + 'Umfrage: ' + m.q; case 'event': return pre + 'Ereignis: ' + m.name;
+      }
+      return '';
+    }
+    function avatar(c, cls) {
+      var bg = c.kind === 'g' ? '#8aa0ad' : (c.kind === 'u' ? '#b0bec5' : (CONTACTS[c.id] ? CONTACTS[c.id].color : (c.color || '#8aa0ad')));
+      var inner = c.kind === 'g' ? ic('people') : (c.kind === 'u' ? ic('person') : esc(c.name.charAt(0)));
+      return '<div class="wa-av' + (cls ? ' ' + cls : '') + '" style="background:' + bg + '">' + inner + '</div>';
+    }
+    function pad() { return isAndroid() ? '<div class="wa-pad-and"></div>' : (state.platform === 'ios-alt' ? '<div class="wa-pad-alt"></div>' : '<div class="wa-pad-ios"></div>'); }
+    function dead(label) { showToast('„' + label + '“ ist in dieser Übung nicht verfügbar.', true); }
+
+    // ---------- Ansichten ----------
+    function topSub(title, opts) {
+      opts = opts || {};
+      return '<div class="wa-top sub"><div class="wa-ic" data-a="back">' + (isAndroid() ? ic('backA') : ic('back')) + '</div><div class="wa-pageTitle">' + esc(title) + '</div>' + (opts.right || '') + '</div>';
+    }
+    function tabbar(active) {
+      if (isAndroid()) {
+        var t = [['chats', 'Chats', 'chats'], ['updates', 'Updates', 'updates'], ['comm', 'Communities', 'comm'], ['calls', 'Anrufe', 'calls']];
+        return '<div class="wa-tabs">' + t.map(function (x) { return '<div class="wa-tab' + (x[0] === active ? ' on' : '') + '" data-a="' + (x[0] === 'chats' ? 'tab:chats' : 'dead:' + x[1]) + '"><div class="wa-tabpill">' + ic(x[2]) + '</div>' + x[1] + '</div>'; }).join('') + '</div>';
+      }
+      var t2 = [['updates', 'Updates', 'updates'], ['calls', 'Anrufe', 'calls'], ['comm', 'Communities', 'comm'], ['chats', 'Chats', 'chats'], ['settings', 'Einstellungen', 'gear']];
+      return '<div class="wa-tabs">' + t2.map(function (x) { return '<div class="wa-tab' + (x[0] === active ? ' on' : '') + '" data-a="' + (x[0] === 'chats' ? 'tab:chats' : (x[0] === 'settings' ? 'tab:settings' : 'dead:' + x[1])) + '">' + ic(x[2]) + x[1] + '</div>'; }).join('') + '</div>';
+    }
+    function vList() {
+      var and = isAndroid(), h = '';
+      if (S.sel) {
+        var sc = S.chats[S.sel];
+        h += '<div class="wa-selbar"><div class="wa-ic" data-a="selclear">' + ic('x') + '</div><div class="cnt">1</div><div class="wa-ic" data-a="pinsel">' + (sc && sc.pinned ? ic('unpin') : ic('pin')) + '</div><div class="wa-ic" data-a="dead:Löschen">' + ic('trash') + '</div><div class="wa-ic" data-a="dead:Stumm schalten">' + ic('mute') + '</div><div class="wa-ic" data-a="dead:Mehr">' + ic('dots') + '</div></div>';
+      } else if (and) {
+        h += '<div class="wa-top"><div class="wa-title">WhatsApp</div><div class="wa-topicons"><div class="wa-ic" data-a="dead:Kamera">' + ic('cam') + '</div><div class="wa-ic" data-a="dead:Suche">' + ic('search') + '</div><div class="wa-ic" data-a="menu">' + ic('dots') + '</div></div></div>';
+      } else {
+        h += '<div class="wa-top"><div class="wa-title">Chats</div><div class="wa-topicons"><div class="wa-ic" data-a="dead:Kamera">' + ic('cam') + '</div><div class="wa-ic green" data-a="newchat">' + ic('plus') + '</div></div></div>';
+      }
+      h += '<div class="wa-search">' + ic('search') + 'Suchen</div><div class="wa-list">';
+      orderIds().forEach(function (id) {
+        var c = S.chats[id], m = lastOf(c), un = c.unread > 0;
+        h += '<div class="wa-rowwrap">' + (!and ? '<div class="wa-swipeact" data-a="pin:' + id + '">' + ic(c.pinned ? 'unpin' : 'pin') + (c.pinned ? 'Lösen' : 'Anpinnen') + '</div>' : '') +
+          '<div class="wa-row' + (S.sel === id ? ' sel' : '') + (S.swipe === id ? ' swiped' : '') + '" data-id="' + id + '" data-a="open:' + id + '">' + avatar(c) + (S.sel === id ? '<span style="position:absolute;left:44px;bottom:6px;width:17px;height:17px;border-radius:50%;background:#00a884;border:2px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center"><span style="width:9px;height:9px;display:block">' + ic('check') + '</span></span>' : '') +
+          '<div class="wa-rbody"><div class="wa-rname">' + esc(c.name) + '</div><div class="wa-rprev">' + esc(preview(c)) + '</div></div>' +
+          '<div class="wa-rmeta"><div class="wa-rtime' + (un ? ' unread' : '') + '">' + esc(m ? m.time : '') + '</div>' + (un ? '<div class="wa-badge">' + c.unread + '</div>' : (c.pinned ? '<div class="wa-pinic">' + ic('pin') + '</div>' : '<div style="height:18px"></div>')) + '</div></div></div>';
+      });
+      h += '</div>';
+      if (and) h += '<div class="wa-fab" data-a="newchat">' + ic('newchat') + '</div>';
+      h += tabbar('chats');
+      if (and && S.menu) h += '<div class="wa-scrim" style="z-index:19;background:transparent" data-a="menuoff"></div><div class="wa-menu" style="z-index:20"><div data-a="menu:newgroup">Neue Gruppe</div><div data-a="dead:Neuer Broadcast">Neuer Broadcast</div><div data-a="dead:Verknüpfte Geräte">Verknüpfte Geräte</div><div data-a="dead:Markierte Nachrichten">Markierte Nachrichten</div><div data-a="menu:settings">Einstellungen</div></div>';
+      return h + pad();
+    }
+
+    function waveBars(seedStr) {
+      var s = 0, i, out = '';
+      for (i = 0; i < seedStr.length; i++) s += seedStr.charCodeAt(i);
+      for (i = 0; i < 24; i++) { var hgt = 5 + ((s * (i + 3) * 7) % 17); out += '<i style="height:' + hgt + 'px"></i>'; }
+      return out;
+    }
+    function opts(m) { return m.opts || []; }
+    function bubBody(c, m) {
+      var me = m.f === 'me';
+      switch (m.t) {
+        case 'text': return '<div>' + esc(m.x) + '</div>';
+        case 'voice': return '<div class="wa-voice"><div class="wa-play" data-a="play:' + m.id + '">' + ic('play') + '</div><div class="wa-wave">' + waveBars(m.id) + '</div></div><div class="wa-vdur">' + dur(m.d) + '</div>';
+        case 'photo': return '<div class="wa-photo">' + scene(m.i) + (m.shade ? '' : '') + '</div>' + (m.cap ? '<div class="wa-cap">' + esc(m.cap) + '</div>' : '');
+        case 'loc': return '<div class="wa-map">' + mapSvg(false) + '</div><div class="wa-ltxt"><b>Mein Standort</b><small>Musterstraße, Musterstadt</small></div>';
+        case 'live':
+          return '<div class="wa-map">' + mapSvg(false) + '</div><div class="wa-ltxt"><b>Live-Standort</b><small>' + (m.ended ? 'Live-Standort beendet' : 'Endet um ' + m.until) + '</small></div>' + (me && !m.ended ? '<div class="wa-linkbtn" data-a="stoplive:' + m.id + '">Teilen beenden</div>' : '');
+        case 'contact':
+          var ct = CONTACTS[m.cid];
+          return '<div class="wa-card"><div class="top"><div class="wa-av sm" style="background:' + ct.color + '">' + esc(ct.name.charAt(0)) + '</div><div><b>' + esc(ct.name) + '</b><small>' + esc(ct.tel) + '</small></div></div></div>' +
+            ((!me && !m.saved) ? '<div class="wa-linkbtn g" data-a="addc:' + m.id + '">Kontakt hinzufügen</div>' : '<div class="wa-linkbtn g" data-a="dead:Nachricht">Nachricht</div>');
+        case 'poll':
+          var total = 0; m.votes.forEach(function (v) { total += v; });
+          var o = '<div class="wa-poll"><div class="pq">' + esc(m.q) + '</div><div class="ph">' + (m.multi ? 'Mehrere Antworten möglich' : 'Eine Antwort wählen') + '</div>';
+          m.o.forEach(function (t, i) {
+            var on = m.mine.indexOf(i) > -1, pct = total ? Math.round(m.votes[i] * 100 / total) : 0;
+            o += '<div class="wa-opt' + (on ? ' on' : '') + '" data-a="vote:' + m.id + ':' + i + '"><div class="rd">' + (on ? ic('check') : '') + '</div><div class="ol"><div class="ot"><span>' + esc(t) + '</span><span>' + m.votes[i] + '</span></div><div class="bar"><i style="width:' + pct + '%"></i></div></div></div>';
+          });
+          return o + '</div>';
+        case 'event':
+          var rs = m.rsvp;
+          return '<div class="wa-ev"><div class="evh">' + ic('event') + 'Ereignis</div><div class="evn">' + esc(m.name) + '</div><div class="evd">' + esc(m.date) + ', ' + esc(m.time) + ' Uhr' + (m.place ? '<br>' + esc(m.place) : '') + '</div>' +
+            '<div class="evr"><div class="' + (rs === 'yes' ? 'on' : '') + '" data-a="rsvp:' + m.id + ':yes">Zusagen</div><div class="' + (rs === 'maybe' ? 'on' : '') + '" data-a="rsvp:' + m.id + ':maybe">Vielleicht</div><div class="' + (rs === 'no' ? 'on' : '') + '" data-a="rsvp:' + m.id + ':no">Absagen</div></div>' +
+            '<div class="evs">' + (rs === 'yes' ? 'Sie haben zugesagt.' : rs === 'maybe' ? 'Sie haben „Vielleicht“ gewählt.' : rs === 'no' ? 'Sie haben abgesagt.' : 'Noch keine Antwort von Ihnen.') + '</div></div>';
+      }
+      return '';
+    }
+    function bubble(c, m) {
+      if (m.t === 'sys') return '<div class="wa-sys">' + esc(m.x) + '</div>';
+      var me = m.f === 'me';
+      return '<div class="wa-b ' + (me ? 'me' : 'them') + '" data-mid="' + m.id + '" id="b_' + m.id + '">' +
+        (!me && c.kind === 'g' ? '<div class="snd" style="color:' + colorOf(m.f) + '">' + esc(nameOf(m.f)) + '</div>' : '') +
+        bubBody(c, m) + '<div class="tm">' + (c.pinMsg === m.id ? '<span class="pinned">' + ic('pin') + '</span>' : '') + esc(m.time) + (me ? ic('dcheck') : '') + '</div></div>';
+    }
+    function vChat() {
+      var c = S.chats[S.cur], and = isAndroid(), h = '';
+      var sub = c.kind === 'g' ? c.members.map(nameOf).join(', ') + ', Sie' : (c.kind === 'u' ? '' : 'online');
+      h += '<div class="wa-chathead"><div class="wa-ic" data-a="back">' + (and ? ic('backA') : ic('back')) + '</div>' + avatar(c, 'sm') + '<div class="who" data-a="dead:Kontaktinfo"><div class="nm">' + esc(c.name) + '</div><div class="st">' + esc(sub) + '</div></div>' +
+        '<div class="wa-ic" data-a="dead:Videoanruf">' + ic('video') + '</div><div class="wa-ic" data-a="dead:Anruf">' + ic('phone') + '</div>' + (and ? '<div class="wa-ic" data-a="dead:Mehr">' + ic('dots') + '</div>' : '') + '</div>';
+      if (c.pinMsg) {
+        var pm = c.msgs.filter(function (x) { return x.id === c.pinMsg; })[0];
+        h += '<div class="wa-pinbar" data-a="gopin">' + ic('pin') + '<div style="min-width:0"><b>Angepinnt</b><span class="t">' + esc(pm ? (pm.x || preview({ msgs: [pm], kind: 'p' })) : '') + '</span></div></div>';
+      }
+      if (c.kind === 'u' && !c.blocked) {
+        h += '<div class="wa-unkbar"><p>Diese Nummer ist nicht in Ihren Kontakten.</p><div class="wa-unkbtns"><button class="danger" data-a="unkblock">Blockieren</button><button data-a="unkreport">Melden</button><button data-a="unkadd">Hinzufügen</button></div></div>';
+      }
+      h += '<div class="wa-msgs"><div class="wa-day">Heute</div>';
+      c.msgs.forEach(function (m) { h += bubble(c, m); });
+      h += '</div>';
+      if (c.blocked) {
+        h += '<div class="wa-compose" style="justify-content:center;font-size:12px;color:#54656f;padding:14px 10px">Sie haben diese Nummer blockiert.</div>';
+      } else {
+        var recbar = '<div class="wa-recbar"><span class="dot"></span><span class="rt" id="waRt">0:00</span><span class="sw">‹ Zum Abbrechen wischen</span></div>';
+        var mic = '<div class="wa-mic" id="waMic">' + ic('mic') + '</div>';
+        if (and) h += '<div class="wa-compose"><div class="wa-field"><div class="wa-ic" data-a="dead:Emoji">' + ic('smile') + '</div><input id="waMsg" type="text" placeholder="Nachricht" autocomplete="off"><div class="wa-ic" data-a="attach">' + ic('clip') + '</div><div class="wa-ic" data-a="dead:Kamera">' + ic('cam') + '</div></div>' + recbar + mic + '</div>';
+        else h += '<div class="wa-compose"><div class="wa-ic plus" data-a="attach">' + ic('plus') + '</div><div class="wa-field"><input id="waMsg" type="text" placeholder="Nachricht" autocomplete="off"><div class="wa-ic" data-a="dead:Kamera">' + ic('cam') + '</div></div>' + recbar + mic + '</div>';
+      }
+      h += pad();
+      if (S.attach) {
+        var A = isAndroid();
+        var items = [['doc', 'Dokument', 'dead:Dokument', '#7f66ff'], ['cam', 'Kamera', 'dead:Kamera', '#ff2e74'], ['image', A ? 'Galerie' : 'Fotos', 'att:photo', '#bf59cf'], ['aud', 'Audio', 'dead:Audio', '#f96533'], ['mapin', 'Standort', 'att:loc', '#1fa855'], ['person', 'Kontakt', 'att:contact', '#009de2'], ['poll', 'Umfrage', 'att:poll', '#f5a623'], ['event', 'Ereignis', 'att:event', '#e8426e']];
+        h += '<div class="wa-scrim" data-a="attachoff"></div>';
+        if (A) h += '<div class="wa-attach-and">' + items.map(function (x) { return '<div class="it" data-a="' + x[2] + '"><div class="ci" style="background:' + x[3] + '">' + ic(x[0]) + '</div>' + x[1] + '</div>'; }).join('') + '</div>';
+        else {
+          var order = [2, 1, 4, 5, 0, 6, 7];
+          h += '<div class="wa-attach-ios"><div class="grab"></div>' + order.map(function (i) { var x = items[i]; return '<div class="row" data-a="' + x[2] + '"><div class="ci" style="color:' + x[3] + '">' + ic(x[0]) + '</div>' + x[1] + '</div>'; }).join('') + '</div>';
+        }
+      }
+      return h;
+    }
+    function vPick() {
+      var h = topSub(isAndroid() ? 'Galerie' : 'Fotos') + '<div class="wa-grid">';
+      for (var i = 0; i < 9; i++) h += '<div class="wa-thumb" data-a="pick:' + i + '"><div style="width:100%;height:100%;' + (i > 5 ? 'filter:hue-rotate(' + (i * 25) + 'deg)' : '') + '">' + scene(i) + '</div></div>';
+      return h + '</div>' + pad();
+    }
+    function vPreview() {
+      return '<div class="wa-dark" style="display:flex;flex-direction:column;flex:1;min-height:0"><div class="wa-top" style="min-height:44px"><div class="wa-ic" style="color:#fff" data-a="back">' + ic('x') + '</div></div><div class="wa-prevwrap">' + scene(S.pick) + '</div>' +
+        '<div class="wa-prevbar"><div class="cap"><input id="waCap" type="text" placeholder="Beschriftung hinzufügen …" autocomplete="off"></div><div class="wa-send" data-a="sendphoto">' + ic('send') + '</div></div>' + (isAndroid() ? '<div class="wa-pad-and" style="background:#0b141a"></div>' : '<div style="height:' + (state.platform === 'ios-alt' ? 50 : 14) + 'px;background:#0b141a"></div>') + '</div>';
+    }
+    function vLoc() {
+      var h = topSub('Standort senden') + '<div class="wa-mapbig">' + mapSvg(true) + '</div><div class="wa-opts">';
+      if (S.perm === false) h += '<div class="wa-orow" data-a="permagain"><div class="ci b">' + ic('x') + '</div><div><b>Kein Zugriff auf den Standort</b><small>Tippen Sie hier, um es noch einmal zu versuchen.</small></div></div>';
+      h += '<div class="wa-orow" data-a="loc:live"><div class="ci">' + ic('live') + '</div><div><b>Live-Standort teilen</b><small>Wird aktualisiert, während Sie sich bewegen</small></div></div>' +
+        '<div class="wa-orow" data-a="loc:cur"><div class="ci">' + ic('mapin') + '</div><div><b>Aktuellen Standort senden</b><small>Genauigkeit: etwa 10 Meter</small></div></div>' +
+        '<div class="wa-sectitle">In der Nähe</div><div class="wa-orow dead" data-a="dead:Bäckerei Schmidt"><div class="ci b">' + ic('mapin') + '</div><div><b>Bäckerei Schmidt</b><small>100 m</small></div></div><div class="wa-orow dead" data-a="dead:Stadtpark"><div class="ci b">' + ic('mapin') + '</div><div><b>Stadtpark</b><small>250 m</small></div></div></div>';
+      return h + pad();
+    }
+    function sheetLive() {
+      var o = ['15 Minuten', '1 Stunde', '8 Stunden'];
+      return '<div class="wa-scrim" style="z-index:18" data-a="livecancel"></div><div class="wa-sheetbox"><h4>Live-Standort teilen für …</h4>' + o.map(function (x) { return '<div class="wa-radio' + (S.liveDur === x ? ' on' : '') + '" data-a="liveopt:' + x + '"><div class="rr"></div>' + x + '</div>'; }).join('') +
+        '<div class="wa-hint">Ihr Standort wird nur an diesen Chat geschickt, bis die Zeit abläuft oder Sie das Teilen beenden.</div><div class="wa-sheetfoot"><button class="wa-btn ghost" data-a="livecancel">Abbrechen</button><button class="wa-btn" data-a="livesend">Senden</button></div></div>';
+    }
+    function pickableContacts(excl) { return ['meier', 'klaus', 'monika', 'thomas', 'anna'].filter(function (x) { return x !== excl; }); }
+    function vContacts() {
+      var c = S.chats[S.cur];
+      var h = topSub('Kontakt senden') + '<div class="wa-contacts">';
+      pickableContacts(c.id).forEach(function (id) {
+        var ct = CONTACTS[id];
+        h += '<div class="wa-crow' + (S.ctSel === id ? ' on' : '') + '" data-a="ctsel:' + id + '"><div class="wa-av sm" style="background:' + ct.color + '">' + esc(ct.name.charAt(0)) + '</div><div class="cn"><b>' + esc(ct.name) + '</b><small>' + esc(ct.tel) + '</small></div><div class="ck">' + (S.ctSel === id ? ic('check') : '') + '</div></div>';
+      });
+      h += '</div>' + (S.ctSel ? '<div class="wa-donefoot"><div class="wa-send" data-a="ctnext">' + (isAndroid() ? ic('send') : ic('send')) + '</div></div>' : '') + pad();
+      if (S.ctConfirm) {
+        var ct2 = CONTACTS[S.ctSel];
+        h += '<div class="wa-center"><div class="wa-dlg"><h4>Kontakt an ' + esc(c.name) + ' senden?</h4><div class="wa-card" style="margin:8px 0 12px"><div class="top"><div class="wa-av sm" style="background:' + ct2.color + '">' + esc(ct2.name.charAt(0)) + '</div><div><b>' + esc(ct2.name) + '</b><small>' + esc(ct2.tel) + '</small></div></div></div><div class="wa-sheetfoot"><button class="wa-btn ghost" data-a="ctcancel">Abbrechen</button><button class="wa-btn" data-a="ctsend">Senden</button></div></div></div>';
+      }
+      return h;
+    }
+    function vPoll() {
+      var f = S.pollForm;
+      return topSub('Umfrage erstellen') + '<div class="wa-form"><div class="wa-lab">Frage</div><input class="wa-in" type="text" data-bind="pq" placeholder="Frage stellen" value="' + esc(f.q) + '" autocomplete="off">' +
+        '<div class="wa-lab">Antworten</div>' + [0, 1, 2].map(function (i) { return '<input class="wa-in" type="text" data-bind="po' + i + '" placeholder="' + (i < 2 ? 'Antwort ' + (i + 1) : 'Antwort 3 (freiwillig)') + '" value="' + esc(f.o[i]) + '" autocomplete="off">'; }).join('') +
+        '<div class="wa-trow"><span>Mehrere Antworten zulassen</span><div class="mini-toggle' + (f.multi ? ' on' : '') + '" data-a="pollmulti"><div class="dot"></div></div></div></div>' +
+        '<div class="wa-donefoot"><div class="wa-send" data-a="pollsend">' + ic('send') + '</div></div>' + pad();
+    }
+    var DATES = ['Donnerstag, 22. Okt.', 'Freitag, 23. Okt.', 'Samstag, 24. Okt.', 'Sonntag, 25. Okt.', 'Montag, 26. Okt.'];
+    var TIMES = ['10:00', '14:00', '15:00', '16:00', '18:00'];
+    function vEvent() {
+      var f = S.evForm;
+      return topSub('Ereignis erstellen') + '<div class="wa-form"><div class="wa-lab">Name des Ereignisses</div><input class="wa-in" type="text" data-bind="en" placeholder="z. B. Kaffeetrinken bei Oma" value="' + esc(f.name) + '" autocomplete="off">' +
+        '<div class="wa-lab">Datum</div><select class="wa-sel" data-bind="ed">' + DATES.map(function (d) { return '<option' + (d === f.date ? ' selected' : '') + '>' + d + '</option>'; }).join('') + '</select>' +
+        '<div class="wa-lab">Uhrzeit</div><select class="wa-sel" data-bind="et">' + TIMES.map(function (d) { return '<option' + (d === f.time ? ' selected' : '') + '>' + d + '</option>'; }).join('') + '</select>' +
+        '<div class="wa-lab">Ort (freiwillig)</div><input class="wa-in" type="text" data-bind="ep" placeholder="z. B. bei Oma zu Hause" value="' + esc(f.place) + '" autocomplete="off">' +
+        '<div style="margin-top:18px"><button class="wa-btn" style="width:100%" data-a="evsend">Erstellen</button></div></div>' + pad();
+    }
+    function vNewChat() {
+      var h = topSub('Neuer Chat') + '<div class="wa-contacts"><div class="wa-crow" data-a="grpnew"><div class="wa-av sm" style="background:#00a884">' + ic('people') + '</div><div class="cn"><b>Neue Gruppe</b></div></div><div class="wa-crow" data-a="dead:Neuer Kontakt"><div class="wa-av sm" style="background:#00a884">' + ic('person') + '</div><div class="cn"><b>Neuer Kontakt</b></div></div><div class="wa-sectitle">Kontakte auf WhatsApp</div>';
+      ['anna', 'thomas', 'monika', 'meier'].forEach(function (id) { var ct = CONTACTS[id]; h += '<div class="wa-crow" data-a="open:' + id + '"><div class="wa-av sm" style="background:' + ct.color + '">' + esc(ct.name.charAt(0)) + '</div><div class="cn"><b>' + esc(ct.name) + '</b><small>' + esc(ct.sub) + '</small></div></div>'; });
+      return h + '</div>' + pad();
+    }
+    function vGrp1() {
+      var h = topSub('Teilnehmer hinzufügen') + '<div class="wa-chips">' + S.grpSel.map(function (id) { return '<span class="wa-chip">' + esc(nameOf(id)) + '</span>'; }).join('') + '</div><div class="wa-contacts">';
+      ['anna', 'thomas', 'monika', 'meier'].forEach(function (id) {
+        var ct = CONTACTS[id], on = S.grpSel.indexOf(id) > -1;
+        h += '<div class="wa-crow' + (on ? ' on' : '') + '" data-a="grptoggle:' + id + '"><div class="wa-av sm" style="background:' + ct.color + '">' + esc(ct.name.charAt(0)) + '</div><div class="cn"><b>' + esc(ct.name) + '</b><small>' + esc(ct.sub) + '</small></div><div class="ck">' + (on ? ic('check') : '') + '</div></div>';
+      });
+      return h + '</div>' + (S.grpSel.length ? '<div class="wa-donefoot"><div class="wa-send" data-a="grpnext">' + ic('send') + '</div></div>' : '') + pad();
+    }
+    function vGrp2() {
+      return topSub('Neue Gruppe') + '<div class="wa-form"><div style="display:flex;align-items:center;gap:12px;margin-top:6px"><div class="wa-av" style="background:#cfd8dc;width:50px;height:50px">' + ic('cam') + '</div><input class="wa-in" type="text" data-bind="gn" placeholder="Gruppenname eingeben" value="' + esc(S.grpName) + '" autocomplete="off"></div>' +
+        '<div class="wa-lab">Teilnehmer: ' + S.grpSel.length + '</div><div class="wa-chips" style="padding:4px 0;border:none">' + S.grpSel.map(function (id) { return '<span class="wa-chip">' + esc(nameOf(id)) + '</span>'; }).join('') + '</div></div>' +
+        '<div class="wa-donefoot"><div class="wa-send" data-a="grpcreate">' + ic('check') + '</div></div>' + pad();
+    }
+    function vAddc() {
+      var ct = CONTACTS.klaus;
+      return topSub('Neuer Kontakt') + '<div class="wa-form"><div class="wa-lab">Vorname</div><input class="wa-in" type="text" data-bind="af" value="' + esc(S.addForm.first) + '"><div class="wa-lab">Nachname</div><input class="wa-in" type="text" data-bind="al" value="' + esc(S.addForm.last) + '"><div class="wa-lab">Telefon</div><input class="wa-in" type="text" value="' + esc(ct.tel) + '" readonly>' +
+        '<div style="margin-top:18px"><button class="wa-btn" style="width:100%" data-a="addsave">Speichern</button></div></div>' + pad();
+    }
+    function vSettings() {
+      var and = isAndroid();
+      var h = (and ? topSub('Einstellungen') : '<div class="wa-top"><div class="wa-title">Einstellungen</div></div>') + '<div class="wa-set"><div class="wa-prof"><div class="wa-av" style="background:#8aa0ad;width:52px;height:52px">' + ic('person') + '</div><div><b>Ihr Name</b><small>Hallo! Ich benutze WhatsApp.</small></div></div>' +
+        '<div class="wa-srow dead" data-a="dead:Konto"><div class="si">' + ic('key') + '</div><div class="sb">Konto</div></div>' +
+        '<div class="wa-srow" data-a="sr:privacy"><div class="si">' + ic('lock') + '</div><div class="sb">Datenschutz</div></div>' +
+        '<div class="wa-srow dead" data-a="dead:Chats"><div class="si">' + ic('chats') + '</div><div class="sb">Chats</div></div>' +
+        '<div class="wa-srow dead" data-a="dead:Benachrichtigungen"><div class="si">' + ic('bell') + '</div><div class="sb">Benachrichtigungen</div></div>' +
+        '<div class="wa-srow dead" data-a="dead:Speicher und Daten"><div class="si">' + ic('data') + '</div><div class="sb">Speicher und Daten</div></div>' +
+        '<div class="wa-srow dead" data-a="dead:Hilfe"><div class="si">' + ic('help') + '</div><div class="sb">Hilfe</div></div></div>';
+      return h + (and ? '' : tabbar('settings')) + (and ? pad() : '');
+    }
+    function vPrivacy() {
+      return topSub('Datenschutz') + '<div class="wa-set"><div class="wa-secthead">Wer kann meine persönlichen Infos sehen?</div>' +
+        '<div class="wa-srow" data-a="popen:seen"><div class="sb">Zuletzt online und online</div><div class="val">' + esc(S.priv.seen) + '</div></div>' +
+        '<div class="wa-srow" data-a="popen:photo"><div class="sb">Profilbild</div><div class="val">' + esc(S.priv.photo) + '</div></div>' +
+        '<div class="wa-srow dead" data-a="dead:Info"><div class="sb">Info</div><div class="val">Alle</div></div>' +
+        '<div class="wa-srow dead" data-a="dead:Gruppen"><div class="sb">Gruppen</div><div class="val">Alle</div></div>' +
+        '<div class="wa-srow"><div class="sb">Lesebestätigungen<small>Wenn Sie das ausschalten, sehen Sie auch nicht, ob andere Ihre Nachrichten gelesen haben.</small></div><div class="mini-toggle' + (S.priv.read ? ' on' : '') + '" data-a="readtoggle"><div class="dot"></div></div></div>' +
+        '<div class="wa-srow dead" data-a="dead:Blockierte Kontakte"><div class="sb">Blockierte Kontakte</div><div class="val">' + (S.flags.blocked ? '1' : 'Keine') + '</div></div></div>' + pad();
+    }
+    function vPopt() {
+      var t = S.optKey === 'photo' ? 'Profilbild' : 'Zuletzt online und online', cur = S.priv[S.optKey];
+      var h = topSub(t) + '<div class="wa-set"><div class="wa-secthead">Wer kann das sehen?</div>';
+      ['Alle', 'Meine Kontakte', 'Meine Kontakte, außer …', 'Niemand'].forEach(function (o) {
+        var isDead = o.indexOf('außer') > -1;
+        h += '<div class="wa-optrow' + (isDead ? ' dead' : '') + '" data-a="' + (isDead ? 'dead:Kontakte ausschließen' : 'popt:' + o) + '"><span>' + esc(o) + '</span>' + (cur === o ? ic('check') : '') + '</div>';
+      });
+      return h + '</div>' + pad();
+    }
+
+    // ---------- Dialoge ----------
+    function modals() {
+      var h = '';
+      if (S.permDlg) {
+        var and = isAndroid();
+        h += '<div class="wa-center"><div class="wa-dlg"><h4>' + (and ? 'Zugriff auf den Standort dieses Geräts erlauben?' : '„WhatsApp“ möchte Ihren Standort verwenden') + '</h4><p>Damit WhatsApp Ihren Standort an Ihre Kontakte schicken kann.</p><div class="stack"><div data-a="perm:allow">' + (and ? 'Bei Nutzung der App' : 'Beim Verwenden der App erlauben') + '</div><div data-a="perm:once">' + (and ? 'Nur dieses Mal' : 'Einmal erlauben') + '</div><div class="red" data-a="perm:deny">' + (and ? 'Nicht zulassen' : 'Nicht erlauben') + '</div></div></div></div>';
+      }
+      if (S.stopDlg) h += '<div class="wa-center"><div class="wa-dlg"><h4>Live-Standort beenden?</h4><p>Ihre Kontakte sehen Ihren Standort dann nicht mehr.</p><div class="wa-sheetfoot"><button class="wa-btn ghost" data-a="stopno">Abbrechen</button><button class="wa-btn red" data-a="stopyes">Beenden</button></div></div></div>';
+      if (S.blockDlg) h += '<div class="wa-center"><div class="wa-dlg"><h4>Diese Nummer blockieren?</h4><p>Blockierte Kontakte können Ihnen keine Nachrichten mehr schicken und Sie nicht mehr anrufen.</p><div class="chk' + (S.blockRep ? ' on' : '') + '" data-a="blockrep"><div class="bx">' + (S.blockRep ? ic('check') : '') + '</div>Zusätzlich melden und Chat löschen</div><div class="wa-sheetfoot"><button class="wa-btn ghost" data-a="blockno">Abbrechen</button><button class="wa-btn red" data-a="blockyes">Blockieren</button></div></div></div>';
+      if (S.msgMenu) {
+        var c = S.chats[S.cur], m = c.msgs.filter(function (x) { return x.id === S.msgMenu; })[0];
+        h += '<div class="wa-center" data-a="mmclose"><div class="wa-msgmenu" data-a="noop"><div class="wa-react"><span data-a="dead:Reaktion">👍</span><span data-a="dead:Reaktion">❤️</span><span data-a="dead:Reaktion">😂</span><span data-a="dead:Reaktion">😮</span><span data-a="dead:Reaktion">🙏</span></div><div class="wa-msgprev">' + esc(m && m.x ? m.x : preview({ msgs: [m], kind: 'p' })) + '</div>' +
+          '<div class="mi dead" data-a="dead:Antworten">' + ic('reply') + 'Antworten</div><div class="mi dead" data-a="dead:Weiterleiten">' + ic('fwd') + 'Weiterleiten</div><div class="mi dead" data-a="dead:Kopieren">' + ic('copy') + 'Kopieren</div><div class="mi" data-a="mm:pin">' + ic('pin') + (c.pinMsg === S.msgMenu ? 'Lösen' : 'Anpinnen') + '</div><div class="mi dead" data-a="dead:Löschen">' + ic('trash') + 'Löschen</div></div></div>';
+      }
+      if (S.pinDlg) {
+        var d = ['24 Stunden', '7 Tage', '30 Tage'];
+        h += '<div class="wa-scrim" style="z-index:24" data-a="pincancel"></div><div class="wa-sheetbox" style="z-index:25"><h4>Wie lange soll die Nachricht angepinnt bleiben?</h4>' + d.map(function (x) { return '<div class="wa-radio' + (S.pinDur === x ? ' on' : '') + '" data-a="pindur:' + x + '"><div class="rr"></div>' + x + '</div>'; }).join('') + '<div class="wa-sheetfoot"><button class="wa-btn ghost" data-a="pincancel">Abbrechen</button><button class="wa-btn" data-a="pinok">Anpinnen</button></div></div>';
+      }
+      if (S.addSheet) h += '<div class="wa-scrim" style="z-index:24" data-a="addoff"></div><div class="wa-sheetbox" style="z-index:25;padding-bottom:20px"><h4>Kontakt hinzufügen</h4><div class="wa-orow" data-a="addnew"><div class="ci">' + ic('person') + '</div><div><b>Neuen Kontakt erstellen</b></div></div><div class="wa-orow dead" data-a="dead:Zu bestehendem Kontakt hinzufügen"><div class="ci b">' + ic('people') + '</div><div><b>Zu bestehendem Kontakt hinzufügen</b></div></div></div>';
+      return h;
+    }
+
+    // ---------- Rendern ----------
+    function body() {
+      switch (S.screen) {
+        case 'list': return vList(); case 'chat': return vChat(); case 'pick': return vPick(); case 'preview': return vPreview(); case 'loc': return vLoc();
+        case 'contacts': return vContacts(); case 'poll': return vPoll(); case 'event': return vEvent(); case 'newchat': return vNewChat(); case 'grp1': return vGrp1(); case 'grp2': return vGrp2();
+        case 'addc': return vAddc(); case 'settings': return vSettings(); case 'privacy': return vPrivacy(); case 'popt': return vPopt();
+      }
+      return '';
+    }
+    function render() {
+      if (!S) return;
+      var extra = '';
+      if (S.screen === 'loc' && S.liveSheet) extra += sheetLive();
+      root.innerHTML = '<div class="wa ' + (isAndroid() ? 'wa-and' : 'wa-ios') + '">' + body() + extra + modals() + '</div><div class="overlay-header" style="display:none"><button type="button" id="waBackHidden" style="display:block">‹</button></div>';
+      after();
+      sync();
+    }
+    function toggleSend() {
+      var mic = root.querySelector('#waMic'); if (!mic) return;
+      var has = !!(S.draft && S.draft.trim());
+      mic.classList.toggle('send', has);
+      mic.innerHTML = has ? ic('send') : ic('mic');
+      if (has) mic.setAttribute('data-a', 'sendtext'); else mic.removeAttribute('data-a');
+    }
+    function after() {
+      var m = root.querySelector('.wa-msgs'); if (m) m.scrollTop = m.scrollHeight;
+      var inp = root.querySelector('#waMsg');
+      if (inp) {
+        inp.value = S.draft || '';
+        inp.addEventListener('input', function () { S.draft = inp.value; toggleSend(); });
+        inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') sendText(); });
+        toggleSend();
+      }
+      root.querySelectorAll('[data-bind]').forEach(function (el) {
+        var f = el.getAttribute('data-bind');
+        var h = function () {
+          var v = el.value;
+          if (f === 'pq') S.pollForm.q = v; else if (f.charAt(0) === 'p' && f.charAt(1) === 'o') S.pollForm.o[Number(f.charAt(2))] = v;
+          else if (f === 'en') S.evForm.name = v; else if (f === 'ed') S.evForm.date = v; else if (f === 'et') S.evForm.time = v; else if (f === 'ep') S.evForm.place = v;
+          else if (f === 'gn') S.grpName = v; else if (f === 'af') S.addForm.first = v; else if (f === 'al') S.addForm.last = v;
+        };
+        el.addEventListener('input', h); el.addEventListener('change', h);
+      });
+      var mic = root.querySelector('#waMic'); if (mic) bindMic(mic);
+      root.querySelectorAll('.wa-row[data-id]').forEach(bindRow);
+      root.querySelectorAll('.wa-b[data-mid]').forEach(bindBubble);
+      var bk = root.querySelector('#waBackHidden'); if (bk) bk.onclick = function () { back(); };
+    }
+
+    // ---------- Gesten ----------
+    function bindMic(mic) {
+      mic.addEventListener('pointerdown', function (e) {
+        if (S.draft && S.draft.trim()) return;
+        e.preventDefault();
+        try { mic.setPointerCapture(e.pointerId); } catch (err) {}
+        recStart = Date.now(); S.recSx = e.clientX; S.recording = true;
+        var comp = root.querySelector('.wa-compose'); comp.classList.add('rec'); mic.classList.add('hold');
+        var t = root.querySelector('#waRt'); t.textContent = '0:00';
+        clearInterval(recTimer);
+        recTimer = setInterval(function () { var s = Math.floor((Date.now() - recStart) / 1000); t.textContent = dur(s); }, 150);
+      });
+      function endRec(e, cancel) {
+        if (!S.recording) return;
+        S.recording = false; clearInterval(recTimer);
+        var dt = Date.now() - recStart, dx = (e && e.clientX != null ? (e.clientX - S.recSx) : 0) / vs();
+        var comp = root.querySelector('.wa-compose'); if (comp) comp.classList.remove('rec'); mic.classList.remove('hold');
+        if (cancel || dx < -70) { showToast('Sprachnachricht abgebrochen.', true); return; }
+        if (dt < 900) { showToast('Zu kurz! Halten Sie das Mikrofon gedrückt, solange Sie sprechen.', true); return; }
+        var c = S.chats[S.cur]; add(c, { f: 'me', t: 'voice', d: Math.max(1, Math.round(dt / 1000)) });
+        S.flags.voice = true; render();
+      }
+      mic.addEventListener('pointerup', function (e) { endRec(e, false); });
+      mic.addEventListener('pointercancel', function (e) { endRec(e, true); });
+    }
+    function bindRow(row) {
+      var id = row.getAttribute('data-id'), sx = 0, sy = 0, down = false, moved = false, timer = null, dx = 0;
+      row.addEventListener('pointerdown', function (e) {
+        down = true; moved = false; sx = e.clientX; sy = e.clientY; dx = 0;
+        if (isAndroid()) timer = setTimeout(function () { if (down && !moved) { down = false; S.sel = id; S.noClickUntil = Date.now() + 400; render(); } }, 520);
+      });
+      row.addEventListener('pointermove', function (e) {
+        if (!down) return;
+        dx = (e.clientX - sx) / vs(); var dy = (e.clientY - sy) / vs();
+        if (Math.abs(dx) > 6 || Math.abs(dy) > 6) { moved = true; clearTimeout(timer); }
+        if (!isAndroid() && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
+          row.style.transition = 'none';
+          row.style.transform = 'translateX(' + Math.max(0, Math.min(96, dx + (S.swipe === id ? 82 : 0))) + 'px)';
+          try { row.setPointerCapture(e.pointerId); } catch (err) {}
+        }
+      });
+      function end() {
+        clearTimeout(timer);
+        if (!down) return; down = false;
+        row.style.transition = ''; row.style.transform = '';
+        if (!moved || isAndroid()) return;
+        S.noClickUntil = Date.now() + 350;
+        if (dx > 40) { S.swipe = id; render(); }
+        else if (dx < -20 && S.swipe === id) { S.swipe = null; render(); }
+      }
+      row.addEventListener('pointerup', end); row.addEventListener('pointercancel', end);
+    }
+    function bindBubble(el) {
+      var down = false, timer = null, sx = 0, sy = 0, mid = el.getAttribute('data-mid');
+      el.addEventListener('pointerdown', function (e) {
+        if (e.target.closest('[data-a]')) return;
+        down = true; sx = e.clientX; sy = e.clientY;
+        timer = setTimeout(function () { if (down) { down = false; S.msgMenu = mid; S.noClickUntil = Date.now() + 400; render(); } }, 480);
+      });
+      el.addEventListener('pointermove', function (e) { if (down && (Math.abs(e.clientX - sx) / vs() > 6 || Math.abs(e.clientY - sy) / vs() > 6)) { down = false; clearTimeout(timer); } });
+      el.addEventListener('pointerup', function () { down = false; clearTimeout(timer); });
+      el.addEventListener('pointercancel', function () { down = false; clearTimeout(timer); });
+    }
+
+    // ---------- Aktionen ----------
+    function curChat() { return S.chats[S.cur]; }
+    function openChat(id) {
+      S.cur = id; S.chats[id].unread = 0; S.screen = 'chat'; S.menu = false; S.sel = null; S.swipe = null; S.attach = false; S.draft = ''; render();
+    }
+    function sendText() {
+      var v = (S.draft || '').trim(); if (!v) return;
+      add(curChat(), { f: 'me', t: 'text', x: v }); S.draft = ''; render();
+    }
+    function checkLocPerm() {
+      if (S.perm === null) { S.permDlg = true; }
+    }
+    function addMsg(m) { return add(curChat(), m); }
+    function untilTime(d) { return d === '15 Minuten' ? '14:47' : (d === '1 Stunde' ? '15:32' : '22:32'); }
+    function act(a, el) {
+      var p = a.split(':'), k = p[0];
+      var c = S.cur ? S.chats[S.cur] : null;
+      switch (k) {
+        case 'noop': return;
+        case 'dead': return dead(a.slice(5));
+        case 'open': return openChat(p[1]);
+        case 'back': return back();
+        case 'tab': if (p[1] === 'settings') { S.screen = 'settings'; render(); } else { S.screen = 'list'; render(); } return;
+        case 'menu':
+          if (p[1] === 'newgroup') { S.menu = false; S.screen = 'newchat'; S.grpSel = []; S.grpName = ''; render(); return; }
+          if (p[1] === 'settings') { S.menu = false; S.screen = 'settings'; render(); return; }
+          S.menu = !S.menu; render(); return;
+        case 'menuoff': S.menu = false; render(); return;
+        case 'newchat': S.screen = 'newchat'; render(); return;
+        case 'pin': { var pc = S.chats[p[1]]; pc.pinned = !pc.pinned; S.swipe = null; render(); showToast(pc.pinned ? 'Chat angepinnt.' : 'Pin gelöst.', true); return; }
+        case 'selclear': S.sel = null; render(); return;
+        case 'pinsel': { var sc = S.chats[S.sel]; sc.pinned = !sc.pinned; S.sel = null; render(); showToast(sc.pinned ? 'Chat angepinnt.' : 'Pin gelöst.', true); return; }
+        case 'attach': S.attach = !S.attach; render(); return;
+        case 'attachoff': S.attach = false; render(); return;
+        case 'att':
+          S.attach = false;
+          if (p[1] === 'photo') { S.screen = 'pick'; }
+          else if (p[1] === 'loc') { S.screen = 'loc'; S.liveSheet = false; if (S.perm === null) S.permDlg = true; }
+          else if (p[1] === 'contact') { S.screen = 'contacts'; S.ctSel = null; S.ctConfirm = false; }
+          else if (p[1] === 'poll') { S.screen = 'poll'; S.pollForm = { q: '', o: ['', '', ''], multi: false }; }
+          else if (p[1] === 'event') { S.screen = 'event'; S.evForm = { name: '', date: 'Samstag, 24. Okt.', time: '15:00', place: '' }; }
+          render(); return;
+        case 'sendtext': sendText(); return;
+        case 'play': showToast('Wiedergabe: In dieser Übung gibt es keinen Ton.', true); return;
+        case 'pick': S.pick = Number(p[1]); S.screen = 'preview'; render(); return;
+        case 'sendphoto': {
+          var cap = (root.querySelector('#waCap') || {}).value || '';
+          addMsg({ f: 'me', t: 'photo', i: S.pick % 6, cap: cap.trim() }); S.flags.photo = true; S.screen = 'chat'; render(); return;
+        }
+        case 'perm':
+          S.permDlg = false;
+          if (p[1] === 'deny') { S.perm = false; showToast('Ohne Standortzugriff kann WhatsApp Ihren Standort nicht senden.', true); } else S.perm = true;
+          render(); return;
+        case 'permagain': S.permDlg = true; render(); return;
+        case 'loc':
+          if (S.perm !== true) { S.permDlg = true; render(); return; }
+          if (p[1] === 'cur') { addMsg({ f: 'me', t: 'loc' }); S.flags.loc = true; S.screen = 'chat'; render(); }
+          else { S.liveSheet = true; S.liveDur = '15 Minuten'; render(); }
+          return;
+        case 'liveopt': S.liveDur = a.slice(8); render(); return;
+        case 'livecancel': S.liveSheet = false; render(); return;
+        case 'livesend':
+          if (taskOf() === 'wa_live' && S.liveDur !== '1 Stunde') { showToast('Wählen Sie für diese Übung „1 Stunde“.', true); return; }
+          addMsg({ f: 'me', t: 'live', until: untilTime(S.liveDur), ended: false }); S.flags.liveStart = true; S.liveSheet = false; S.screen = 'chat'; render(); return;
+        case 'stoplive': S.stopDlg = p[1]; render(); return;
+        case 'stopno': S.stopDlg = null; render(); return;
+        case 'stopyes': { var lm = c.msgs.filter(function (x) { return x.id === S.stopDlg; })[0]; if (lm) lm.ended = true; S.stopDlg = null; S.flags.liveStop = true; render(); return; }
+        case 'ctsel': S.ctSel = p[1]; render(); return;
+        case 'ctnext': S.ctConfirm = true; render(); return;
+        case 'ctcancel': S.ctConfirm = false; render(); return;
+        case 'ctsend':
+          addMsg({ f: 'me', t: 'contact', cid: S.ctSel }); if (S.ctSel === 'meier' && c.id === 'anna') S.flags.contactSent = true;
+          S.ctConfirm = false; S.screen = 'chat'; render(); return;
+        case 'pollmulti': S.pollForm.multi = !S.pollForm.multi; render(); return;
+        case 'pollsend': {
+          var f = S.pollForm, os = f.o.map(function (x) { return x.trim(); }).filter(function (x) { return x; });
+          if (!f.q.trim() || os.length < 2) { showToast('Schreiben Sie eine Frage und mindestens zwei Antworten.', true); return; }
+          addMsg({ f: 'me', t: 'poll', q: f.q.trim(), o: os, votes: os.map(function () { return 0; }), mine: [], multi: f.multi }); S.flags.poll = true; S.screen = 'chat'; render(); return;
+        }
+        case 'vote': {
+          var pm = c.msgs.filter(function (x) { return x.id === p[1]; })[0], i = Number(p[2]);
+          var at = pm.mine.indexOf(i);
+          if (at > -1) { pm.mine.splice(at, 1); pm.votes[i]--; }
+          else { if (!pm.multi && pm.mine.length) { pm.votes[pm.mine[0]]--; pm.mine = []; } pm.mine.push(i); pm.votes[i]++; S.flags.pollVote = true; }
+          render(); return;
+        }
+        case 'evsend': {
+          var ef = S.evForm;
+          if (!ef.name.trim()) { showToast('Geben Sie dem Ereignis einen Namen.', true); return; }
+          addMsg({ f: 'me', t: 'event', name: ef.name.trim(), date: ef.date, time: ef.time, place: ef.place.trim(), rsvp: null }); S.flags.event = true; S.screen = 'chat'; render(); return;
+        }
+        case 'rsvp': {
+          var em = c.msgs.filter(function (x) { return x.id === p[1]; })[0]; em.rsvp = p[2]; if (p[2] === 'yes') S.flags.rsvp = 'yes'; render(); return;
+        }
+        case 'grpnew': S.screen = 'grp1'; S.grpSel = []; render(); return;
+        case 'grptoggle': { var ix = S.grpSel.indexOf(p[1]); if (ix > -1) S.grpSel.splice(ix, 1); else S.grpSel.push(p[1]); render(); return; }
+        case 'grpnext': S.screen = 'grp2'; render(); return;
+        case 'grpcreate': {
+          if (!S.grpName.trim()) { showToast('Bitte geben Sie der Gruppe einen Namen.', true); return; }
+          var gid = 'g' + (uid++);
+          var gc = mk(gid, S.grpName.trim(), 'g', [{ f: 'me', t: 'sys', x: 'Sie haben die Gruppe „' + S.grpName.trim() + '“ erstellt.' }], { members: S.grpSel.slice() });
+          S.chats[gid] = gc; S.order.unshift(gid); S.flags.group = true; S.cur = gid; S.screen = 'chat'; render(); return;
+        }
+        case 'addc': S.addSheet = p[1]; render(); return;
+        case 'addoff': S.addSheet = null; render(); return;
+        case 'addnew': S.addMsg = S.addSheet; S.addSheet = null; S.screen = 'addc'; render(); return;
+        case 'addsave': {
+          var am = c.msgs.filter(function (x) { return x.id === S.addMsg; })[0]; if (am) am.saved = true;
+          S.flags.contactSaved = true; S.screen = 'chat'; render(); showToast('Kontakt gespeichert.', true); return;
+        }
+        case 'unkblock': S.blockDlg = true; render(); return;
+        case 'unkreport': S.blockDlg = true; render(); return;
+        case 'unkadd': return dead('Hinzufügen');
+        case 'blockrep': S.blockRep = !S.blockRep; render(); return;
+        case 'blockno': S.blockDlg = false; render(); return;
+        case 'blockyes': S.blockDlg = false; c.blocked = true; S.flags.blocked = true; if (S.blockRep) showToast('Die Nummer wurde blockiert und gemeldet.', true); else showToast('Die Nummer wurde blockiert.', true); render(); return;
+        case 'mmclose': S.msgMenu = null; render(); return;
+        case 'mm': if (p[1] === 'pin') { S.pinDlg = S.msgMenu; S.msgMenu = null; S.pinDur = '7 Tage'; render(); } return;
+        case 'pindur': S.pinDur = a.slice(7); render(); return;
+        case 'pincancel': S.pinDlg = null; render(); return;
+        case 'pinok': { c.pinMsg = S.pinDlg; S.pinDlg = null; S.flags.msgPin = true; render(); return; }
+        case 'gopin': { var b = root.querySelector('#b_' + c.pinMsg); if (b) { b.scrollIntoView({ block: 'center' }); b.classList.add('flash'); } return; }
+        case 'sr': if (p[1] === 'privacy') { S.screen = 'privacy'; render(); } return;
+        case 'popen': S.optKey = p[1]; S.screen = 'popt'; render(); return;
+        case 'popt': S.priv[S.optKey] = a.slice(5); render(); return;
+        case 'readtoggle': S.priv.read = !S.priv.read; render(); return;
+      }
+    }
+    ['screen'].forEach(function (id) { var el = document.getElementById(id); if (el) el.addEventListener('scroll', function () { if (this.scrollTop) this.scrollTop = 0; }); });
+    root.addEventListener('scroll', function () { root.scrollTop = 0; });
+    root.addEventListener('click', function (e) {
+      if (!S) return;
+      if (Date.now() < S.noClickUntil) return;
+      var el = e.target.closest('[data-a]');
+      if (S.swipe) {
+        var onAct = el && el.classList.contains('wa-swipeact');
+        if (!onAct) { S.swipe = null; render(); return; }
+      }
+      if (!el || !root.contains(el)) return;
+      act(el.getAttribute('data-a'), el);
+    });
+
+    function back() {
+      if (!S) return;
+      if (S.permDlg) { S.permDlg = false; render(); return; }
+      if (S.stopDlg) { S.stopDlg = null; render(); return; }
+      if (S.blockDlg) { S.blockDlg = false; render(); return; }
+      if (S.msgMenu) { S.msgMenu = null; render(); return; }
+      if (S.pinDlg) { S.pinDlg = null; render(); return; }
+      if (S.addSheet) { S.addSheet = null; render(); return; }
+      if (S.ctConfirm) { S.ctConfirm = false; render(); return; }
+      if (S.liveSheet) { S.liveSheet = false; render(); return; }
+      if (S.attach) { S.attach = false; render(); return; }
+      if (S.menu) { S.menu = false; render(); return; }
+      if (S.sel) { S.sel = null; render(); return; }
+      if (S.swipe) { S.swipe = null; render(); return; }
+      var to = { chat: 'list', pick: 'chat', preview: 'pick', loc: 'chat', contacts: 'chat', poll: 'chat', event: 'chat', newchat: 'list', grp1: 'newchat', grp2: 'grp1', addc: 'chat', settings: 'list', privacy: 'settings', popt: 'privacy' }[S.screen];
+      if (!to) { goHome(); return; }
+      S.screen = to; render();
+    }
+
+    // ---------- Aufgaben: Prüfung und Hinweise ----------
+    function done() {
+      if (!S) return false;
+      var t = taskOf(), f = S.flags;
+      switch (t) {
+        case 'wa_sprache': return !!f.voice; case 'wa_foto': return !!f.photo; case 'wa_standort': return !!f.loc; case 'wa_live': return !!f.liveStop;
+        case 'wa_kontakt': return !!f.contactSent; case 'wa_kontakt_speichern': return !!f.contactSaved; case 'wa_gruppe': return !!f.group;
+        case 'wa_umfrage': return !!f.pollVote; case 'wa_ereignis': return f.rsvp === 'yes';
+        case 'wa_chat_pin': return !!(S.chats.familie && S.chats.familie.pinned); case 'wa_msg_pin': return !!f.msgPin;
+        case 'wa_privat': return S.priv.photo !== 'Alle' && S.priv.seen !== 'Alle'; case 'wa_betrug': return !!f.blocked;
+      }
+      return false;
+    }
+    function steps() {
+      var t = taskOf(), and = isAndroid();
+      var open = 'Schritt 1: Öffnen Sie die App "WhatsApp".';
+      var fin = 'Geschafft! Sie können mit "Zurücksetzen" von vorne beginnen.';
+      var plus = and ? 'Tippen Sie im Textfeld auf die Büroklammer.' : 'Tippen Sie unten links auf das Plus-Zeichen (+).';
+      var galerie = and ? 'Galerie' : 'Fotos';
+      var chat = function (n, name) { return 'Schritt 2: Tippen Sie auf den Chat "' + name + '".'; };
+      switch (t) {
+        case 'wa_sprache': return [open, chat(2, 'Anna'), 'Schritt 3: Halten Sie das Mikrofon-Symbol unten rechts gedrückt und sprechen Sie ein paar Sekunden. Lassen Sie erst los, wenn Sie fertig sind.', fin];
+        case 'wa_foto': return [open, chat(2, 'Anna'), 'Schritt 3: ' + plus, 'Schritt 4: Tippen Sie auf "' + galerie + '".', 'Schritt 5: Tippen Sie auf ein Foto Ihrer Wahl.', 'Schritt 6: Tippen Sie auf den grünen Senden-Pfeil.', fin];
+        case 'wa_standort': return [open, chat(2, 'Anna'), 'Schritt 3: ' + plus, 'Schritt 4: Tippen Sie auf "Standort". Fragt das Smartphone nach dem Standortzugriff, wählen Sie "' + (and ? 'Bei Nutzung der App' : 'Beim Verwenden der App erlauben') + '".', 'Schritt 5: Tippen Sie auf "Aktuellen Standort senden".', fin];
+        case 'wa_live': return [open, chat(2, 'Thomas'), 'Schritt 3: ' + plus, 'Schritt 4: Tippen Sie auf "Standort". Fragt das Smartphone nach dem Standortzugriff, erlauben Sie ihn für die Nutzung der App.', 'Schritt 5: Tippen Sie auf "Live-Standort teilen".', 'Schritt 6: Wählen Sie "1 Stunde" und tippen Sie auf "Senden".', 'Schritt 7: Beenden Sie die Freigabe wieder: Tippen Sie unter Ihrem Live-Standort auf "Teilen beenden" und bestätigen Sie.', fin];
+        case 'wa_kontakt': return [open, chat(2, 'Anna'), 'Schritt 3: ' + plus, 'Schritt 4: Tippen Sie auf "Kontakt".', 'Schritt 5: Wählen Sie "Dr. Meier" aus und tippen Sie auf den grünen Pfeil.', 'Schritt 6: Tippen Sie auf "Senden".', fin];
+        case 'wa_kontakt_speichern': return [open, chat(2, 'Anna'), 'Schritt 3: Tippen Sie unter der Kontaktkarte auf "Kontakt hinzufügen".', 'Schritt 4: Tippen Sie auf "Neuen Kontakt erstellen".', 'Schritt 5: Tippen Sie auf "Speichern".', fin];
+        case 'wa_gruppe': return [open, 'Schritt 2: ' + (and ? 'Tippen Sie unten rechts auf den grünen Knopf.' : 'Tippen Sie oben rechts auf das grüne Plus-Zeichen.') + (and ? '' : ''), 'Schritt 3: Tippen Sie auf "Neue Gruppe".', 'Schritt 4: Wählen Sie Anna und Thomas aus (es erscheint ein grüner Haken) und tippen Sie auf den grünen Pfeil.', 'Schritt 5: Geben Sie der Gruppe einen Namen, zum Beispiel "Familie", und tippen Sie auf den grünen Haken.', fin];
+        case 'wa_umfrage': return [open, chat(2, 'Familie'), 'Schritt 3: ' + plus, 'Schritt 4: Tippen Sie auf "Umfrage".', 'Schritt 5: Schreiben Sie eine Frage, zum Beispiel "Wann treffen wir uns?", und zwei Antworten, zum Beispiel "Samstag" und "Sonntag". Tippen Sie dann auf den grünen Senden-Pfeil.', 'Schritt 6: Stimmen Sie selbst ab: Tippen Sie unter der Umfrage auf eine Antwort.', fin];
+        case 'wa_ereignis': return [open, chat(2, 'Familie'), 'Schritt 3: ' + plus, 'Schritt 4: Tippen Sie auf "Ereignis".', 'Schritt 5: Geben Sie dem Ereignis einen Namen, zum Beispiel "Kaffeetrinken bei Oma", und tippen Sie auf "Erstellen".', 'Schritt 6: Sagen Sie selbst zu: Tippen Sie unter dem Ereignis auf "Zusagen".', fin];
+        case 'wa_chat_pin': return [open, and ? 'Schritt 2: Halten Sie den Chat "Familie" mit dem Finger gedrückt, bis oben eine Leiste erscheint.' : 'Schritt 2: Wischen Sie den Chat "Familie" mit dem Finger nach rechts, bis die grüne Taste "Anpinnen" erscheint.', and ? 'Schritt 3: Tippen Sie oben auf das Pinnnadel-Symbol.' : 'Schritt 3: Tippen Sie auf "Anpinnen".', fin];
+        case 'wa_msg_pin': return [open, chat(2, 'Familie'), 'Schritt 3: Halten Sie die Nachricht "Treffen am Samstag um 15 Uhr bei Oma!" mit dem Finger gedrückt.', 'Schritt 4: Tippen Sie auf "Anpinnen".', 'Schritt 5: Wählen Sie, wie lange die Nachricht oben bleiben soll, zum Beispiel "7 Tage", und tippen Sie auf "Anpinnen".', fin];
+        case 'wa_privat': return [open, and ? 'Schritt 2: Tippen Sie oben rechts auf die drei Punkte und dann auf "Einstellungen".' : 'Schritt 2: Tippen Sie unten rechts auf "Einstellungen".', 'Schritt 3: Tippen Sie auf "Datenschutz".', 'Schritt 4: Tippen Sie auf "Profilbild" und wählen Sie "Meine Kontakte".', 'Schritt 5: Gehen Sie zurück, tippen Sie auf "Zuletzt online und online" und wählen Sie "Meine Kontakte".', fin];
+        case 'wa_betrug': return [open, 'Schritt 2: Tippen Sie auf den Chat mit der unbekannten Nummer (+49 176 5550123).', 'Schritt 3: Lesen Sie die Nachricht genau. Wer von einer unbekannten Nummer schnell Geld verlangt, will Sie meist betrügen. Tippen Sie oben auf "Blockieren".', 'Schritt 4: Bestätigen Sie mit "Blockieren" (der Haken bei "Melden" darf bleiben).', fin];
+      }
+      return [];
+    }
+    function step() {
+      if (!S) return 1;
+      var t = taskOf(), n = steps().length;
+      if (done()) return n;
+      if (state.screen !== 'overlayWA') return 1;
+      var sc = S.screen, f = S.flags, cur = S.cur;
+      var inC = function (id) { return sc === 'chat' && cur === id; };
+      switch (t) {
+        case 'wa_sprache': return inC('anna') ? 3 : 2;
+        case 'wa_foto': if (sc === 'pick') return 5; if (sc === 'preview') return 6; return inC('anna') ? (S.attach ? 4 : 3) : 2;
+        case 'wa_standort': if (sc === 'loc') return 5; return inC('anna') ? (S.attach ? 4 : 3) : 2;
+        case 'wa_live':
+          if (f.liveStart && sc === 'chat' && cur === 'thomas') return 7;
+          if (sc === 'loc') return S.liveSheet ? 6 : 5; return inC('thomas') ? (S.attach ? 4 : 3) : 2;
+        case 'wa_kontakt': if (sc === 'contacts') return S.ctConfirm ? 6 : 5; return inC('anna') ? (S.attach ? 4 : 3) : 2;
+        case 'wa_kontakt_speichern': if (sc === 'addc') return 5; return inC('anna') ? (S.addSheet ? 4 : 3) : 2;
+        case 'wa_gruppe': if (sc === 'newchat') return 3; if (sc === 'grp1') return 4; if (sc === 'grp2') return 5; return 2;
+        case 'wa_umfrage': if (sc === 'poll') return 5; if (inC('familie') && f.poll) return 6; return inC('familie') ? (S.attach ? 4 : 3) : 2;
+        case 'wa_ereignis': if (sc === 'event') return 5; if (inC('familie') && f.event) return 6; return inC('familie') ? (S.attach ? 4 : 3) : 2;
+        case 'wa_chat_pin': return (S.swipe === 'familie' || S.sel === 'familie') ? 3 : 2;
+        case 'wa_msg_pin': if (!inC('familie')) return 2; return S.pinDlg ? 5 : (S.msgMenu ? 4 : 3);
+        case 'wa_privat':
+          if (sc === 'settings') return 3;
+          if (sc === 'privacy') return S.priv.photo === 'Alle' ? 4 : 5;
+          if (sc === 'popt') return S.optKey === 'photo' ? 4 : 5;
+          return 2;
+        case 'wa_betrug': if (inC('unk')) return S.blockDlg ? 4 : 3; return 2;
+      }
+      return 1;
+    }
+    function sync() {
+      if (!isWaTask() || !S) return;
+      state.step = step();
+      updateHint();
+    }
+    function reset() {
+      clearInterval(recTimer);
+      if (!isWaTask()) { S = null; root.innerHTML = ''; return; }
+      fresh(); render();
+    }
+    function open() {
+      if (!S) { fresh(); }
+      render();
+    }
+    return { reset: reset, open: open, back: back, done: done, steps: steps, sync: sync };
+  })();
+
   (function checkAutoStart() {
     var params = PARAMS;
     if (params.get('auto') === '1') {
